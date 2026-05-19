@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # YUNN - K-뷰티 맞춤형 스킨케어 MVP
 인도 델리 2030 여성을 위한 AI 피부 진단 및 루틴 관리 웹앱입니다.
 
@@ -33,3 +34,6 @@ YUNN_Mobile/
 │   └── TROUBLESHOOTING.md
 └── image/                # 이미지 에셋 폴더
 ```
+=======
+# YUNN_Official
+>>>>>>> f31aedef8972ad454bfbbb282d8f3cd97b2c29ff
