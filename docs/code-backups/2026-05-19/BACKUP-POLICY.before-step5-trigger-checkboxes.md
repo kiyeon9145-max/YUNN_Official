@@ -89,9 +89,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-19/survey.before-skin-helper-subflow.html`
 - `docs/code-backups/2026-05-19/survey.skin-helper-subflow.html`
 - `docs/code-backups/2026-05-19/BACKUP-POLICY.before-skin-helper-subflow.md`
-- `docs/code-backups/2026-05-19/survey.before-step5-trigger-checkboxes.html`
-- `docs/code-backups/2026-05-19/survey.step5-trigger-checkboxes.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step5-trigger-checkboxes.md`
 
 ## Restore
 

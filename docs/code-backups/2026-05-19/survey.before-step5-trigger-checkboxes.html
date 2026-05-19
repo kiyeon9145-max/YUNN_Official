@@ -1427,58 +1427,6 @@
             line-height: 1.45;
         }
 
-        /* Trigger Checkbox Step */
-        .trigger-title {
-            color: #000;
-            font-size: 23px;
-            font-weight: 700;
-            line-height: 1.23;
-            margin-bottom: 10px;
-        }
-
-        .trigger-title span {
-            color: var(--primary);
-        }
-
-        .trigger-copy {
-            color: #000;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.65;
-            margin-bottom: 18px;
-        }
-
-        .trigger-checkbox-list {
-            gap: 10px;
-        }
-
-        .trigger-checkbox-list .option-card {
-            min-height: 58px;
-            border: 1px solid #CCCCCC;
-            border-radius: 5px;
-            box-shadow: none;
-            padding: 15px 20px;
-        }
-
-        .trigger-checkbox-list .option-card.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .trigger-checkbox-list .option-text {
-            color: #000;
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 1.25;
-        }
-
-        .trigger-checkbox-list .check-circle {
-            width: 24px;
-            height: 24px;
-            border-width: 2px;
-            margin-left: auto;
-        }
-
         /* Skin Type Helper Subflow */
         .skin-helper-title {
             color: #000;
@@ -1989,15 +1937,14 @@
 
                 <!-- Step 5: Triggers -->
                 <div class="survey-step" data-step="5">
-                    <h2 class="question-title trigger-title">When does<br><span>your skin</span> get worse?</h2>
-                    <p class="trigger-copy">Select all that apply.<br>Triggers help us understand your skin better.</p>
-                    <div class="option-list checkbox-group trigger-checkbox-list">
-                        <label class="option-card checkbox-card"><input type="checkbox" name="trigger" value="Sun"><span class="option-text">After sun exposure</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card checkbox-card"><input type="checkbox" name="trigger" value="Stress"><span class="option-text">During stressful periods</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card checkbox-card"><input type="checkbox" name="trigger" value="Period"><span class="option-text">Around my period</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card checkbox-card"><input type="checkbox" name="trigger" value="Sleep"><span class="option-text">When I don’t sleep enough</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card checkbox-card"><input type="checkbox" name="trigger" value="New skincare"><span class="option-text">After trying new skincare</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card checkbox-card"><input type="checkbox" name="trigger" value="Same"><span class="option-text">It stays the same most of the time</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    <h2 class="question-title">When does your skin get worse?</h2>
+                    <p class="question-subtitle">Triggers help us build a responsive routine.</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="trigger" value="Sun"><span class="option-text">After sun exposure</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Stress"><span class="option-text">During high-stress periods</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Period"><span class="option-text">Around your period</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Sleep"><span class="option-text">When not sleeping enough</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Same"><span class="option-text">It's always roughly the same</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
                     </div>
 
                     <div class="bottom-action">

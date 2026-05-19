@@ -753,3 +753,35 @@ Verification:
 - `3-1`, `3-2`, `3-3`, `3-4` 각 질문 제목과 indicator 확인
 - 3-4 마지막 답변 후 `Page 4 of 10`, `What’s bothering your skin the most?`로 이동 확인
 - 테스트 답변 패턴에서 `skinType=Combination`으로 추론되어 실제 선택 값에 반영되는 것 확인
+
+### 설문 Step 5 트리거 체크박스 페이지 개편
+
+Purpose:
+사용자 레퍼런스 이미지에 맞춰 Step 5 페이지를 단일 선택 radio에서 다중 선택 체크박스 구조로 바꿨다. 체크박스는 현재 웹사이트의 기존 `checkbox-card` 디자인을 유지했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-step5-trigger-checkboxes.html`
+- `docs/code-backups/2026-05-19/survey.step5-trigger-checkboxes.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step5-trigger-checkboxes.md`
+
+Main implementation:
+- 제목을 `When does / your skin / get worse?` 구조로 변경하고 `your skin`에 민트 포인트 적용
+- 설명 문구를 `Select all that apply.`와 `Triggers help us understand your skin better.`로 변경
+- 트리거 선택지를 checkbox 다중 선택으로 변경
+- 선택지 6개 구성:
+  - `After sun exposure`
+  - `During stressful periods`
+  - `Around my period`
+  - `When I don’t sleep enough`
+  - `After trying new skincare`
+  - `It stays the same most of the time`
+- 기존 `.option-card.checkbox-card`와 `.check-circle` 기반 체크박스 선택 디자인 유지
+
+Verification:
+- `http://127.0.0.1:8123/pages/survey.html?survey=1&step=5&triggerCheckbox=1779162300000`에서 `Page 5 of 10` 로드 확인
+- 체크박스 카드 6개 렌더링 확인
+- 모든 선택지가 `type="checkbox"`로 적용된 것 확인
+- 체크박스 라운드가 기존 디자인과 같은 `6px`인지 확인
+- `After sun exposure` 클릭 후 checked 값과 selected 클래스가 정상 반영되는 것 확인
