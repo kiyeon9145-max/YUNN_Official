@@ -70,3 +70,8 @@ git commit -m "backup before edit"
 git add .
 git commit -m "describe changes"
 ```
+
+**Automated GitHub Push (AI Responsibility):**
+- AI 어시스턴트는 터미널 명령어를 통해 사용자를 대신하여 Git 백업 및 커밋 작업을 수행할 수 있습니다.
+- 작업 완료 후, 혹은 사용자의 별도 요청 시 `git push` 명령을 사용하여 원격 저장소(GitHub)로 최신 변경 사항을 업로드(Push)해야 합니다.
+
