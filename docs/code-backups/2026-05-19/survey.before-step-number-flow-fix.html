@@ -1327,106 +1327,6 @@
             color: var(--text-light);
         }
 
-        /* Skin Concern Image Grid */
-        .concern-title {
-            font-size: 30px;
-            line-height: 1.25;
-            margin-bottom: 24px;
-        }
-
-        .concern-title span {
-            color: var(--primary);
-        }
-
-        .concern-copy {
-            color: #000;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.75;
-            margin-bottom: 22px;
-        }
-
-        .concern-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px 14px;
-        }
-
-        .concern-grid.option-list {
-            flex-direction: unset;
-        }
-
-        .concern-image-card {
-            position: relative;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0;
-            padding: 0;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--white);
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-        }
-
-        .concern-image-card.selected {
-            border: 2px solid var(--primary);
-            background: var(--white);
-        }
-
-        .concern-image-card img {
-            width: 100%;
-            height: 128px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .concern-check-square {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 25px;
-            height: 25px;
-            border-radius: 4px;
-            border: 2px solid #D9D9D9;
-            background: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: transparent;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-            transition: all 0.2s ease;
-            z-index: 2;
-        }
-
-        .concern-image-card.selected .concern-check-square {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: var(--white);
-        }
-
-        .concern-card-content {
-            min-height: 96px;
-            padding: 13px 8px 16px;
-            background: var(--white);
-        }
-
-        .concern-card-title {
-            color: #000;
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
-        .concern-card-desc {
-            color: #777;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.45;
-        }
-
     </style>
 </head>
 <body>
@@ -1664,8 +1564,29 @@
                 </div>
 
 
-                <!-- Step 3: Skin Type -->
+                <!-- Step 3: Age -->
                 <div class="survey-step" data-step="3">
+                    <h2 class="question-title">How old are you?</h2>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="age" value="Under 20"><span class="option-text">Under 20</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="20-24"><span class="option-text">20–24</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="25-29"><span class="option-text">25–29</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="30-34"><span class="option-text">30–34</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="35+"><span class="option-text">35+</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 4: Skin Type -->
+                <div class="survey-step" data-step="4">
                     <h2 class="question-title" style="margin-bottom:12px;">Let’s understand <br><span class="diagnosis-highlight">your skin</span></h2>
                     <p class="question-subtitle" style="margin-bottom:28px;">This helps us create the perfect routine for you.</p>
                     <div style="font-size:16px; font-weight:700; color:var(--text-main); margin-bottom:8px;">Which one feels most like your skin?</div>
@@ -1730,47 +1651,17 @@
                 </div>
 
 
-                <!-- Step 4: Skin Concerns -->
-                <div class="survey-step" data-step="4">
-                    <h2 class="question-title concern-title">What’s bothering<br><span>your skin</span> the most?</h2>
-                    <p class="concern-copy">Select all that apply.<br>This helps us create a routine<br>that targets your main skin concerns.</p>
-                    <div class="option-list checkbox-group concern-grid">
-                        <label class="option-card checkbox-card concern-image-card">
-                            <input type="checkbox" name="concerns" value="Acne">
-                            <img src="../assets/image/Acne : Breaksout .png" alt="Acne and breakouts">
-                            <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
-                            <div class="concern-card-content">
-                                <div class="concern-card-title">Acne / Breakouts</div>
-                                <div class="concern-card-desc">Active pimples,<br>redness, inflamed bumps</div>
-                            </div>
-                        </label>
-                        <label class="option-card checkbox-card concern-image-card">
-                            <input type="checkbox" name="concerns" value="Acne marks">
-                            <img src="../assets/image/Acne Marks.png" alt="Acne marks">
-                            <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
-                            <div class="concern-card-content">
-                                <div class="concern-card-title">Acne Marks</div>
-                                <div class="concern-card-desc">Dark spots or marks<br>left after breakouts</div>
-                            </div>
-                        </label>
-                        <label class="option-card checkbox-card concern-image-card">
-                            <input type="checkbox" name="concerns" value="Pigmentation">
-                            <img src="../assets/image/Pigmentation : Dark Spots.png" alt="Pigmentation and dark spots">
-                            <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
-                            <div class="concern-card-content">
-                                <div class="concern-card-title">Pigmentation / Dark Spots</div>
-                                <div class="concern-card-desc">Brown spots, sun spots,<br>or hyperpigmentation</div>
-                            </div>
-                        </label>
-                        <label class="option-card checkbox-card concern-image-card">
-                            <input type="checkbox" name="concerns" value="Uneven skin tone">
-                            <img src="../assets/image/Uneven skin tone .png" alt="Uneven skin tone">
-                            <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
-                            <div class="concern-card-content">
-                                <div class="concern-card-title">Uneven Skin Tone</div>
-                                <div class="concern-card-desc">Dullness, blotchiness,<br>uneven or patchy skin tone</div>
-                            </div>
-                        </label>
+                <!-- Step 5: Skin Concerns -->
+                <div class="survey-step" data-step="5">
+                    <h2 class="question-title">What's actually bothering you?</h2>
+                    <p class="question-subtitle">Select everything that applies.</p>
+                    <div class="option-list checkbox-group">
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Pigmentation"><span class="option-text">Pigmentation (Dark spots)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Uneven skin tone"><span class="option-text">Uneven skin tone (Dullness)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Acne"><span class="option-text">Acne (Active breakouts)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Acne marks"><span class="option-text">Acne marks (Scars)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Enlarged pores"><span class="option-text">Enlarged pores</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Dryness"><span class="option-text">Dryness (Dehydrated skin)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
                     </div>
 
                     <div class="bottom-action">
@@ -1783,8 +1674,8 @@
                 </div>
 
 
-                <!-- Step 5: Triggers -->
-                <div class="survey-step" data-step="5">
+                <!-- Step 6: Triggers -->
+                <div class="survey-step" data-step="6">
                     <h2 class="question-title">When does your skin get worse?</h2>
                     <p class="question-subtitle">Triggers help us build a responsive routine.</p>
                     <div class="option-list radio-group">
@@ -1805,8 +1696,8 @@
                 </div>
 
 
-                <!-- Step 6: Sensitivity -->
-                <div class="survey-step" data-step="6">
+                <!-- Step 7: Sensitivity -->
+                <div class="survey-step" data-step="7">
                     <h2 class="question-title">Skin sensitivity.</h2>
                     <p class="question-subtitle">How does your skin react to external factors?</p>
                     <div class="option-list radio-group">
@@ -1826,8 +1717,8 @@
                 </div>
 
 
-                <!-- Step 7: Outdoor -->
-                <div class="survey-step" data-step="7">
+                <!-- Step 8: Outdoor -->
+                <div class="survey-step" data-step="8">
                     <h2 class="question-title">Outdoor habits.</h2>
                     <p class="question-subtitle">How much time do you spend outdoors?</p>
                     <div class="option-list radio-group">
@@ -1847,8 +1738,8 @@
                 </div>
 
 
-                <!-- Step 8: Sunscreen -->
-                <div class="survey-step" data-step="8">
+                <!-- Step 9: Sunscreen -->
+                <div class="survey-step" data-step="9">
                     <h2 class="question-title">Sun protection.</h2>
                     <p class="question-subtitle">How often do you apply sunscreen?</p>
                     <div class="option-list radio-group">
@@ -1868,8 +1759,8 @@
                 </div>
 
 
-                <!-- Step 9: Sleep -->
-                <div class="survey-step" data-step="9">
+                <!-- Step 10: Sleep -->
+                <div class="survey-step" data-step="10">
                     <h2 class="question-title">Lifestyle intensity.</h2>
                     <p class="question-subtitle">How many hours of sleep do you usually get?</p>
                     <div class="option-list radio-group">
@@ -1889,8 +1780,8 @@
                 </div>
 
 
-                <!-- Step 10: Current Routine -->
-                <div class="survey-step" data-step="10">
+                <!-- Step 11: Current Routine -->
+                <div class="survey-step" data-step="11">
                     <h2 class="question-title">Current routine.</h2>
                     <p class="question-subtitle">What does your skincare look like right now?</p>
                     <div class="option-list radio-group">
@@ -2361,13 +2252,13 @@
         };
 
         let currentStep = 1;
-        const totalSteps = 10;
+        const totalSteps = 11;
         const displayedSurveyPages = 10;
         const progressBar = document.getElementById('progress-bar');
         const steps = document.querySelectorAll('.survey-step');
 
         function updateProgress() {
-            const displayStep = Math.min(currentStep, displayedSurveyPages);
+            const displayStep = Math.min(currentStep > 2 ? currentStep - 1 : currentStep, displayedSurveyPages);
             const percent = (displayStep / displayedSurveyPages) * 100;
             progressBar.style.width = percent + '%';
             const indicator = document.getElementById('step-indicator');
@@ -2399,13 +2290,13 @@
             if (currentStep === totalSteps) {
                 startAnalysis();
             } else {
-                goToStep(currentStep + 1);
+                goToStep(currentStep === 2 ? 4 : currentStep + 1);
             }
         }
 
         function goBack() {
             if (currentStep > 1) {
-                goToStep(currentStep - 1);
+                goToStep(currentStep === 4 ? 2 : currentStep - 1);
             } else {
                 // Go back to intro
                 document.getElementById('survey-screen').classList.remove('active');
@@ -2436,12 +2327,11 @@
         // Auto-advance logic for radio cards
         document.querySelectorAll('.option-card').forEach(card => {
             card.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
                 if (this.classList.contains('checkbox-card')) {
                     const cb = this.querySelector('input[type="checkbox"]');
-                    cb.checked = !cb.checked;
+                    if (e.target !== cb) {
+                        cb.checked = !cb.checked;
+                    }
                     if (cb.checked) {
                         this.classList.add('selected');
                     } else {
@@ -2462,7 +2352,7 @@
                         updateStepTwoState();
                         if (isStepTwoComplete()) {
                             setTimeout(() => {
-                                goToStep(3);
+                                goToStep(4);
                             }, 300);
                         }
                         return;

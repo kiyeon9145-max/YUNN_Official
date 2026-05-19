@@ -27,15 +27,11 @@
 ## 폴더 구조 (Directory Structure)
 ```
 YUNN_Mobile/
-├── index.html            # 홈 화면 진입 파일
-├── pages/                # 세부 HTML 화면
-│   ├── survey.html       # 피부 진단/설문 화면
-│   ├── login.html        # 로그인 화면
-│   └── landing.html      # 브랜드/랜딩 화면
+├── index.html            # 메인 웹앱 실행 파일
 ├── docs/                 # 프로젝트 관련 명세서 및 가이드라인
 │   ├── DESIGN-SYSTEM.md  # 컬러, 폰트, 공통 컴포넌트 규칙
 │   ├── PRD.md            # 제품 기획서
 │   ├── API.md            # 로컬 스토리지/외부 API 연동 문서
 │   └── TROUBLESHOOTING.md
-└── assets/image/         # 이미지 에셋 폴더
+└── image/                # 이미지 에셋 폴더
 ```

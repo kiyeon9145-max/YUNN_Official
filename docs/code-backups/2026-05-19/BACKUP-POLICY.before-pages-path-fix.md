@@ -75,17 +75,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-19/BACKUP-POLICY.before-collaboration-workflow.md`
 - `docs/code-backups/2026-05-19/IMPLEMENTATION-LOG.before-collaboration-workflow.md`
 - `docs/code-backups/2026-05-19/README.before-collaboration-workflow-conflict-cleanup.md`
-- `docs/code-backups/2026-05-19/index.before-pages-path-fix.html`
-- `docs/code-backups/2026-05-19/index.pages-path-fixed.html`
-- `docs/code-backups/2026-05-19/README.before-pages-path-fix.md`
-- `docs/code-backups/2026-05-19/README.pages-path-fixed.md`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-pages-path-fix.md`
-- `docs/code-backups/2026-05-19/survey.before-step-number-flow-fix.html`
-- `docs/code-backups/2026-05-19/survey.step-number-flow-fixed.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step-number-flow-fix.md`
-- `docs/code-backups/2026-05-19/survey.before-step4-concern-image-grid.html`
-- `docs/code-backups/2026-05-19/survey.step4-concern-image-grid.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step4-concern-image-grid.md`
 
 ## Restore
 

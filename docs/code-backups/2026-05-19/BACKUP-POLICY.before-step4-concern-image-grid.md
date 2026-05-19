@@ -83,9 +83,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-19/survey.before-step-number-flow-fix.html`
 - `docs/code-backups/2026-05-19/survey.step-number-flow-fixed.html`
 - `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step-number-flow-fix.md`
-- `docs/code-backups/2026-05-19/survey.before-step4-concern-image-grid.html`
-- `docs/code-backups/2026-05-19/survey.step4-concern-image-grid.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step4-concern-image-grid.md`
 
 ## Restore
 
