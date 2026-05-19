@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YUNN - Login</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #5CC1A6;
+            --primary-dark: #3AAE92;
+            --mint-wash: #EAF3F1;
+            --border: #EBEBEB;
+            --text: #000000;
+            --muted: #666666;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--text);
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 393px;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 48px 43px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 54px;
+            left: calc(50% - 180px);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .logo {
+            width: 136px;
+            height: 109px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            line-height: 1.5;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        .login-card {
+            width: 100%;
+            display: grid;
+            gap: 14px;
+        }
+
+        .input-box {
+            height: 54px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 16px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-box:focus {
+            border-color: var(--primary-dark);
+        }
+
+        .login-btn {
+            min-height: 59px;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .login-note {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 999px;
+            background: var(--mint-wash);
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .secondary {
+            margin-top: 24px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <main class="app-shell">
+        <a class="back-link" href="index.html" aria-label="Back"><i class="ph ph-arrow-left"></i></a>
+        <img class="logo" src="image/yuun_logo png.png" alt="YUNN">
+        <h1>Your skin<br>deserves better.<br>Let’s begin.</h1>
+
+        <form class="login-card" onsubmit="handleDemoLogin(event)">
+            <input class="input-box" id="nickname" type="text" autocomplete="nickname" placeholder="Enter your nickname" required>
+            <button class="login-btn" type="submit">
+                Continue <i class="ph ph-arrow-right"></i>
+            </button>
+        </form>
+
+        <div class="login-note">
+            Demo login stores your nickname locally so the home screen can render personalized data.
+        </div>
+
+        <a class="secondary" href="survey.html">Skip and take the skin quiz</a>
+    </main>
+
+    <script>
+        function handleDemoLogin(event) {
+            event.preventDefault();
+            const nickname = document.getElementById("nickname").value.trim();
+            if (!nickname) return;
+
+            localStorage.setItem("yunnUser", JSON.stringify({ nickname }));
+            localStorage.setItem("yunnUserNickname", nickname);
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

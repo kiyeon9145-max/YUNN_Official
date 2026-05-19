@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YUNN | Skin Analysis</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        :root {
+            --primary: #3AAE92;
+            --primary-dark: #2F8E76;
+            --primary-light: #E9F6F3;
+            --text-main: #222222;
+            --text-light: #A8A8A8;
+            --white: #FFFFFF;
+            --bg-gray: #F8F9FA;
+            --border-color: #EAEAEA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 16px;
+            position: relative;
+        }
+
+        /* --- Reusable --- */
+        .btn-primary {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background-color: var(--primary);
+            color: var(--white);
+            height: 58px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(58, 174, 146, 0.2);
+        }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled {
+            background-color: #CCCCCC;
+            box-shadow: none;
+            cursor: not-allowed;
+            border: none;
+        }
+
+        .btn-outline {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background-color: var(--white);
+            color: var(--primary);
+            height: 58px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-outline:active { transform: scale(0.98); }
+
+        /* --- Global Header & Modals --- */
+        .global-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--white);
+        }
+        .header-icon { font-size: 24px; cursor: pointer; color: #000; }
+        .header-logo { font-size: 20px; font-weight: 300; letter-spacing: 2px; cursor: pointer; position: relative;}
+        .header-logo span { border: 1px solid #ccc; border-radius: 50%; width: 12px; height: 12px; display: inline-block; position: absolute; transform: translate(2px, -6px); }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
+        .cart-wrapper { position: relative; }
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -6px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 10px;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.4);
+            z-index: 99; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .sidebar-menu {
+            position: fixed;
+            top: 0; left: 0; width: 50%; max-width: 280px; height: 100vh;
+            background: var(--white); z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 44px 16px; box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+        }
+        .sidebar-menu.active { transform: translateX(0); }
+        .sidebar-menu ul { list-style: none; margin-top: 40px; }
+        .sidebar-menu li { margin-bottom: 24px; font-size: 18px; font-weight: 500; color: var(--text-main); cursor:pointer;}
+        
+        /* --- Step 0: Intro Screen (Figma Diagnosis Start) --- */
+        #intro-screen {
+            display: none;
+            background: var(--white);
+        }
+        #intro-screen.active {
+            display: block;
+        }
+
+        .diagnosis-shell {
+            width: 100%;
+            max-width: 393px;
+            min-height: 816px;
+            margin: 0 auto;
+            background: var(--white);
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .diagnosis-status-bar {
+            height: 40px;
+            padding: 12px 16px 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            color: #000;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .diagnosis-live-status {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            min-width: 120px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0;
+            white-space: nowrap;
+        }
+
+        .diagnosis-live-status span {
+            display: none;
+        }
+
+        .diagnosis-live-status span.active {
+            display: inline;
+        }
+
+        .diagnosis-live-status span.is-muted {
+            color: #666;
+        }
+
+        .diagnosis-header {
+            height: 56px;
+            padding: 0 17px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            background: var(--white);
+        }
+
+        .diagnosis-header .header-icon {
+            font-size: 24px;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .diagnosis-logo-mark {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 128px;
+            height: 58px;
+            transform: translate(-50%, -50%) scale(1.75);
+            transform-origin: center;
+            overflow: visible;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .diagnosis-logo-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .diagnosis-logo-text {
+            justify-self: center;
+            color: #000;
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1;
+            letter-spacing: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .diagnosis-logo-text::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            position: absolute;
+            right: -12px;
+            top: -7px;
+        }
+
+        .diagnosis-logo {
+            width: 82px;
+            height: 24px;
+            justify-self: center;
+            object-fit: contain;
+        }
+
+        .diagnosis-header-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .diagnosis-content {
+            padding: 0 17px;
+        }
+
+        .diagnosis-hero {
+            min-height: 268px;
+            position: relative;
+            padding-top: 0;
+        }
+
+        .diagnosis-copy {
+            position: relative;
+            z-index: 2;
+            width: 206px;
+            padding-top: 0;
+        }
+
+        .diagnosis-headline {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.45;
+            letter-spacing: -0.01em;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .diagnosis-headline p {
+            margin-bottom: 18px;
+        }
+
+        .diagnosis-headline p:last-child {
+            margin-bottom: 0;
+        }
+
+        .diagnosis-highlight {
+            color: var(--primary);
+        }
+
+        .diagnosis-subcopy {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.66;
+            color: #000;
+            letter-spacing: 0;
+        }
+
+        .diagnosis-visual {
+            position: absolute;
+            right: -19px;
+            top: 4px;
+            width: 188px;
+            height: 262px;
+            z-index: 1;
+        }
+
+        .diagnosis-visual-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 15px 0 0 15px;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #effaf7 48%, #c7ede4 100%);
+        }
+
+        .diagnosis-visual img {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 58% center;
+            border-radius: 15px 0 0 15px;
+        }
+
+        .diagnosis-card {
+            position: absolute;
+            z-index: 3;
+            background: rgba(255,255,255,0.9);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            color: #000;
+            letter-spacing: 0;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .diagnosis-card.ai {
+            top: 18px;
+            right: 85px;
+            width: 98px;
+            min-height: 34px;
+            padding: 5px 8px;
+        }
+
+        .diagnosis-card.ai strong {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 11px;
+        }
+
+        .diagnosis-card.ai span {
+            display: block;
+            margin-top: 2px;
+            font-size: 5px;
+            font-weight: 400;
+            line-height: 7px;
+            color: #404040;
+        }
+
+        .diagnosis-card.severity {
+            top: 83px;
+            right: 105px;
+            width: 90px;
+            min-height: 37px;
+            padding: 6px 8px;
+            display: grid;
+            grid-template-columns: 14px 1fr;
+            column-gap: 5px;
+            align-items: center;
+        }
+
+        .diagnosis-card-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #e3f5ef;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+        }
+
+        .diagnosis-card.severity strong {
+            display: block;
+            font-size: 7px;
+            line-height: 9px;
+            font-weight: 700;
+        }
+
+        .diagnosis-card.severity span {
+            display: block;
+            margin-top: 2px;
+            color: var(--primary);
+            font-size: 11px;
+            line-height: 12px;
+            font-weight: 700;
+        }
+
+        .diagnosis-card.metric {
+            width: 84px;
+            min-height: 48px;
+            padding: 5px 8px;
+        }
+
+        .diagnosis-card.metric.acne {
+            top: 145px;
+            right: 99px;
+        }
+
+        .diagnosis-card.metric.spots {
+            top: 197px;
+            right: 80px;
+        }
+
+        .diagnosis-card.metric strong {
+            display: block;
+            font-size: 7px;
+            line-height: 10px;
+            font-weight: 700;
+        }
+
+        .diagnosis-card.metric b {
+            display: block;
+            margin-top: 2px;
+            color: var(--primary);
+            font-size: 14px;
+            line-height: 15px;
+            font-weight: 700;
+        }
+
+        .diagnosis-card.metric span {
+            display: block;
+            color: #565656;
+            font-size: 5px;
+            line-height: 7px;
+            font-weight: 400;
+        }
+
+        .feature-icons {
+            display: flex;
+            justify-content: space-between;
+            margin: 19px 0 35px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 0 15px;
+        }
+        .f-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-main);
+            text-align: center;
+            flex: 1;
+        }
+        .f-icon i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .diagnosis-desc {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.55;
+            color: #000;
+            margin-bottom: 38px;
+            letter-spacing: -0.01em;
+        }
+
+        .diagnosis-desc-line {
+            margin: 0 0 15px;
+        }
+
+        .diagnosis-desc-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .diagnosis-desc .highlight {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        #intro-screen .btn-primary {
+            height: 44px;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: 500;
+            box-shadow: none;
+        }
+
+        .footer-supporting {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .diagnosis-home-indicator {
+            width: 134px;
+            height: 5px;
+            margin: 7px auto 0;
+            border-radius: 999px;
+            background: #000;
+        }
+
+        
+        /* --- Survey Core CSS (Kept from original) --- */
+        #survey-screen {
+            display: none;
+            min-height: 100vh;
+            background-color: var(--white);
+        }
+        #survey-screen.active {
+            display: block;
+        }
+
+        .survey-app-shell {
+            width: 100%;
+            max-width: 393px;
+            min-height: 852px;
+            margin: 0 auto;
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 26px;
+        }
+
+        .survey-status-bar {
+            height: 40px;
+            padding: 12px 24px 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            color: #000;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .survey-status-icons {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            height: 16px;
+        }
+
+        .survey-network-slot {
+            min-width: 20px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: right;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .survey-signal-bars {
+            display: flex;
+            align-items: end;
+            gap: 2px;
+            height: 15px;
+        }
+
+        .survey-signal-bars span {
+            width: 4px;
+            border-radius: 2px;
+            background: #000;
+            display: block;
+        }
+
+        .survey-signal-bars span:nth-child(1) { height: 5px; }
+        .survey-signal-bars span:nth-child(2) { height: 8px; }
+        .survey-signal-bars span:nth-child(3) { height: 11px; }
+        .survey-signal-bars span:nth-child(4) { height: 15px; }
+
+        .survey-wifi-mark {
+            width: 20px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .survey-battery-shell {
+            width: 25px;
+            height: 13px;
+            border: 1.5px solid #8c8c8c;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .survey-battery-shell::after {
+            content: "";
+            position: absolute;
+            right: -3px;
+            top: 4px;
+            width: 2px;
+            height: 5px;
+            background: #8c8c8c;
+            border-radius: 0 1px 1px 0;
+        }
+
+        .survey-battery-level {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            height: 7px;
+            width: 18px;
+            border-radius: 1px;
+            background: #000;
+        }
+
+        .survey-top-header {
+            height: 104px;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            background: var(--white);
+        }
+
+        .survey-top-header .header-icon {
+            width: 24px;
+            height: 24px;
+            font-size: 23px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+            margin-top: 39px;
+        }
+
+        .survey-logo-mark {
+            position: absolute;
+            left: 50%;
+            top: 51px;
+            width: 128px;
+            height: 58px;
+            transform: translate(-50%, -50%) scale(1.75);
+            transform-origin: center;
+            overflow: visible;
+            z-index: 1;
+        }
+
+        .survey-logo-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .survey-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 2;
+            margin-top: 39px;
+        }
+
+        .survey-header-actions .header-icon {
+            margin-top: 0;
+        }
+
+        .survey-header-actions .cart-wrapper {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .survey-header-actions .cart-wrapper .header-icon {
+            margin-top: 0;
+        }
+
+        .survey-header {
+            background: var(--white);
+            padding: 0 25px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .progress-wrapper {
+            width: 100%;
+            height: 4px;
+            background: #d7d7d7;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #5cc1a6;
+            transition: width 0.3s ease;
+        }
+        .step-indicator {
+            font-size: 12px;
+            line-height: 1.25;
+            color: #000;
+            margin-bottom: 14px;
+            font-weight: 400;
+            letter-spacing: 0;
+        }
+        .survey-content { padding: 0 25px 30px 25px; max-width: 393px; margin: 0 auto; }
+        .survey-step { display: none; animation: fadeIn 0.4s ease; }
+        .survey-step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .question-title { font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.02em; }
+        .question-subtitle { font-size: 1rem; color: var(--text-light); margin-bottom: 30px; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+        .form-control { width: 100%; padding: 16px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 1rem; background: var(--white); transition: border-color 0.2s; }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+        .option-list { display: flex; flex-direction: column; gap: 12px; }
+        .option-card { background: var(--white); border: 2px solid var(--white); border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .option-card:active { transform: scale(0.98); }
+        .option-card.selected { border-color: var(--primary); background: var(--primary-light); }
+        .option-card input { display: none; }
+        .option-text { font-size: 1.05rem; font-weight: 600; color: var(--text-main); flex-grow: 1; }
+        .check-circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: transparent; transition: all 0.2s; }
+        .option-card.selected .check-circle { background: var(--primary); border-color: var(--primary); color: var(--white); }
+        .checkbox-card .check-circle { border-radius: 6px; }
+        .bottom-action { margin-top: 40px; display: flex; gap: 16px; }
+        .secure-text { text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+        .step-one-title {
+            color: #000;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.17;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+        }
+
+        .step-one-title span {
+            color: #3AAE92;
+        }
+
+        .step-one-subtitle {
+            color: #000;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.45;
+            letter-spacing: 0;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .step-one-subtitle i {
+            color: #3AAE92;
+            font-size: 17px;
+        }
+
+        .step-one-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 21px;
+        }
+
+        .step-one-card {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px 24px 13px 16px;
+            background: #fff;
+            border: 1px solid #EBEBEB;
+            border-radius: 5px;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-one-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #000;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.75px;
+            margin-bottom: 16px;
+        }
+
+        .step-one-label i {
+            color: #3AAE92;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .step-one-card input {
+            width: 100%;
+            height: 36px;
+            border: 1px solid #EBEBEB;
+            border-radius: 5px;
+            background: #fff;
+            padding: 0 16px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.6px;
+            outline: none;
+        }
+
+        .step-one-card input::placeholder {
+            color: #9D9BA0;
+        }
+
+        .step-input-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        .step-input-wrap input {
+            padding-right: 40px;
+        }
+
+        .step-valid-check {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3AAE92;
+            font-size: 18px;
+            line-height: 1;
+            display: none;
+            pointer-events: none;
+        }
+
+        .step-one-card.is-valid .step-valid-check {
+            display: block;
+        }
+
+        .step-one-card.is-invalid input,
+        .step-one-card.is-invalid .step-phone-row {
+            border-color: #E5534B;
+        }
+
+        .step-field-error {
+            display: none;
+            margin-top: 7px;
+            color: #E5534B;
+            font-size: 11px;
+            line-height: 1.25;
+            letter-spacing: 0.2px;
+        }
+
+        .step-one-card.is-invalid .step-field-error {
+            display: block;
+        }
+
+        .step-phone-row {
+            display: grid;
+            grid-template-columns: 94px 1fr;
+            height: 36px;
+            border: 1px solid #EBEBEB;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+        }
+
+        .country-select {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-right: 1px solid #EBEBEB;
+            color: #000;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+        }
+
+        .country-select img {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .country-select i {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .step-phone-row input {
+            border: 0;
+            border-radius: 0;
+            height: 34px;
+            padding-right: 40px;
+        }
+
+        .step-phone-row .step-valid-check {
+            right: 12px;
+        }
+
+        .step-one-secure {
+            width: 100%;
+            min-height: 47px;
+            margin: 33px auto 0;
+            padding: 8px 16px;
+            border-radius: 5px;
+            background: #F5FAF9;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #000;
+        }
+
+        .step-one-secure i {
+            color: #3AAE92;
+            font-size: 24px;
+            line-height: 1;
+            flex: 0 0 auto;
+        }
+
+        .step-one-secure-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            font-size: 12px;
+            line-height: 1.2;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+
+        .step-one-actions {
+            height: 69px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .step-one-actions .btn-outline,
+        .step-one-actions .btn-primary {
+            width: 150px;
+            height: 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            box-shadow: none;
+        }
+
+        .step-one-actions .btn-outline {
+            border-color: #5CC1A6;
+            color: #3AAE92;
+            background: #fff;
+        }
+
+        .step-one-actions .btn-primary {
+            background: #5CC1A6;
+            color: #fff;
+        }
+
+        .step-one-actions .btn-primary:disabled {
+            background: #CFCFCF;
+            color: #fff;
+            cursor: not-allowed;
+        }
+
+        .ios-browser-toolbar {
+            display: none;
+            width: 246px;
+            height: 46px;
+            margin: 19px auto 12px;
+            border-radius: 23px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+            align-items: center;
+            justify-content: space-around;
+            color: #000;
+            font-size: 25px;
+        }
+
+        .ios-browser-toolbar .disabled {
+            color: #CFCFCF;
+        }
+
+        .ios-home-indicator {
+            display: none;
+            width: 140px;
+            height: 5px;
+            margin: 0 auto;
+            border-radius: 999px;
+            background: #000;
+        }
+
+        body.is-ios-mobile #survey-screen.active .ios-browser-toolbar,
+        body.is-ios-mobile #survey-screen.active .ios-home-indicator {
+            display: flex;
+        }
+
+        body.is-ios-mobile #survey-screen.active .ios-home-indicator {
+            display: block;
+        }
+
+        #analysis-screen { display: none; min-height: 100vh; background: var(--white); text-align: center; padding: 80px 24px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid var(--primary-light); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 30px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <!-- Modals & Overlays -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-menu" id="sidebar-menu">
+        <i class="ph ph-x" style="font-size:24px; cursor:pointer;" onclick="toggleSidebar()"></i>
+        <ul>
+            <li>Home</li>
+            <li>Skin</li>
+            <li>Routine Program</li>
+            <li>Treatment Finder</li>
+            <li>About Us</li>
+        </ul>
+    </div>
+    
+    <!-- STEP 0: Intro -->
+    <div id="intro-screen" class="active">
+        <div class="diagnosis-shell">
+            <div class="diagnosis-status-bar">
+                <span id="diagnosis-current-time">--:--</span>
+                <div class="diagnosis-live-status" aria-label="Live device status">
+                    <span id="diagnosis-network-status" class="active is-muted">Online</span>
+                    <span id="diagnosis-battery-status"></span>
+                </div>
+            </div>
+
+            <div class="diagnosis-header">
+                <i class="ph ph-list header-icon" onclick="toggleSidebar()"></i>
+                <div class="diagnosis-logo-mark" onclick="goHome()" aria-label="YUNN home">
+                    <img src="image/yuun_logo png.png" alt="YUNN">
+                </div>
+                <div class="diagnosis-header-actions">
+                    <i class="ph ph-user header-icon" onclick="handleUserClick()"></i>
+                    <div class="cart-wrapper" onclick="handleCartClick()">
+                        <i class="ph ph-shopping-bag header-icon"></i>
+                        <div class="cart-badge" id="cart-badge" style="display:none;">2</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diagnosis-content">
+                <div class="diagnosis-hero">
+                    <div class="diagnosis-copy">
+                        <div class="diagnosis-headline">
+                            <p>Your acne<br>keeps <span class="diagnosis-highlight">coming back.</span></p>
+                            <p>Your dark spots<br><span class="diagnosis-highlight">won't fade.</span></p>
+                            <p>Let's find out <span class="diagnosis-highlight">why.</span></p>
+                        </div>
+                        <div class="diagnosis-subcopy">
+                            Answer a few quick questions<br>
+                            and get your personalized<br>
+                            skin routine.
+                        </div>
+                    </div>
+
+                    <div class="diagnosis-visual" aria-hidden="true">
+                        <div class="diagnosis-visual-bg"></div>
+                        <img src="image/survey.start.image.png" alt="">
+                    </div>
+                </div>
+
+                <div class="feature-icons">
+                    <div class="f-icon">
+                        <i class="ph-light ph-clock"></i>
+                        <span>Takes 3 minutes</span>
+                    </div>
+                    <div class="f-icon">
+                        <i class="ph-light ph-user-focus"></i>
+                        <span>100% Private</span>
+                    </div>
+                    <div class="f-icon">
+                        <i class="ph-light ph-sparkle"></i>
+                        <span>Personalized for you</span>
+                    </div>
+                </div>
+
+                <div class="diagnosis-desc">
+                    <div class="diagnosis-desc-line">Most routines fail</div>
+                    <div class="diagnosis-desc-line">because they're built on <span class="highlight">guesswork.</span></div>
+                    <div class="diagnosis-desc-line">YUNN <span class="highlight">analyzes</span> your skin,</div>
+                    <div class="diagnosis-desc-line">your <span class="highlight">environment,</span></div>
+                    <div class="diagnosis-desc-line">and your <span class="highlight">lifestyle</span> then builds</div>
+                    <div class="diagnosis-desc-line">a <span class="highlight">14-day routine</span></div>
+                    <div class="diagnosis-desc-line">designed specifically for you.</div>
+                </div>
+
+                <button class="btn-primary" onclick="startSurvey()">
+                    Start My Skin Analysis <i class="ph ph-arrow-right" style="margin-left:8px;"></i>
+                </button>
+                <div class="footer-supporting">
+                    Takes 3 minutes. Results in 24 hours.
+                </div>
+            </div>
+
+            <div class="diagnosis-home-indicator" aria-hidden="true"></div>
+        </div>
+    </div>
+
+
+<!-- SURVEY CORE -->
+    <div id="survey-screen">
+        <div class="survey-app-shell">
+            <div class="survey-status-bar">
+                <span id="survey-current-time">--:--</span>
+                <div class="survey-status-icons" aria-label="Live device status">
+                    <span class="survey-signal-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                    <span class="survey-network-slot" id="survey-network-slot">
+                        <i class="ph-fill ph-wifi-high survey-wifi-mark" aria-hidden="true"></i>
+                    </span>
+                    <span class="survey-battery-shell" aria-hidden="true"><span class="survey-battery-level" id="survey-battery-level"></span></span>
+                </div>
+            </div>
+
+            <div class="survey-top-header">
+                <i class="ph ph-list header-icon" onclick="toggleSidebar()" aria-label="Open menu"></i>
+                <div class="survey-logo-mark" onclick="goHome()" aria-label="YUNN home">
+                    <img src="image/yuun_logo png.png" alt="YUNN">
+                </div>
+                <div class="survey-header-actions">
+                    <i class="ph ph-user header-icon" onclick="handleUserClick()" aria-label="Account"></i>
+                    <div class="cart-wrapper" onclick="handleCartClick()" aria-label="Cart">
+                        <i class="ph ph-shopping-bag header-icon"></i>
+                        <div class="cart-badge" id="survey-cart-badge" style="display:none;">2</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="survey-header">
+                <div class="progress-wrapper">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="step-indicator" id="step-indicator">Page 1 of 10</div>
+            </div>
+
+            <div class="survey-content">
+                <form id="assessment-form">
+
+                <!-- Step 1: Contact Info -->
+                <div class="survey-step active" data-step="1">
+                    <h2 class="step-one-title">Let’s Start<br><span>with the basics</span></h2>
+                    <p class="step-one-subtitle">Your routine will be delivered via WhatsApp. <i class="ph ph-whatsapp-logo"></i></p>
+
+                    <div class="step-one-fields">
+                        <div class="step-one-card">
+                            <label class="step-one-label" for="userName">
+                                <i class="ph ph-user"></i>
+                                <span>Your Name</span>
+                            </label>
+                            <div class="step-input-wrap">
+                                <input type="text" id="userName" placeholder="Enter your full name" autocomplete="name" required>
+                                <i class="ph-fill ph-check-circle step-valid-check" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="step-one-card">
+                            <label class="step-one-label" for="userEmail">
+                                <i class="ph ph-envelope-simple"></i>
+                                <span>Email</span>
+                            </label>
+                            <div class="step-input-wrap">
+                                <input type="email" id="userEmail" placeholder="Enter your email address" autocomplete="email" inputmode="email" required>
+                                <i class="ph-fill ph-check-circle step-valid-check" aria-hidden="true"></i>
+                            </div>
+                            <div class="step-field-error" id="userEmailError">Please enter a valid email address.</div>
+                        </div>
+                        <div class="step-one-card">
+                            <label class="step-one-label" for="userWhatsApp">
+                                <i class="ph ph-phone"></i>
+                                <span>Phone Number</span>
+                            </label>
+                            <div class="step-phone-row">
+                                <div class="country-select">
+                                    <img src="https://flagcdn.com/w40/in.png" alt="India">
+                                    <span>+91</span>
+                                    <i class="ph ph-caret-down"></i>
+                                </div>
+                                <div class="step-input-wrap">
+                                    <input type="tel" id="userWhatsApp" placeholder="Enter your phone number" inputmode="numeric" maxlength="10" autocomplete="tel-national" required>
+                                    <i class="ph-fill ph-check-circle step-valid-check" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="step-field-error" id="userPhoneError">Please enter a valid Indian phone number.</div>
+                        </div>
+                    </div>
+
+                    <div class="step-one-secure">
+                        <i class="ph ph-user-focus"></i>
+                        <div class="step-one-secure-text">
+                            <span>Your information is 100% safe and secure.</span>
+                            <span>We never share your data with anyone.</span>
+                        </div>
+                    </div>
+
+                    <div class="step-one-actions">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" id="btn-next-1" disabled onclick="nextStep()">Next</button>
+                    </div>
+                </div>
+
+
+                <!-- Step 2: Gender -->
+                <div class="survey-step" data-step="2">
+                    <h2 class="question-title">What's your gender?</h2>
+                    <p class="question-subtitle">This helps us refine your routine.</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="gender" value="Female"><span class="option-text">Female</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="gender" value="Male"><span class="option-text">Male</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="gender" value="Prefer not to say"><span class="option-text">Prefer not to say</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 3: Age -->
+                <div class="survey-step" data-step="3">
+                    <h2 class="question-title">How old are you?</h2>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="age" value="Under 20"><span class="option-text">Under 20</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="20-24"><span class="option-text">20–24</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="25-29"><span class="option-text">25–29</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="30-34"><span class="option-text">30–34</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="age" value="35+"><span class="option-text">35+</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 4: Skin Type -->
+                <div class="survey-step" data-step="4">
+                    <h2 class="question-title">What's your skin type?</h2>
+                    <p class="question-subtitle">Choose the description that fits best.</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card">
+                            <input type="radio" name="skinType" value="Oily">
+                            <div class="option-text"><div>Oily</div><div style="font-size:0.85rem; color:var(--text-light); font-weight:400; margin-top:4px;">Shine appears within an hour of cleansing</div></div>
+                            <div class="check-circle"><i class="ph-bold ph-check"></i></div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="skinType" value="Dry">
+                            <div class="option-text"><div>Dry</div><div style="font-size:0.85rem; color:var(--text-light); font-weight:400; margin-top:4px;">Feels tight or flaky, especially after washing</div></div>
+                            <div class="check-circle"><i class="ph-bold ph-check"></i></div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="skinType" value="Combination">
+                            <div class="option-text"><div>Combination</div><div style="font-size:0.85rem; color:var(--text-light); font-weight:400; margin-top:4px;">Oily in the T-zone, drier on the cheeks</div></div>
+                            <div class="check-circle"><i class="ph-bold ph-check"></i></div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="skinType" value="Normal">
+                            <div class="option-text"><div>Normal</div><div style="font-size:0.85rem; color:var(--text-light); font-weight:400; margin-top:4px;">Balanced — not too oily, not too dry</div></div>
+                            <div class="check-circle"><i class="ph-bold ph-check"></i></div>
+                        </label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 5: Skin Concerns -->
+                <div class="survey-step" data-step="5">
+                    <h2 class="question-title">What's actually bothering you?</h2>
+                    <p class="question-subtitle">Select everything that applies.</p>
+                    <div class="option-list checkbox-group">
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Pigmentation"><span class="option-text">Pigmentation (Dark spots)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Uneven skin tone"><span class="option-text">Uneven skin tone (Dullness)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Acne"><span class="option-text">Acne (Active breakouts)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Acne marks"><span class="option-text">Acne marks (Scars)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Enlarged pores"><span class="option-text">Enlarged pores</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card checkbox-card"><input type="checkbox" name="concerns" value="Dryness"><span class="option-text">Dryness (Dehydrated skin)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 6: Triggers -->
+                <div class="survey-step" data-step="6">
+                    <h2 class="question-title">When does your skin get worse?</h2>
+                    <p class="question-subtitle">Triggers help us build a responsive routine.</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="trigger" value="Sun"><span class="option-text">After sun exposure</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Stress"><span class="option-text">During high-stress periods</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Period"><span class="option-text">Around your period</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Sleep"><span class="option-text">When not sleeping enough</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="trigger" value="Same"><span class="option-text">It's always roughly the same</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 7: Sensitivity -->
+                <div class="survey-step" data-step="7">
+                    <h2 class="question-title">Skin sensitivity.</h2>
+                    <p class="question-subtitle">How does your skin react to external factors?</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="sensitivity" value="Fine"><span class="option-text">Usually fine — no reaction</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sensitivity" value="Occasional"><span class="option-text">Occasionally breaks out/irritated</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sensitivity" value="Reacts often"><span class="option-text">Reacts fairly often</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sensitivity" value="Always"><span class="option-text">Almost always has a reaction</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 8: Outdoor -->
+                <div class="survey-step" data-step="8">
+                    <h2 class="question-title">Outdoor habits.</h2>
+                    <p class="question-subtitle">How much time do you spend outdoors?</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="outdoor" value="Barely"><span class="option-text">Barely any — mostly indoors</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="outdoor" value="Under 1h"><span class="option-text">Under 1 hour</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="outdoor" value="1-3h"><span class="option-text">1–3 hours</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="outdoor" value="3h+"><span class="option-text">More than 3 hours</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 9: Sunscreen -->
+                <div class="survey-step" data-step="9">
+                    <h2 class="question-title">Sun protection.</h2>
+                    <p class="question-subtitle">How often do you apply sunscreen?</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="sunscreen" value="Every day"><span class="option-text">Every day, without fail</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sunscreen" value="Most days"><span class="option-text">Most days</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sunscreen" value="Occasionally"><span class="option-text">Occasionally</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sunscreen" value="Rarely"><span class="option-text">Rarely or never</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 10: Sleep -->
+                <div class="survey-step" data-step="10">
+                    <h2 class="question-title">Lifestyle intensity.</h2>
+                    <p class="question-subtitle">How many hours of sleep do you usually get?</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="sleep" value="Under 5h"><span class="option-text">Under 5 hours</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sleep" value="5-6h"><span class="option-text">5–6 hours</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sleep" value="7-8h"><span class="option-text">7–8 hours</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="sleep" value="8h+"><span class="option-text">More than 8 hours</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+
+                <!-- Step 11: Current Routine -->
+                <div class="survey-step" data-step="11">
+                    <h2 class="question-title">Current routine.</h2>
+                    <p class="question-subtitle">What does your skincare look like right now?</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Nothing"><span class="option-text">Nothing — I don't have one</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Wash only"><span class="option-text">I wash my face, that's it</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Basic"><span class="option-text">A basic routine (1–2 products)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Multi"><span class="option-text">A multi-step routine (3+ products)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                    </div>
+
+                    <div class="bottom-action">
+                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                    </div>
+                    <div class="secure-text">
+                        <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
+                    </div>
+                </div>
+
+            </form>
+            </div>
+
+            <div class="ios-browser-toolbar" aria-hidden="true">
+                <i class="ph ph-caret-left"></i>
+                <i class="ph ph-caret-right disabled"></i>
+                <i class="ph ph-share"></i>
+                <i class="ph ph-book-open"></i>
+                <i class="ph ph-copy"></i>
+            </div>
+            <div class="ios-home-indicator" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <!-- ANALYSIS SCREEN -->
+
+<!-- ANALYSIS SCREEN -->
+    <div id="analysis-screen">
+        <div class="container">
+            <div class="spinner"></div>
+            <h2 class="question-title">Building your routine.</h2>
+            <p class="question-subtitle">We're cross-referencing your skin profile, lifestyle data, and environment.</p>
+            <div id="cycling-status" style="font-weight:600; color:var(--primary);">Analysing skin concern patterns...</div>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" style="display:none; padding-bottom:60px; background:var(--bg-gray); min-height:100vh;">
+        <div class="survey-header" style="justify-content:center;">
+            <div class="logo-text">YUNN</div>
+        </div>
+        <div class="survey-content">
+            <h2 class="question-title"><span id="res-name">Ananya</span>'s 14-day routine.</h2>
+            <p class="question-subtitle">Built around your skin, your triggers, and your lifestyle.</p>
+            
+            <div id="routine-sections">
+                <!-- Injected via JS -->
+            </div>
+
+            <div style="background:var(--white); padding:24px; border-radius:16px; text-align:center; margin-top:24px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+                <p style="font-size:1.1rem; font-weight:600; margin-bottom:8px;">Your routine focuses on <span id="res-focus" style="color:var(--primary);">Acne prevention</span>.</p>
+                <div style="font-size:2rem; font-weight:800; margin-bottom:20px;">₹2,850</div>
+                <button class="btn-primary" onclick="alert('Proceed to checkout')">Start my 14-day routine</button>
+                <p style="font-size:0.85rem; color:var(--text-light); margin-top:16px;">"If your skin doesn't improve, we don't stop. We rebuild."</p>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+
+        // --- Live status bars ---
+        function initMobileChrome() {
+            const timeEl = document.getElementById('diagnosis-current-time');
+            const networkEl = document.getElementById('diagnosis-network-status');
+            const batteryEl = document.getElementById('diagnosis-battery-status');
+            const surveyTimeEl = document.getElementById('survey-current-time');
+            const surveyNetworkEl = document.getElementById('survey-network-slot');
+            const surveyBatteryLevelEl = document.getElementById('survey-battery-level');
+
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const isMobileWidth = window.matchMedia('(max-width: 767px)').matches;
+            document.body.classList.toggle('is-ios-mobile', isIOS && isMobileWidth);
+
+            const updateTime = () => {
+                const now = new Date();
+                const value = now.toLocaleTimeString([], {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: false
+                });
+                if (timeEl) timeEl.textContent = value;
+                if (surveyTimeEl) surveyTimeEl.textContent = value;
+            };
+
+            const updateNetwork = () => {
+                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                const onlineText = navigator.onLine ? 'Online' : 'Offline';
+                const connectionType = connection && (connection.effectiveType || connection.type);
+                const value = navigator.onLine && connectionType ? connectionType.toUpperCase() : onlineText;
+                if (networkEl) {
+                    networkEl.textContent = value;
+                    networkEl.classList.add('active');
+                    networkEl.classList.toggle('is-muted', !connectionType);
+                }
+                if (surveyNetworkEl) {
+                    const normalized = String(value).toUpperCase();
+                    if (normalized.includes('4G') || normalized.includes('5G') || normalized.includes('3G') || normalized.includes('2G') || normalized.includes('CELLULAR')) {
+                        surveyNetworkEl.textContent = normalized.replace('CELLULAR', '5G');
+                    } else if (navigator.onLine) {
+                        surveyNetworkEl.innerHTML = '<i class="ph-fill ph-wifi-high survey-wifi-mark" aria-hidden="true"></i>';
+                    } else {
+                        surveyNetworkEl.textContent = 'Off';
+                    }
+                }
+            };
+
+            const updateBatteryText = (battery) => {
+                const percent = Math.round(battery.level * 100);
+                if (batteryEl) {
+                    batteryEl.textContent = `${percent}%`;
+                    batteryEl.classList.add('active');
+                    batteryEl.classList.toggle('is-muted', !battery.charging);
+                }
+                if (surveyBatteryLevelEl) {
+                    surveyBatteryLevelEl.style.width = `${Math.max(4, Math.round(18 * battery.level))}px`;
+                }
+            };
+
+            updateTime();
+            updateNetwork();
+            setInterval(updateTime, 10000);
+            window.addEventListener('online', updateNetwork);
+            window.addEventListener('offline', updateNetwork);
+            window.addEventListener('resize', () => {
+                document.body.classList.toggle('is-ios-mobile', isIOS && window.matchMedia('(max-width: 767px)').matches);
+            });
+
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection && connection.addEventListener) {
+                connection.addEventListener('change', updateNetwork);
+            }
+
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then((battery) => {
+                    updateBatteryText(battery);
+                    battery.addEventListener('levelchange', () => updateBatteryText(battery));
+                    battery.addEventListener('chargingchange', () => updateBatteryText(battery));
+                }).catch(() => {
+                    if (batteryEl) batteryEl.classList.remove('active');
+                    if (surveyBatteryLevelEl) surveyBatteryLevelEl.style.width = '14px';
+                });
+            } else if (surveyBatteryLevelEl) {
+                surveyBatteryLevelEl.style.width = '14px';
+            }
+        }
+
+        initMobileChrome();
+
+        // --- Navigation Logic ---
+        let isLoggedIn = false; // Mock login state
+        
+        function toggleSidebar() {
+            document.getElementById('sidebar-menu').classList.toggle('active');
+            document.getElementById('sidebar-overlay').classList.toggle('active');
+        }
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+        function handleUserClick() {
+            if (!isLoggedIn) {
+                alert("Login required. Redirecting to login page...");
+                // window.location.href = 'login.html';
+            } else {
+                alert("Redirecting to My Page...");
+            }
+        }
+        function handleCartClick() {
+            if (!isLoggedIn) {
+                alert("로그인 후 이용하시기 바랍니다.");
+                // window.location.href = 'login.html';
+            } else {
+                alert("Redirecting to Cart Page...");
+            }
+        }
+
+        // Demo function to simulate login
+        function debugLogin() {
+            isLoggedIn = true;
+            document.getElementById('cart-badge').style.display = 'flex';
+            alert("Simulated Login: Success. Cart badge is now visible.");
+        }
+
+
+
+        const ROUTINE_DATABASE = {
+            "F-A-O": {
+                title: "Female · Acne · Oily Skin",
+                morning: [
+                    { name: "Mild gel cleanser (pH 5.5)", desc: "Cleanse with lukewarm water for 30 sec, no harsh scrubbing" },
+                    { name: "Salicylic acid 2% toner", desc: "Wipe entire face with cotton pad (max 5x/week)" },
+                    { name: "Niacinamide 10% serum", desc: "Apply thin layer across entire face" },
+                    { name: "Oil-free water-gel moisturizer", desc: "Pat gently until fully absorbed" },
+                    { name: "SPF50+ PA++++ sunscreen (oil-free)", desc: "Apply coin-sized amount 30 min before going out" }
+                ],
+                out: [{ name: "SPF50+ sun stick", desc: "Reapply every 2-3 hours" }],
+                home: [
+                    { name: "Micellar water", desc: "Remove pollutants gently with cotton pad" },
+                    { name: "Calming toner mist", desc: "Spritz lightly across face" }
+                ],
+                evening: [
+                    { name: "Gel cleanser", desc: "Cleanse with lukewarm water" },
+                    { name: "Salicylic acid 2% toner", desc: "Focus on T-zone" },
+                    { name: "Niacinamide + Azelaic acid serum", desc: "Apply to entire face (intensive night treatment)" },
+                    { name: "Oil-free night gel", desc: "Finish with thin layer" }
+                ]
+            },
+            "F-A-D": {
+                title: "Female · Acne · Dry Skin",
+                morning: [
+                    { name: "Hydrating mild foam cleanser", desc: "Gentle circular motions for 5-10 sec" },
+                    { name: "Hydrating toner", desc: "Hyaluronic Acid - Press gently into skin" },
+                    { name: "Niacinamide 5% serum", desc: "Apply to entire face (low concentration)" },
+                    { name: "Ceramide cream", desc: "Deep moisture" },
+                    { name: "SPF50+ hydrating sunscreen", desc: "Apply 30 min before going out" }
+                ],
+                out: [{ name: "Hydrating sun stick SPF50+", desc: "Reapply as needed" }],
+                home: [{ name: "Mild cleansing water then sheet mask", desc: "Leave on 10-15 min" }],
+                evening: [
+                    { name: "Cleansing balm then foam", desc: "Double cleanse" },
+                    { name: "Hydrating toner", desc: "Layer 2-3 times" },
+                    { name: "Benzoyl peroxide 2.5%", desc: "Spot treatment only on breakouts" },
+                    { name: "Ceramide + Peptide cream", desc: "Apply generously" }
+                ]
+            },
+            "F-A-N": {
+                title: "Female · Acne · Normal Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "30 sec gentle massage" },
+                    { name: "BHA toner", desc: "Apply all over (3-4x/week)" },
+                    { name: "Niacinamide serum", desc: "All over" },
+                    { name: "Light lotion moisturizer", desc: "Pat until absorbed" },
+                    { name: "SPF50+ sunscreen", desc: "Apply 30 min before" }
+                ],
+                out: [{ name: "Sun stick", desc: "Reapply every 2-3 hours" }],
+                home: [{ name: "Micellar water", desc: "Light cleanse" }],
+                evening: [
+                    { name: "Foam cleanser", desc: "Second cleanse" },
+                    { name: "Salicylic acid serum", desc: "Alternate with Retinol 0.025%" },
+                    { name: "Lotion moisturizer", desc: "Finish" }
+                ]
+            },
+            "F-A-C": {
+                title: "Female · Acne · Combination Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse with lukewarm water" },
+                    { name: "BHA toner", desc: "Focus on T-zone" },
+                    { name: "Niacinamide serum", desc: "Balancing effect" },
+                    { name: "Gel-cream moisturizer", desc: "Zone-specific application" },
+                    { name: "SPF50+ sunscreen", desc: "Apply all over" }
+                ],
+                out: [{ name: "SPF50+ powder", desc: "Reapply on T-zone" }],
+                home: [{ name: "Toning mist", desc: "Spritz and pat" }],
+                evening: [
+                    { name: "Cleansing oil then foam", desc: "Double cleanse" },
+                    { name: "Niacinamide + Azelaic acid", desc: "All over" },
+                    { name: "Gel-cream", desc: "Finish" }
+                ]
+            },
+            "F-P-O": {
+                title: "Female · Hyperpigmentation · Oily Skin",
+                morning: [
+                    { name: "Mild gel cleanser", desc: "Cleanse with lukewarm water" },
+                    { name: "Vitamin C serum (L-Ascorbic Acid 15%)", desc: "Apply thin layer (morning only)" },
+                    { name: "Niacinamide toner", desc: "Apply all over" },
+                    { name: "Oil-free water-gel moisturizer", desc: "Light application" },
+                    { name: "SPF50+ PA++++ sunscreen", desc: "Sun protection is #1 brightening step" }
+                ],
+                out: [{ name: "SPF50+", desc: "Reapply every 2-3 hours" }],
+                home: [{ name: "Micellar water then mist", desc: "Remove pollutants + calm" }],
+                evening: [
+                    { name: "Gel cleanser", desc: "Cleanse" },
+                    { name: "Alpha Arbutin + Niacinamide", desc: "Focus on pigmented areas" },
+                    { name: "Retinol 0.05%", desc: "Focus on dark spots (start 3x/week)" },
+                    { name: "Oil-free night gel", desc: "Finish" }
+                ]
+            },
+            "F-P-D": {
+                title: "Female · Hyperpigmentation · Dry Skin",
+                morning: [
+                    { name: "Hydrating foam cleanser", desc: "Gentle cleanse" },
+                    { name: "Vitamin C serum 10%", desc: "All over (low concentration)" },
+                    { name: "Hyaluronic acid essence", desc: "Layer for moisture" },
+                    { name: "Ceramide cream", desc: "Apply generously" },
+                    { name: "SPF50+ hydrating sunscreen", desc: "Apply 30 min before" }
+                ],
+                out: [{ name: "Hydrating sun stick", desc: "Reapply" }],
+                home: [{ name: "Cleansing water then sheet mask", desc: "Calm + hydrate" }],
+                evening: [
+                    { name: "Cleansing balm then foam", desc: "Double cleanse" },
+                    { name: "Alpha Arbutin + Niacinamide", desc: "All over" },
+                    { name: "Retinol 0.025%", desc: "Low concentration" },
+                    { name: "Rich night cream", desc: "Apply generously" }
+                ]
+            },
+            "F-P-N": {
+                title: "Female · Hyperpigmentation · Normal Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse" },
+                    { name: "Vitamin C serum 15-20%", desc: "All over" },
+                    { name: "Lotion moisturizer", desc: "All over" },
+                    { name: "SPF50+ PA++++ sunscreen", desc: "Apply generously" }
+                ],
+                out: [{ name: "Sun stick", desc: "Reapply" }],
+                home: [{ name: "Micellar water", desc: "Light cleanse" }],
+                evening: [
+                    { name: "Foam cleanser", desc: "Cleanse" },
+                    { name: "AHA toner", desc: "3x/week, exfoliate + improve pigmentation" },
+                    { name: "Retinol 0.05%", desc: "Every other night" },
+                    { name: "Lotion moisturizer", desc: "Finish" }
+                ]
+            },
+            "F-P-C": {
+                title: "Female · Hyperpigmentation · Combination Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse" },
+                    { name: "Vitamin C serum", desc: "All over" },
+                    { name: "Gel-cream", desc: "Thin on T-zone, thicker on cheeks" },
+                    { name: "SPF50+ PA++++", desc: "Apply generously" }
+                ],
+                out: [{ name: "SPF50+ powder", desc: "Reapply on T-zone" }],
+                home: [{ name: "Micellar water then mist", desc: "Calm + clean" }],
+                evening: [
+                    { name: "Cleansing oil then foam", desc: "Double cleanse" },
+                    { name: "Alpha Arbutin serum", desc: "Focus on pigmented areas" },
+                    { name: "Retinol", desc: "Focus on cheeks" },
+                    { name: "Gel-cream", desc: "Finish" }
+                ]
+            },
+            "M-A-O": {
+                title: "Male · Acne · Oily Skin",
+                morning: [
+                    { name: "Deep cleansing gel (Salicylic Acid)", desc: "Massage 30sec-1min" },
+                    { name: "Salicylic acid 2% toner", desc: "Wipe entire face" },
+                    { name: "Oil-free matte lotion", desc: "Light application" },
+                    { name: "SPF50+ oil-control sunscreen", desc: "Apply before going out" }
+                ],
+                out: [{ name: "Oil-control powder", desc: "Focus reapplication on T-zone" }],
+                home: [{ name: "Micellar water", desc: "Remove pollutants" }],
+                evening: [
+                    { name: "Salicylic acid foam", desc: "Thorough cleanse" },
+                    { name: "Niacinamide + Azelaic acid", desc: "All over" },
+                    { name: "Oil-free night gel", desc: "Finish" }
+                ]
+            },
+            "M-A-D": {
+                title: "Male · Acne · Dry Skin",
+                morning: [
+                    { name: "Hydrating foam cleanser", desc: "Gentle cleanse" },
+                    { name: "Hydrating toner", desc: "All over" },
+                    { name: "Ceramide lotion", desc: "Apply for moisture" },
+                    { name: "SPF50+ hydrating sunscreen", desc: "Apply before going out" }
+                ],
+                out: [{ name: "Sun stick", desc: "Reapply" }],
+                home: [{ name: "Cleansing water", desc: "Gentle cleanse" }],
+                evening: [
+                    { name: "Cleansing balm then foam", desc: "Double cleanse" },
+                    { name: "Benzoyl peroxide 2.5%", desc: "Spot treatment" },
+                    { name: "Ceramide cream", desc: "Apply generously" }
+                ]
+            },
+            "M-A-N": {
+                title: "Male · Acne · Normal Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse" },
+                    { name: "BHA toner", desc: "All over (3-4x/week)" },
+                    { name: "Lotion moisturizer", desc: "Pat until absorbed" },
+                    { name: "SPF50+ sunscreen", desc: "Apply before going out" }
+                ],
+                out: [{ name: "Sun stick", desc: "Reapply" }],
+                home: [{ name: "Micellar water", desc: "Light cleanse" }],
+                evening: [
+                    { name: "Foam cleanser", desc: "Cleanse" },
+                    { name: "Retinol 0.025% or Salicylic acid", desc: "Alternate (2-3x/week)" },
+                    { name: "Lotion", desc: "Finish" }
+                ]
+            },
+            "M-A-C": {
+                title: "Male · Acne · Combination Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse" },
+                    { name: "BHA toner", desc: "Focus on T-zone" },
+                    { name: "Gel moisturizer", desc: "Thin on T-zone, thicker on cheeks" },
+                    { name: "SPF50+", desc: "All over" }
+                ],
+                out: [{ name: "SPF50+ powder", desc: "Reapply" }],
+                home: [{ name: "Toning mist", desc: "Calm skin" }],
+                evening: [
+                    { name: "Cleansing oil then foam", desc: "Double cleanse" },
+                    { name: "Azelaic acid serum", desc: "All over" },
+                    { name: "Gel-cream", desc: "Finish" }
+                ]
+            },
+            "M-P-O": {
+                title: "Male · Hyperpigmentation · Oily Skin",
+                morning: [
+                    { name: "Deep cleansing gel", desc: "Cleanse" },
+                    { name: "Vitamin C serum 15%", desc: "All over (morning only)" },
+                    { name: "Oil-free matte lotion", desc: "Light application" },
+                    { name: "SPF50+ oil-control sunscreen", desc: "Apply generously" }
+                ],
+                out: [{ name: "Oil-control sun stick", desc: "Reapply" }],
+                home: [{ name: "Micellar water", desc: "Remove pollutants" }],
+                evening: [
+                    { name: "Gel cleanser", desc: "Cleanse" },
+                    { name: "Niacinamide + Alpha Arbutin", desc: "Focus application" },
+                    { name: "Retinol 0.05%", desc: "Focus on dark spots" },
+                    { name: "Oil-free night gel", desc: "Finish" }
+                ]
+            },
+            "M-P-D": {
+                title: "Male · Hyperpigmentation · Dry Skin",
+                morning: [
+                    { name: "Hydrating foam cleanser", desc: "Gentle cleanse" },
+                    { name: "Vitamin C 10% serum", desc: "All over" },
+                    { name: "Ceramide cream", desc: "Apply generously" },
+                    { name: "SPF50+ hydrating sunscreen", desc: "Apply before" }
+                ],
+                out: [{ name: "Sun stick", desc: "Reapply" }],
+                home: [{ name: "Sheet mask", desc: "Calm for 10-15 min" }],
+                evening: [
+                    { name: "Cleansing balm then foam", desc: "Double cleanse" },
+                    { name: "Alpha Arbutin serum", desc: "All over" },
+                    { name: "Retinol 0.025%", desc: "Small amount" },
+                    { name: "Rich night cream", desc: "Apply generously" }
+                ]
+            },
+            "M-P-N": {
+                title: "Male · Hyperpigmentation · Normal Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse" },
+                    { name: "Vitamin C serum 15-20%", desc: "All over" },
+                    { name: "SPF50+ PA++++", desc: "Apply generously" }
+                ],
+                out: [{ name: "Sun stick", desc: "Reapply" }],
+                home: [{ name: "Micellar water", desc: "Light cleanse" }],
+                evening: [
+                    { name: "Foam cleanser", desc: "Cleanse" },
+                    { name: "AHA toner", desc: "3x/week, improve pigmentation" },
+                    { name: "Retinol 0.05%", desc: "Every other night" },
+                    { name: "Lotion", desc: "Finish" }
+                ]
+            },
+            "M-P-C": {
+                title: "Male · Hyperpigmentation · Combination Skin",
+                morning: [
+                    { name: "Mild foam cleanser", desc: "Cleanse" },
+                    { name: "Vitamin C serum", desc: "All over" },
+                    { name: "SPF50+ PA++++", desc: "Apply generously" }
+                ],
+                out: [{ name: "SPF50+ powder", desc: "Reapply" }],
+                home: [{ name: "Micellar water then mist", desc: "Cleanse + calm" }],
+                evening: [
+                    { name: "Cleansing oil then foam", desc: "Double cleanse" },
+                    { name: "Alpha Arbutin + Vitamin C", desc: "Focus on pigmented areas" },
+                    { name: "Retinol", desc: "Focus on cheeks" },
+                    { name: "Gel-cream", desc: "Finish" }
+                ]
+            }
+        };
+
+        let currentStep = 1;
+        const totalSteps = 11;
+        const displayedSurveyPages = 10;
+        const progressBar = document.getElementById('progress-bar');
+        const steps = document.querySelectorAll('.survey-step');
+
+        function updateProgress() {
+            const displayStep = Math.min(currentStep, displayedSurveyPages);
+            const percent = (displayStep / displayedSurveyPages) * 100;
+            progressBar.style.width = percent + '%';
+            const indicator = document.getElementById('step-indicator');
+            if (indicator) indicator.innerText = 'Page ' + displayStep + ' of ' + displayedSurveyPages;
+        }
+
+        function goToStep(step) {
+            if (step < 1 || step > totalSteps) return;
+            steps.forEach(s => s.classList.remove('active'));
+            document.querySelector(`.survey-step[data-step="${step}"]`).classList.add('active');
+            currentStep = step;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function nextStep() {
+            // Very simple validation
+            if (currentStep === 1) {
+                const stepOneReady = validateStepOne({ revealEmailError: true, revealPhoneError: true });
+                if(!stepOneReady) {
+                    alert("Please fill out all fields.");
+                    return;
+                }
+            }
+            if (currentStep === totalSteps) {
+                startAnalysis();
+            } else {
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function goBack() {
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
+            } else {
+                // Go back to intro
+                document.getElementById('survey-screen').classList.remove('active');
+                document.getElementById('intro-screen').classList.add('active');
+            }
+        }
+
+        function startSurvey() {
+            document.getElementById('intro-screen').classList.remove('active');
+            document.getElementById('survey-screen').classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        window.startSurvey = startSurvey;
+        window.nextStep = nextStep;
+        window.goBack = goBack;
+
+        if (new URLSearchParams(window.location.search).has('survey')) {
+            startSurvey();
+        }
+
+        // Auto-advance logic for radio cards
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (this.classList.contains('checkbox-card')) {
+                    const cb = this.querySelector('input[type="checkbox"]');
+                    if (e.target !== cb) {
+                        cb.checked = !cb.checked;
+                    }
+                    if (cb.checked) {
+                        this.classList.add('selected');
+                    } else {
+                        this.classList.remove('selected');
+                    }
+                    return;
+                }
+
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    const step = this.closest('.survey-step');
+                    step.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    radio.checked = true;
+
+                    setTimeout(() => {
+                        nextStep();
+                    }, 300);
+                }
+            });
+        });
+
+        const ALLOWED_INDIAN_EMAIL_DOMAINS = [
+            'gmail.com',
+            'outlook.com',
+            'yahoo.com',
+            'yahoo.in',
+            'hotmail.com',
+            'rediffmail.com',
+            'icloud.com'
+        ];
+        const EMAIL_ERROR_MESSAGE = 'Please enter a valid email address.';
+        const step1Inputs = document.querySelectorAll('#userName, #userEmail, #userWhatsApp');
+        const btnNext1 = document.getElementById('btn-next-1');
+
+        function normalizeEmail(value) {
+            return value.trim().toLowerCase();
+        }
+
+        function isValidIndianMvpEmail(value) {
+            const email = normalizeEmail(value);
+            if (!email) return false;
+            if (email !== value.trim()) return false;
+            if (/\s/.test(email)) return false;
+            if (/[^\x00-\x7F]/.test(email)) return false;
+
+            const parts = email.split('@');
+            if (parts.length !== 2) return false;
+
+            const [local, domain] = parts;
+            if (!local || !domain) return false;
+            if (!/^[a-z0-9._%+-]+$/.test(local)) return false;
+            if (!/^[a-z0-9.-]+$/.test(domain)) return false;
+            if (/^[._%+-]|[._%+-]$/.test(local)) return false;
+            if (local.includes('..') || domain.includes('..')) return false;
+            if (!domain.includes('.')) return false;
+
+            const domainLabels = domain.split('.');
+            if (domainLabels.some(label => !label || label.startsWith('-') || label.endsWith('-'))) return false;
+
+            const tld = domainLabels[domainLabels.length - 1];
+            if (!/^[a-z]{2,}$/.test(tld)) return false;
+            if (!ALLOWED_INDIAN_EMAIL_DOMAINS.includes(domain)) return false;
+
+            return true;
+        }
+
+        function setFieldState(input, state) {
+            const card = input.closest('.step-one-card');
+            if (!card) return;
+            card.classList.toggle('is-valid', state === 'valid');
+            card.classList.toggle('is-invalid', state === 'invalid');
+        }
+
+        function validateStepOne(options = {}) {
+            const revealEmailError = Boolean(options.revealEmailError);
+            const revealPhoneError = Boolean(options.revealPhoneError);
+            const nameInput = document.getElementById('userName');
+            const emailInput = document.getElementById('userEmail');
+            const phoneInput = document.getElementById('userWhatsApp');
+
+            const nameValid = nameInput.value.trim().length >= 2;
+            const emailValid = isValidIndianMvpEmail(emailInput.value);
+            const phoneValid = /^[6-9]\d{9}$/.test(phoneInput.value.trim());
+
+            setFieldState(nameInput, nameValid ? 'valid' : '');
+
+            if (phoneValid) {
+                setFieldState(phoneInput, 'valid');
+            } else if (revealPhoneError && phoneInput.value.trim()) {
+                setFieldState(phoneInput, 'invalid');
+            } else {
+                setFieldState(phoneInput, '');
+            }
+
+            if (emailValid) {
+                setFieldState(emailInput, 'valid');
+            } else if (revealEmailError && emailInput.value.trim()) {
+                setFieldState(emailInput, 'invalid');
+            } else {
+                setFieldState(emailInput, '');
+            }
+
+            btnNext1.disabled = !(nameValid && emailValid && phoneValid);
+            return nameValid && emailValid && phoneValid;
+        }
+
+        step1Inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.id === 'userWhatsApp') {
+                    input.value = input.value.replace(/\D/g, '').slice(0, 10);
+                }
+                validateStepOne({ revealEmailError: false, revealPhoneError: false });
+            });
+        });
+
+        document.getElementById('userEmail').addEventListener('blur', () => {
+            validateStepOne({ revealEmailError: true, revealPhoneError: false });
+        });
+
+        document.getElementById('userWhatsApp').addEventListener('blur', () => {
+            validateStepOne({ revealEmailError: false, revealPhoneError: true });
+        });
+
+        validateStepOne();
+
+        function startAnalysis() {
+            document.getElementById('survey-screen').style.display = 'none';
+            document.getElementById('analysis-screen').style.display = 'block';
+            
+            const statusMessages = ["Analysing skin concern patterns...", "Mapping daily environment...", "Calibrating routine intensity...", "Finalising your plan..."];
+            let i = 0;
+            const interval = setInterval(() => {
+                document.getElementById('cycling-status').innerText = statusMessages[i % statusMessages.length];
+                i++;
+                if (i === 12) {
+                    clearInterval(interval);
+                    showResults();
+                }
+            }, 600);
+        }
+
+        function showResults() {
+            const genderVal = document.querySelector('input[name="gender"]:checked');
+            const gender = (genderVal && genderVal.value === "Male") ? "M" : "F";
+            
+            const concernElements = document.querySelectorAll('input[name="concerns"]:checked');
+            let concern = "A";
+            if (concernElements.length > 0) {
+                const primaryVal = concernElements[0].value;
+                if (primaryVal === "Pigmentation" || primaryVal === "Uneven skin tone") {
+                    concern = "P";
+                }
+            }
+
+            const typeVal = document.querySelector('input[name="skinType"]:checked');
+            const type = typeVal ? typeVal.value.charAt(0) : "O"; // Default O
+
+            const routineId = `${gender}-${concern}-${type}`;
+            const routine = ROUTINE_DATABASE[routineId] || ROUTINE_DATABASE["F-A-O"];
+
+            document.getElementById('analysis-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            document.getElementById('res-name').innerText = document.getElementById('userName').value || 'Guest';
+            document.getElementById('res-focus').innerText = concern === "P" ? "Hyperpigmentation" : "Acne prevention";
+
+            renderRoutineBox("Morning", routine.morning);
+            renderRoutineBox("On-the-go", routine.out);
+            renderRoutineBox("Reset", routine.home);
+            renderRoutineBox("Evening", routine.evening);
+        }
+
+        function renderRoutineBox(title, items) {
+            const container = document.getElementById('routine-sections');
+            if(!items || items.length === 0) return;
+            
+            let html = `
+            <div style="background:var(--white); padding:24px; border-radius:16px; text-align:left; margin-top:24px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--primary); text-transform:uppercase; margin-bottom:8px;">${title}</div>
+            `;
+            
+            items.forEach((item, idx) => {
+                html += `
+                <div style="display:flex; gap:16px; margin-top:16px; align-items:flex-start;">
+                    <div style="width:28px; height:28px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0;">${idx+1}</div>
+                    <div>
+                        <div style="font-weight:700; font-size:1.05rem;">${item.name}</div>
+                        <div style="font-size:0.9rem; color:var(--text-light); margin-top:4px;">${item.desc}</div>
+                    </div>
+                </div>
+                `;
+            });
+            html += `</div>`;
+            container.innerHTML += html;
+        }
+
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+# Backup Policy
+
+YUNN 웹사이트 작업 시 복구 가능성을 유지하기 위한 백업 규칙입니다.
+
+## Rule
+
+1. 큰 UI 변경 전후로 핵심 파일을 `docs/code-backups/YYYY-MM-DD/`에 복사한다.
+2. 백업 파일명은 목적이 드러나게 작성한다.
+   - 예: `index.figma-home.html`
+   - 예: `survey.current-flow.html`
+3. 변경 내용은 `docs/IMPLEMENTATION-LOG.md`에 반드시 기록한다.
+4. Figma 기준으로 작업한 경우 Figma 프레임 이름도 함께 기록한다.
+5. 새 화면 파일을 만들면 해당 파일도 백업 대상에 포함한다.
+
+## Current Backups
+
+Created on 2026-05-18:
+- `docs/code-backups/2026-05-18/index.figma-home.html`
+- `docs/code-backups/2026-05-18/index.before-logo-status-fix.html`
+- `docs/code-backups/2026-05-18/index.logo-status-fixed.html`
+- `docs/code-backups/2026-05-18/index.before-new-badge-fix.html`
+- `docs/code-backups/2026-05-18/index.new-badge-fixed.html`
+- `docs/code-backups/2026-05-18/index.before-login-hero-state.html`
+- `docs/code-backups/2026-05-18/index.login-aware-hero.html`
+- `docs/code-backups/2026-05-18/index.before-logged-out-hero-layout.html`
+- `docs/code-backups/2026-05-18/index.logged-out-hero-layout.html`
+- `docs/code-backups/2026-05-18/index.before-logged-out-copy-image-tune.html`
+- `docs/code-backups/2026-05-18/index.logged-out-copy-image-tuned.html`
+- `docs/code-backups/2026-05-18/index.before-new-badge-typography.html`
+- `docs/code-backups/2026-05-18/index.before-hero-image-edge-tune.html`
+- `docs/code-backups/2026-05-18/index.hero-image-edge-new-badge-typography.html`
+- `docs/code-backups/2026-05-18/index.before-reference-polish.html`
+- `docs/code-backups/2026-05-18/index.reference-polish.html`
+- `docs/code-backups/2026-05-18/index.before-new-12px.html`
+- `docs/code-backups/2026-05-18/index.new-12px.html`
+- `docs/code-backups/2026-05-18/login.demo.html`
+- `docs/code-backups/2026-05-18/survey.current-flow.html`
+- `docs/code-backups/2026-05-18/survey.before-figma-diagnosis-start.html`
+- `docs/code-backups/2026-05-18/survey.before-diagnosis-desc-spacing.html`
+- `docs/code-backups/2026-05-18/survey.figma-diagnosis-start-spacing.html`
+- `docs/code-backups/2026-05-18/survey.before-logo-image-restore.html`
+- `docs/code-backups/2026-05-18/survey.logo-image-restored.html`
+- `docs/code-backups/2026-05-19/survey.before-logo-status-live.html`
+- `docs/code-backups/2026-05-19/survey.logo-status-live.html`
+- `docs/code-backups/2026-05-19/survey.before-home-logo-match.html`
+- `docs/code-backups/2026-05-19/survey.home-logo-match.html`
+- `docs/code-backups/2026-05-19/survey.before-step1-figma-mobile.html`
+- `docs/code-backups/2026-05-19/survey.step1-figma-mobile.html`
+- `docs/code-backups/2026-05-19/survey.before-status-wifi-icon-fix.html`
+- `docs/code-backups/2026-05-19/survey.status-wifi-icon-fixed.html`
+- `docs/code-backups/2026-05-19/index.before-shared-network-status.html`
+- `docs/code-backups/2026-05-19/index.shared-network-status.html`
+- `docs/code-backups/2026-05-19/survey.before-shared-network-status.html`
+- `docs/code-backups/2026-05-19/survey.shared-network-status-logo-aligned.html`
+- `docs/code-backups/2026-05-19/survey.before-header-icon-spacing.html`
+- `docs/code-backups/2026-05-19/survey.header-icon-spacing.html`
+- `docs/code-backups/2026-05-19/survey.before-remove-search-icons.html`
+- `docs/code-backups/2026-05-19/survey.remove-search-secure-line.html`
+- `docs/code-backups/2026-05-19/survey.before-step1-validation.html`
+- `docs/code-backups/2026-05-19/survey.step1-validation.html`
+- `docs/code-backups/2026-05-19/survey.before-email-domain-allowlist.html`
+- `docs/code-backups/2026-05-19/survey.email-domain-allowlist.html`
+- `docs/code-backups/2026-05-19/survey.before-phone-validation.html`
+- `docs/code-backups/2026-05-19/survey.phone-validation.html`
+- `docs/code-backups/2026-05-19/survey.before-option-main-bold.html`
+- `docs/code-backups/2026-05-19/survey.option-main-bold.html`
+- `docs/code-backups/2026-05-19/survey.before-step2-card-ui-match.html`
+- `docs/code-backups/2026-05-19/survey.step2-card-ui-match.html`
+
+## Restore
+
+홈 화면을 복구하려면:
+
+```bash
+cp docs/code-backups/2026-05-18/index.figma-home.html index.html
+```
+
+설문 화면을 복구하려면:
+
+```bash
+cp docs/code-backups/2026-05-18/survey.current-flow.html survey.html
+```

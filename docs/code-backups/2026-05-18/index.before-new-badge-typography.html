@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YUNN - Premium K-Beauty</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #5CC1A6;
+            --primary-dark: #3AAE92;
+            --primary-pale: #F1F6F6;
+            --mint-wash: #EAF3F1;
+            --line: #E5E5E5;
+            --border: #EBEBEB;
+            --card-bg: #F7F7F7;
+            --category-bg: #F2F2F2;
+            --accent: #E5484D;
+            --text: #000000;
+            --muted: #666666;
+            --soft: #CCCCCC;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        a {
+            color: inherit;
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 393px;
+            min-height: 100vh;
+            margin: 0 auto;
+            background: var(--white);
+            position: relative;
+            padding-bottom: 72px;
+            overflow-x: hidden;
+        }
+
+        .status-bar {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text);
+        }
+
+        .signal-bars {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 14px;
+        }
+
+        .signal-bars span {
+            display: block;
+            width: 3px;
+            border-radius: 2px;
+            background: var(--text);
+        }
+
+        .signal-bars span:nth-child(1) { height: 5px; }
+        .signal-bars span:nth-child(2) { height: 8px; }
+        .signal-bars span:nth-child(3) { height: 11px; }
+        .signal-bars span:nth-child(4) { height: 14px; }
+
+        .wifi-mark {
+            width: 15px;
+            height: 12px;
+            position: relative;
+        }
+
+        .wifi-mark::before,
+        .wifi-mark::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid var(--text);
+            border-bottom: 0;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-radius: 999px 999px 0 0;
+        }
+
+        .wifi-mark::before {
+            width: 15px;
+            height: 9px;
+            top: 0;
+        }
+
+        .wifi-mark::after {
+            width: 8px;
+            height: 5px;
+            top: 5px;
+        }
+
+        .wifi-dot {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 3px;
+            height: 3px;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: var(--text);
+        }
+
+        .battery-shell {
+            width: 24px;
+            height: 12px;
+            border: 1.5px solid var(--text);
+            border-radius: 3px;
+            padding: 1px;
+            position: relative;
+        }
+
+        .battery-shell::after {
+            content: "";
+            position: absolute;
+            right: -4px;
+            top: 3px;
+            width: 2px;
+            height: 5px;
+            border-radius: 0 2px 2px 0;
+            background: var(--text);
+        }
+
+        .battery-level {
+            height: 100%;
+            width: 70%;
+            border-radius: 1.5px;
+            background: var(--text);
+            transition: width 0.2s ease, background-color 0.2s ease;
+        }
+
+        .network-label {
+            min-width: 18px;
+            text-align: right;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .top-header {
+            height: 56px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 17px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-icon {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .logo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1.75);
+            width: 128px;
+            height: 58px;
+            object-fit: contain;
+            transform-origin: center;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .cart-trigger {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            right: -4px;
+            top: -3px;
+            min-width: 14px;
+            height: 14px;
+            padding: 0 4px;
+            border-radius: 999px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        main {
+            padding: 19px 17px 0;
+        }
+
+        .hero-card {
+            min-height: 127px;
+            border-radius: 5px;
+            background: var(--primary-pale);
+            position: relative;
+            overflow: hidden;
+            padding: 20px 18px;
+        }
+
+        .hero-copy {
+            width: 170px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-copy h1 {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+
+        .hero-copy p {
+            font-size: 14px;
+            line-height: 1.45;
+            margin-bottom: 13px;
+            max-width: 156px;
+        }
+
+        .hero-copy strong {
+            display: block;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .profile-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            min-height: 26px;
+            padding: 7px 10px;
+            border: 1px solid var(--category-bg);
+            border-radius: 5px;
+            background: var(--white);
+            text-decoration: none;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .hero-card.logged-out .hero-copy {
+            width: 235px;
+        }
+
+        .hero-card.logged-out .hero-copy p {
+            max-width: 232px;
+            font-size: 15px;
+            line-height: 1.48;
+            margin-bottom: 14px;
+        }
+
+        .hero-card.logged-out .routine-ring {
+            display: none;
+        }
+
+        .hero-card.logged-out .hero-product {
+            width: 142px;
+            height: 122px;
+            right: -2px;
+            bottom: 1px;
+            opacity: 0.96;
+        }
+
+        .hero-product {
+            position: absolute;
+            right: -16px;
+            bottom: -5px;
+            width: 160px;
+            height: 120px;
+            object-fit: contain;
+            z-index: 1;
+        }
+
+        .routine-ring {
+            position: absolute;
+            right: 87px;
+            top: 16px;
+            width: 92px;
+            height: 92px;
+            border-radius: 999px;
+            border: 5px solid rgba(58, 174, 146, 0.35);
+            background: rgba(241, 246, 246, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+        }
+
+        .routine-ring span {
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
+        .routine-ring strong {
+            color: var(--primary-dark);
+            font-size: 16px;
+            line-height: 1.35;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 23px 0 12px;
+        }
+
+        .section-head h2 {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px 10px;
+        }
+
+        .category-item {
+            text-align: center;
+            min-width: 0;
+        }
+
+        .category-image {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 5px;
+            border-radius: 999px;
+            background: var(--category-bg);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-image img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+        }
+
+        .category-item span {
+            display: block;
+            font-size: 14px;
+            line-height: 1.15;
+        }
+
+        .tag-new {
+            position: absolute;
+            left: 2px;
+            top: -6px;
+            border-radius: 3px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 9px;
+            line-height: 14px;
+            min-width: 29px;
+            height: 14px;
+            padding: 0 4px;
+            z-index: 3;
+            letter-spacing: 0;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .product-card {
+            min-width: 0;
+        }
+
+        .product-media {
+            height: 119px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            background: var(--card-bg);
+        }
+
+        .product-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .heart-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.72);
+            font-size: 19px;
+        }
+
+        .heart-btn.active {
+            color: var(--accent);
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            min-height: 40px;
+            margin-top: 7px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            line-height: 20px;
+            margin-top: 2px;
+        }
+
+        .rating {
+            height: 27px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+            color: var(--primary);
+            font-size: 13px;
+        }
+
+        .add-cart {
+            width: 100%;
+            height: 29px;
+            border-radius: 5px;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 393px;
+            height: 46px;
+            border-top: 1px solid var(--category-bg);
+            background: var(--white);
+            z-index: 30;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 6px 16px 0;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+            line-height: 10px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            line-height: 20px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-dark);
+        }
+
+        .modal-scrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.24);
+            z-index: 39;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .cart-sheet {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%, 105%);
+            width: 100%;
+            max-width: 393px;
+            min-height: 271px;
+            border-radius: 20px 20px 0 0;
+            background: var(--white);
+            z-index: 40;
+            padding: 31px 16px 18px;
+            box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.12);
+            transition: transform 0.24s ease;
+        }
+
+        .cart-sheet.active {
+            transform: translate(-50%, 0);
+        }
+
+        .modal-scrim.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sheet-grip {
+            position: absolute;
+            width: 41px;
+            height: 4px;
+            border-radius: 999px;
+            background: #111;
+            opacity: 0.16;
+            left: 50%;
+            top: 9px;
+            transform: translateX(-50%);
+        }
+
+        .sheet-close {
+            position: absolute;
+            right: 15px;
+            top: 8px;
+            font-size: 24px;
+        }
+
+        .cart-product {
+            display: grid;
+            grid-template-columns: 116px 1fr;
+            gap: 14px;
+            align-items: start;
+            padding-bottom: 20px;
+        }
+
+        .cart-product img {
+            width: 116px;
+            height: 114px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-confirm {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .cart-confirm i {
+            color: var(--primary-dark);
+            font-size: 24px;
+        }
+
+        .cart-name {
+            font-size: 14px;
+            line-height: 19px;
+            margin-bottom: 11px;
+        }
+
+        .cart-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .cart-sale {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .cart-original {
+            color: var(--soft);
+            text-decoration: line-through;
+        }
+
+        .sheet-summary {
+            border-top: 1px solid var(--line);
+            padding-top: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px 15px;
+            font-size: 14px;
+        }
+
+        .sheet-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px;
+        }
+
+        .sheet-actions a,
+        .sheet-actions button {
+            height: 41px;
+            border-radius: 5px;
+            border: 1px solid var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sheet-actions a {
+            background: var(--primary-dark);
+            color: var(--white);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 393px;
+            pointer-events: none;
+            z-index: 45;
+        }
+
+        .sidebar-panel {
+            width: 246px;
+            height: 100%;
+            background: var(--white);
+            padding: 58px 22px;
+            box-shadow: 8px 0 28px rgba(0, 0, 0, 0.14);
+            transform: translateX(-105%);
+            visibility: hidden;
+            transition: transform 0.24s ease;
+            pointer-events: auto;
+        }
+
+        .sidebar.active {
+            pointer-events: auto;
+        }
+
+        .sidebar.active .sidebar-panel {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .sidebar-panel button {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            font-size: 24px;
+        }
+
+        .sidebar-panel a {
+            display: block;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 640px) {
+            body {
+                background: #F4F5F5;
+            }
+
+            .app-shell {
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <div class="status-bar" aria-hidden="true">
+            <span id="device-time">10:07</span>
+            <div class="status-icons">
+                <span class="network-label" id="network-label">5G</span>
+                <span class="signal-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span class="wifi-mark" aria-hidden="true"><span class="wifi-dot"></span></span>
+                <span class="battery-shell" aria-hidden="true"><span class="battery-level" id="battery-level"></span></span>
+            </div>
+        </div>
+
+        <header class="top-header">
+            <button class="header-icon" type="button" aria-label="Open menu" onclick="toggleSidebar()">
+                <i class="ph ph-list"></i>
+            </button>
+            <img class="logo" src="image/yuun_logo png.png" alt="YUNN">
+            <div class="header-actions">
+                <button class="header-icon" type="button" aria-label="Search">
+                    <i class="ph ph-magnifying-glass"></i>
+                </button>
+                <button class="header-icon" type="button" aria-label="Notifications">
+                    <i class="ph ph-bell"></i>
+                </button>
+                <button class="header-icon cart-trigger" type="button" aria-label="Open cart" onclick="openCartSheet()">
+                    <i class="ph ph-shopping-bag"></i>
+                    <span class="cart-count" id="cart-count">1</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero-card" id="personal-hero">
+                <div class="hero-copy">
+                    <h1 id="hero-title">Hi, <span id="user-nickname"></span></h1>
+                    <p id="hero-message">Your skin journey is <strong>on track</strong></p>
+                    <a class="profile-btn" id="hero-cta" href="survey.html">
+                        My skin Profile <i class="ph ph-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="routine-ring">
+                    <span>Routine</span>
+                    <strong>3/5</strong>
+                    <span>steps done</span>
+                </div>
+                <img class="hero-product" src="image/YUNN_Web_image_1_nobg.png" alt="YUNN routine products">
+            </section>
+
+            <section aria-labelledby="category-title">
+                <div class="section-head">
+                    <h2 id="category-title">Shop by Category</h2>
+                    <a class="view-all" href="#categories">View all <i class="ph ph-caret-right"></i></a>
+                </div>
+                <div class="category-grid" id="categories">
+                    <div class="category-item">
+                        <div class="category-image"><img src="image/Facewash_YUNN_nobg.png" alt=""></div>
+                        <span>Facewash</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="image/Serum_topselling_nobg.png" alt=""></div>
+                        <span>Serum</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><span class="tag-new">NEW</span><img src="image/Moisturies_top selling_nobg.png" alt=""></div>
+                        <span>Moisturiser</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><span class="tag-new">NEW</span><img src="image/Sunscreen_YUNN_nobg.png" alt=""></div>
+                        <span>Sunscreen</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="image/Toner_YUNN_nobg.png" alt=""></div>
+                        <span>Toner</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="image/Mask_YUNN_nobg.png" alt=""></div>
+                        <span>Mask</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="image/Woman model_YUNN_nobg.png" alt=""></div>
+                        <span>Women</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="image/Man model_YUNN_nobg.png" alt=""></div>
+                        <span>Men</span>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="selling-title">
+                <div class="section-head">
+                    <h2 id="selling-title">Top Selling</h2>
+                    <a class="view-all" href="#top-selling">View all <i class="ph ph-caret-right"></i></a>
+                </div>
+                <div class="product-row" id="top-selling">
+                    <article class="product-card">
+                        <div class="product-media">
+                            <img src="image/Serum_topselling.png" alt="YUNN Glow Serum">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist" onclick="toggleWishlist(this)">
+                                <i class="ph ph-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="product-title">YUNN Glow Serum</h3>
+                        <div class="product-price">$cost</div>
+                        <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
+                        <button class="add-cart" type="button" onclick="addToCart('YUNN Glow Serum', 'image/Serum_topselling.png')">
+                            <i class="ph ph-shopping-bag"></i> Add to Cart
+                        </button>
+                    </article>
+                    <article class="product-card">
+                        <div class="product-media">
+                            <img src="image/Facewash_top selling.png" alt="YUNN Mattee Sunscreen">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist" onclick="toggleWishlist(this)">
+                                <i class="ph ph-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="product-title">YUNN Mattee Sunscreen</h3>
+                        <div class="product-price">$cost</div>
+                        <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
+                        <button class="add-cart" type="button" onclick="addToCart('YUNN Mattee Sunscreen', 'image/Facewash_top selling.png')">
+                            <i class="ph ph-shopping-bag"></i> Add to Cart
+                        </button>
+                    </article>
+                    <article class="product-card">
+                        <div class="product-media">
+                            <img src="image/Moisturies_top selling.png" alt="YUNN Hydrating Moisturiser">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist" onclick="toggleWishlist(this)">
+                                <i class="ph ph-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="product-title">YUNN Hydrating Moisturiser</h3>
+                        <div class="product-price">$cost</div>
+                        <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
+                        <button class="add-cart" type="button" onclick="addToCart('YUNN Hydrating Moisturiser', 'image/Moisturies_top selling.png')">
+                            <i class="ph ph-shopping-bag"></i> Add to Cart
+                        </button>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottom-nav" aria-label="Primary">
+            <a href="index.html" class="nav-item active"><i class="ph-fill ph-house"></i><span>Home</span></a>
+            <a href="#top-selling" class="nav-item"><i class="ph ph-shopping-cart-simple"></i><span>shop</span></a>
+            <a href="survey.html" class="nav-item"><i class="ph ph-plus-circle"></i><span>Quiz</span></a>
+            <a href="#offers" class="nav-item"><i class="ph ph-ticket"></i><span>Offers</span></a>
+            <a href="login.html" class="nav-item"><i class="ph ph-user"></i><span>Account</span></a>
+        </nav>
+
+        <div class="modal-scrim" id="modal-scrim" onclick="closeAllOverlays()"></div>
+        <aside class="cart-sheet" id="cart-sheet" aria-label="Cart preview">
+            <div class="sheet-grip"></div>
+            <button class="sheet-close" type="button" aria-label="Close cart" onclick="closeAllOverlays()"><i class="ph ph-x"></i></button>
+            <div class="cart-product">
+                <img id="cart-product-image" src="image/Facewash_top selling.png" alt="">
+                <div>
+                    <div class="cart-confirm"><i class="ph-fill ph-check-circle"></i><span>Added to your cart!</span></div>
+                    <div class="cart-name" id="cart-product-name">Anua Heartleaf Pore Deep Cleansing Foam</div>
+                    <div class="cart-meta">
+                        <span>Qty 1</span>
+                        <span>₹ 1,700</span>
+                        <span class="cart-sale">15%</span>
+                        <span class="cart-original">₹ 2,000</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sheet-summary">
+                <div class="summary-row">
+                    <span>Cart <span id="cart-items">(01 items)</span></span>
+                    <strong>₹ 1,700 <i class="ph ph-caret-right"></i></strong>
+                </div>
+                <div class="sheet-actions">
+                    <a href="checkout.html">View Cart</a>
+                    <button type="button" onclick="closeAllOverlays()">Continue Shopping</button>
+                </div>
+            </div>
+        </aside>
+
+        <aside class="sidebar" id="sidebar" aria-label="Menu">
+            <div class="sidebar-panel">
+                <button type="button" aria-label="Close menu" onclick="closeAllOverlays()"><i class="ph ph-x"></i></button>
+                <a href="index.html">Home</a>
+                <a href="#categories">Skin</a>
+                <a href="survey.html">Routine Program</a>
+                <a href="survey.html">Treatment Finder</a>
+                <a href="landing.html">About YUNN</a>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        let cartCount = 0;
+
+        function applySessionUrlActions() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.has("logout")) return;
+
+            localStorage.removeItem("yunnUser");
+            localStorage.removeItem("yunnUserNickname");
+            window.history.replaceState({}, "", window.location.pathname);
+        }
+
+        function getCurrentUser() {
+            try {
+                const savedUser = JSON.parse(localStorage.getItem("yunnUser") || "null");
+                if (savedUser && savedUser.nickname) {
+                    return savedUser;
+                }
+            } catch (error) {
+                localStorage.removeItem("yunnUser");
+            }
+
+            const nickname = localStorage.getItem("yunnUserNickname");
+            if (nickname) {
+                return { nickname };
+            }
+
+            return null;
+        }
+
+        function renderPersonalHero() {
+            const hero = document.getElementById("personal-hero");
+            const title = document.getElementById("hero-title");
+            const nickname = document.getElementById("user-nickname");
+            const message = document.getElementById("hero-message");
+            const cta = document.getElementById("hero-cta");
+            const user = getCurrentUser();
+
+            if (user) {
+                hero.classList.remove("logged-out");
+                title.innerHTML = 'Hi, <span id="user-nickname"></span>';
+                document.getElementById("user-nickname").textContent = user.nickname;
+                message.innerHTML = "Your skin journey is <strong>on track</strong>";
+                cta.href = "survey.html";
+                cta.innerHTML = 'My skin Profile <i class="ph ph-arrow-right"></i>';
+                return;
+            }
+
+            hero.classList.add("logged-out");
+            title.textContent = "Welcome to YUNN";
+            nickname.textContent = "";
+            message.innerHTML = "Log in to track your skin journey <strong>and routine progress</strong>";
+            cta.href = "login.html";
+            cta.innerHTML = 'Log in to continue <i class="ph ph-arrow-right"></i>';
+        }
+
+        function updateDeviceTime() {
+            const timeEl = document.getElementById("device-time");
+            const now = new Date();
+            timeEl.textContent = now.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: false
+            });
+        }
+
+        function updateNetworkStatus() {
+            const label = document.getElementById("network-label");
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (!connection) {
+                label.textContent = "5G";
+                return;
+            }
+
+            const type = connection.effectiveType || connection.type || "5g";
+            label.textContent = String(type).toUpperCase().replace("4G", "5G");
+        }
+
+        async function updateBatteryStatus() {
+            const batteryLevel = document.getElementById("battery-level");
+            if (!navigator.getBattery) {
+                batteryLevel.style.width = "72%";
+                return;
+            }
+
+            const battery = await navigator.getBattery();
+            const renderBattery = () => {
+                const percent = Math.max(8, Math.round(battery.level * 100));
+                batteryLevel.style.width = `${percent}%`;
+                batteryLevel.style.backgroundColor = percent <= 20 ? "var(--accent)" : "var(--text)";
+            };
+
+            renderBattery();
+            battery.addEventListener("levelchange", renderBattery);
+            battery.addEventListener("chargingchange", renderBattery);
+        }
+
+        applySessionUrlActions();
+        renderPersonalHero();
+        updateDeviceTime();
+        updateNetworkStatus();
+        updateBatteryStatus();
+        setInterval(updateDeviceTime, 1000);
+
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+            connection.addEventListener("change", updateNetworkStatus);
+        }
+
+        function showScrim() {
+            document.getElementById("modal-scrim").classList.add("active");
+        }
+
+        function closeAllOverlays() {
+            document.getElementById("modal-scrim").classList.remove("active");
+            document.getElementById("cart-sheet").classList.remove("active");
+            document.getElementById("sidebar").classList.remove("active");
+        }
+
+        function openCartSheet() {
+            showScrim();
+            document.getElementById("cart-sheet").classList.add("active");
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const isActive = sidebar.classList.toggle("active");
+            if (isActive) {
+                showScrim();
+            } else {
+                closeAllOverlays();
+            }
+        }
+
+        function addToCart(name, image) {
+            cartCount += 1;
+            const count = document.getElementById("cart-count");
+            count.textContent = cartCount;
+            count.style.display = "flex";
+            document.getElementById("cart-items").textContent = `(${String(cartCount).padStart(2, "0")} items)`;
+            document.getElementById("cart-product-name").textContent = name;
+            document.getElementById("cart-product-image").src = image;
+            openCartSheet();
+        }
+
+        function toggleWishlist(button) {
+            button.classList.toggle("active");
+            const icon = button.querySelector("i");
+            icon.classList.toggle("ph");
+            icon.classList.toggle("ph-fill");
+        }
+    </script>
+</body>
+</html>
