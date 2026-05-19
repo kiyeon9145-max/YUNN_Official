@@ -785,3 +785,161 @@ Verification:
 - 모든 선택지가 `type="checkbox"`로 적용된 것 확인
 - 체크박스 라운드가 기존 디자인과 같은 `6px`인지 확인
 - `After sun exposure` 클릭 후 checked 값과 selected 클래스가 정상 반영되는 것 확인
+
+### 설문 Step 6 반응성 질문 페이지 개편
+
+Purpose:
+사용자 Figma 캡처에 맞춰 Step 6 페이지를 `How reactive is your skin?` 질문 구성으로 변경했다. 선택 박스/체크 디자인은 기존 웹사이트의 현재 선택 카드 위계를 유지했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-step6-reactive-skin.html`
+- `docs/code-backups/2026-05-19/survey.step6-reactive-skin.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step6-reactive-skin.md`
+
+Main implementation:
+- 제목을 `How reactive / is your skin?` 구조로 변경하고 `your skin`에 민트 포인트 적용
+- 설명 문구를 `This helps us personalize the right ingredients and strength for your skin.`로 변경
+- 선택지를 4개로 재구성:
+  - `Rarely reacts`
+  - `Sometimes gets irritated`
+  - `Reacts easily`
+  - `Very sensitive to products`
+- 기존 `.option-card`, `.check-circle` 기반 선택 디자인 유지
+
+Verification:
+- `http://127.0.0.1:8123/pages/survey.html?survey=1&step=6&reactive=1779163100000`에서 `Page 6 of 10` 로드 확인
+- Step 6 옵션 4개 렌더링 확인
+- 각 옵션이 `type="radio"`로 적용된 것 확인
+- 체크 표시가 기존 선택 카드 디자인과 같은 원형 체크 구조를 유지하는지 확인
+- `Sometimes gets irritated` 선택 시 `sensitivity=Sometimes` 값이 정상 반영되는 것 확인
+
+### Step 5/6 답변 카드 위계 통일
+
+Purpose:
+사용자가 Step 5/6 답변 박스가 Step 1/2와 다르게 보인다고 지적했다. Step 5 트리거 체크박스와 Step 6 반응성 선택지를 Step 2 선택 카드와 같은 박스 위계로 통일했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-step5-step6-card-hierarchy.html`
+- `docs/code-backups/2026-05-19/survey.step5-step6-card-hierarchy.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step5-step6-card-hierarchy.md`
+
+Main implementation:
+- Step 5 `.trigger-checkbox-list .option-card`를 Step 2 카드와 같은 `92px` 높이, `14px` 라운드, 흰 배경, 은은한 그림자 구조로 변경
+- Step 6 `.reactive-options .option-card`도 동일한 카드 위계로 변경
+- 선택 상태는 민트 테두리 `#3AAE92`, 연녹색 배경 `#F5FAF9`, 그림자 제거로 통일
+- Step 5는 기존 사각 체크박스 디자인을 유지하고, Step 6은 기존 원형 선택 체크 디자인을 유지
+
+Verification:
+- Step 5 첫 카드 계산 스타일 확인: `height: 92px`, `border-radius: 14px`, 흰 배경, 은은한 그림자
+- Step 6 첫 카드 계산 스타일 확인: `height: 92px`, `border-radius: 14px`, 흰 배경, 은은한 그림자
+- Step 5 선택 상태 확인: `border: 2px solid rgb(58, 174, 146)`, `background: rgb(245, 250, 249)`, `box-shadow: none`
+
+### Step 5/6 텍스트 포인트 위계 통일
+
+Purpose:
+사용자가 Step 1/2와 Step 5/6의 글씨 포인트가 다르게 느껴진다고 지적했다. 실제 계산 스타일을 비교한 결과 Step 5/6 제목은 `23px`, 답변 텍스트는 `14px`로 Step 2보다 작았다. 이를 Step 1/2 기준에 맞춰 수정했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-step5-step6-typography-hierarchy.html`
+- `docs/code-backups/2026-05-19/survey.step5-step6-typography-hierarchy.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step5-step6-typography-hierarchy.md`
+
+Main implementation:
+- Step 5 제목 `.trigger-title`을 `24px`, `700`, `letter-spacing: -0.01em`으로 변경
+- Step 6 제목 `.reactive-title`을 `24px`, `700`, `letter-spacing: -0.01em`으로 변경
+- Step 5 답변 텍스트를 `1.05rem`으로 변경해 Step 2 답변 텍스트와 같은 `16.8px` 포인트로 맞춤
+- Step 6 답변 텍스트도 `1.05rem`으로 동일 적용
+
+Verification:
+- Step 2 제목/답변 계산 스타일: `24px/700`, `16.8px/700`
+- Step 5 제목/답변 계산 스타일: `24px/700`, `16.8px/700`
+- Step 6 제목/답변 계산 스타일: `24px/700`, `16.8px/700`
+
+### 디자인 시스템 위계 일관성 규칙 문서화
+
+Purpose:
+사용자가 앞으로 모든 디자인 시스템이 동일해야 하며, 답변 박스, 모바일 목업/상태 아이콘, 로고 위치 등 웹사이트 내 위계 질서가 일관되어야 한다고 명시했다. 이를 프로젝트 디자인 시스템과 AI 작업 규칙에 고정했다.
+
+Changed files:
+- `docs/DESIGN-SYSTEM.md`
+- `docs/AI-WORK-RULES.md`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/DESIGN-SYSTEM.before-ui-hierarchy-rules.md`
+- `docs/code-backups/2026-05-19/AI-WORK-RULES.before-ui-hierarchy-rules.md`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-ui-hierarchy-rules.md`
+
+Main implementation:
+- `docs/DESIGN-SYSTEM.md`에 `UI Hierarchy Consistency Rules` 섹션 추가
+- 모바일 상태바, 상단 메뉴 아이콘, 로고, 우측 아이콘 묶음의 위치/크기 위계 유지 규칙 추가
+- 설문 제목/설명/답변 카드 텍스트 포인트 기준 추가
+- 설문 답변 카드 기본 상태와 선택 상태의 높이, 라운드, 배경, 테두리, 그림자 기준 추가
+- 새 UI 작업 후 기존 기준 페이지와 `font-size`, `font-weight`, `line-height`, `border-radius`, `min-height`, `box-shadow`, `background`, `selected state`를 비교하도록 QA 규칙 추가
+- `docs/AI-WORK-RULES.md`에 UI 작업 전 디자인 시스템 위계 규칙 확인 의무 추가
+- 단일 페이지에만 예외적인 UI 위계를 만드는 것을 금지 규칙에 추가
+
+Verification:
+- `docs/DESIGN-SYSTEM.md`에서 `UI Hierarchy Consistency Rules` 검색 확인
+- `docs/AI-WORK-RULES.md`에서 디자인 시스템 확인 의무와 one-off UI hierarchy 금지 규칙 확인
+
+### Step 7 Outdoor/Sunscreen 통합 페이지 개편
+
+Purpose:
+사용자 요청에 따라 기존 Step 7 Outdoor와 Step 8 Sunscreen을 Step 7 한 화면에 함께 담았다. Step 2와 같은 복합 질문 구조로 만들고, 두 질문이 모두 답변되었을 때 자동으로 다음 페이지로 이동하도록 구현했다. 이전 Step 3에서 Step 5로 건너뛰던 유형의 번호 오류가 생기지 않도록 뒤쪽 페이지 번호도 함께 재정렬했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-step7-combined-sun-habits.html`
+- `docs/code-backups/2026-05-19/survey.step7-combined-sun-habits.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step7-combined-sun-habits.md`
+
+Main implementation:
+- Step 7에 `How much time do you spend outdoors?` 질문과 `How often do you apply sunscreen?` 질문을 함께 배치
+- Outdoor 선택지 4개 구성: `Mostly indoors`, `Under 1 hour`, `1-3 hours`, `More than 3 hours`
+- Sunscreen 선택지 4개 구성: `Every day`, `Most days`, `Occasionally`, `Rarely or never`
+- 두 질문 모두 선택되기 전까지 Step 7 Next 버튼 비활성화
+- 두 질문 모두 선택되면 자동으로 새 Step 8로 이동
+- 기존 Step 9 Sleep을 새 Step 8로, 기존 Step 10 Current Routine을 새 Step 9로 재번호화
+- 전체 실제 설문 단계 수를 9개로 정리
+- Step 7 답변 카드는 디자인 시스템 기준에 맞춰 `92px`, `14px`, `16.8px/700`, 흰 배경, 은은한 그림자, 선택 시 민트 테두리/연녹색 배경 유지
+
+Verification:
+- `http://127.0.0.1:8123/pages/survey.html?survey=1&step=7&sunCombined=1779164500000`에서 Step 7 로드 확인
+- Step 7에 두 질문과 각각 4개 선택지가 렌더링되는 것 확인
+- Outdoor만 선택했을 때 Next 비활성 유지 확인
+- Outdoor와 Sunscreen 모두 선택 후 `Page 8 of 9`, `Lifestyle intensity.`로 자동 이동 확인
+- Step 7 첫 답변 카드 계산 스타일 확인: `height: 92px`, `border-radius: 14px`, `font-size: 16.8px`, `font-weight: 700`
+
+### Step 8 Sleep/Stress 통합 페이지 개편
+
+Purpose:
+사용자 요청에 따라 Step 8도 Step 7과 같은 복합 질문 구조로 변경했다. 한 화면에서 수면 시간과 스트레스 레벨을 함께 묻고, 두 질문이 모두 답변되었을 때만 다음 단계로 이동하도록 설문 흐름을 정리했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-step8-combined-sleep-stress.html`
+- `docs/code-backups/2026-05-19/survey.step8-combined-sleep-stress.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step8-combined-sleep-stress.md`
+
+Main implementation:
+- Step 8 제목을 `How much sleep do you usually get?`로 변경하고 `sleep` 키워드에 민트 컬러 강조 적용
+- Sleep 선택지 4개 구성: `Under 5 hours`, `5-6 hours`, `7-8 hours`, `More than 8 hours`
+- 두 번째 질문 `How would you describe your stress level?` 추가 및 `stress level` 키워드 강조 적용
+- Stress 선택지 4개 구성: `Very high`, `High`, `Manageable`, `Low`
+- Step 8 Next 버튼을 `btn-next-8`로 관리하고, Sleep과 Stress가 모두 선택되기 전까지 비활성화
+- 두 질문 모두 선택되면 자동으로 Step 9 Current Routine으로 이동
+- Step 8 답변 카드는 Step 7과 같은 `.sun-habit-options` 디자인 시스템을 재사용해 카드 높이, 라운드, 텍스트 포인트, 선택 상태 위계를 통일
+
+Verification:
+- `http://127.0.0.1:8123/pages/survey.html?survey=1&step=8&sleepStress=1779165000001`에서 Step 8 로드 확인
+- Step 8에 Sleep/Stress 두 질문과 각각 4개 선택지가 렌더링되는 것 확인
+- 초기 Step 8 Next 버튼 비활성 상태 확인
+- Step 8 첫 답변 카드 계산 스타일 확인: `min-height: 92px`, `border-radius: 14px`, `font-size: 16.8px`, `font-weight: 700`
+- `pages/survey.html` 내부 스크립트 구문 검사 통과: `scripts parse ok: 2`

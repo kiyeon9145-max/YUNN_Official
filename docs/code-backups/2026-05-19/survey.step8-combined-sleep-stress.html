@@ -1667,100 +1667,6 @@
             border-width: 2px;
         }
 
-        .routine-number-card {
-            justify-content: flex-start;
-            padding: 16px;
-            gap: 16px;
-        }
-        .routine-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-weight: 500;
-            font-size: 16px;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-        .option-card.selected .routine-number {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
-        }
-
-        .photo-upload-box {
-            border: 2px dashed var(--border-color);
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: var(--white);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .photo-upload-box:hover {
-            border-color: var(--primary);
-            background: rgba(76, 175, 80, 0.02);
-        }
-        .photo-upload-box i {
-            font-size: 32px;
-            color: var(--primary);
-        }
-        .photo-upload-box .upload-text {
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 4px;
-        }
-        .photo-upload-box .upload-subtext {
-            font-size: 13px;
-            color: var(--text-light);
-        }
-        .photo-upload-box img#photo-preview {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-            z-index: 2;
-        }
-        .photo-upload-box input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        .btn-analyze {
-            width: 100%;
-            padding: 18px;
-            border-radius: 100px;
-            background: var(--primary);
-            color: var(--white);
-            font-size: 16px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
-            transition: all 0.3s ease;
-            margin-top: 32px;
-        }
-
     </style>
 </head>
 <body>
@@ -2319,12 +2225,13 @@
 
                 <!-- Step 9: Current Routine -->
                 <div class="survey-step" data-step="9">
-                    <h2 class="question-title">What does your <br><span class="diagnosis-highlight">skincare routine</span><br>look like right now?</h2>
-                    <div class="option-list radio-group" style="margin-top: 32px;">
-                        <label class="option-card routine-number-card"><input type="radio" name="routineLevel" value="Nothing"><div class="routine-number">1</div><span class="option-text">I don't really use skincare</span></label>
-                        <label class="option-card routine-number-card"><input type="radio" name="routineLevel" value="Wash only"><div class="routine-number">2</div><span class="option-text">I only use cleanser or moisturizer</span></label>
-                        <label class="option-card routine-number-card"><input type="radio" name="routineLevel" value="Basic"><div class="routine-number">3</div><span class="option-text">I use a simple routine (2-3 products)</span></label>
-                        <label class="option-card routine-number-card"><input type="radio" name="routineLevel" value="Multi"><div class="routine-number">4</div><span class="option-text">I already follow a full skincare routine</span></label>
+                    <h2 class="question-title">Current routine.</h2>
+                    <p class="question-subtitle">What does your skincare look like right now?</p>
+                    <div class="option-list radio-group">
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Nothing"><span class="option-text">Nothing — I don't have one</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Wash only"><span class="option-text">I wash my face, that's it</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Basic"><span class="option-text">A basic routine (1–2 products)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
+                        <label class="option-card"><input type="radio" name="routineLevel" value="Multi"><span class="option-text">A multi-step routine (3+ products)</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
                     </div>
 
                     <div class="bottom-action">
@@ -2333,26 +2240,6 @@
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
-                    </div>
-                </div>
-
-                <!-- Step 10: Photo Upload -->
-                <div class="survey-step" data-step="10">
-                    <h2 class="question-title">Let's look at your skin.</h2>
-                    <p class="question-subtitle">Upload a clear photo of your bare face for better AI analysis.</p>
-                    
-                    <div class="photo-upload-box">
-                        <i class="ph-bold ph-camera"></i>
-                        <div class="upload-text">Take a selfie or upload</div>
-                        <div class="upload-subtext">JPG, PNG up to 5MB</div>
-                        <input type="file" accept="image/*" id="bareFacePhoto" onchange="previewPhoto(event)">
-                        <img id="photo-preview" src="" alt="Preview">
-                    </div>
-
-                    <button type="button" class="btn-analyze" onclick="nextStep()">Analyze Results <i class="ph-bold ph-sparkle" style="margin-left:8px;"></i></button>
-
-                    <div class="secure-text" style="margin-top:24px;">
-                        <i class="ph-light ph-lock-key"></i> Your photo is strictly private and used only for analysis.
                     </div>
                 </div>
 
@@ -2808,8 +2695,8 @@
         };
 
         let currentStep = '1';
-        const totalSteps = 10;
-        const displayedSurveyPages = 10;
+        const totalSteps = 9;
+        const displayedSurveyPages = 9;
         const progressBar = document.getElementById('progress-bar');
         const steps = document.querySelectorAll('.survey-step');
         const skinHelperSteps = ['3-1', '3-2', '3-3', '3-4'];
@@ -3182,19 +3069,6 @@
         });
 
         validateStepOne();
-
-        function previewPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('photo-preview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
 
         function startAnalysis() {
             document.getElementById('survey-screen').style.display = 'none';

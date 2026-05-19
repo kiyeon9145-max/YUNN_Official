@@ -104,12 +104,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-19/DESIGN-SYSTEM.before-ui-hierarchy-rules.md`
 - `docs/code-backups/2026-05-19/AI-WORK-RULES.before-ui-hierarchy-rules.md`
 - `docs/code-backups/2026-05-19/BACKUP-POLICY.before-ui-hierarchy-rules.md`
-- `docs/code-backups/2026-05-19/survey.before-step7-combined-sun-habits.html`
-- `docs/code-backups/2026-05-19/survey.step7-combined-sun-habits.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step7-combined-sun-habits.md`
-- `docs/code-backups/2026-05-19/survey.before-step8-combined-sleep-stress.html`
-- `docs/code-backups/2026-05-19/survey.step8-combined-sleep-stress.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step8-combined-sleep-stress.md`
 
 ## Restore
 

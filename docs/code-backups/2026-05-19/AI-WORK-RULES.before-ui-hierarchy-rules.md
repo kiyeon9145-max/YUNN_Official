@@ -45,9 +45,6 @@
 - Explain which files will be modified before making any changes.
 - Check the existing structure before creating new files.
 - Reuse existing files whenever possible.
-- UI 작업 전 `docs/DESIGN-SYSTEM.md`의 `UI Hierarchy Consistency Rules`를 확인한다.
-- 새 답변 박스, 헤더, 로고, 아이콘, 상태바, 버튼을 만들 때는 기존 화면과 계산 스타일을 비교한다.
-- 설문 화면의 답변 카드와 텍스트 포인트는 Step 1/2의 위계를 기본 기준으로 삼는다.
 
 ---
 
@@ -57,8 +54,6 @@
 - Do not move files automatically.
 - Do not create duplicate pages.
 - Do not overwrite the existing design system.
-- Do not create one-off UI hierarchy for a single page unless the user explicitly approves the exception.
-- Do not change logo alignment, top mobile shell icon alignment, or answer card hierarchy on one page only.
 
 ---
 
