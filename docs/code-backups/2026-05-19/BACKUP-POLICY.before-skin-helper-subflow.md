@@ -86,9 +86,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-19/survey.before-step4-concern-image-grid.html`
 - `docs/code-backups/2026-05-19/survey.step4-concern-image-grid.html`
 - `docs/code-backups/2026-05-19/BACKUP-POLICY.before-step4-concern-image-grid.md`
-- `docs/code-backups/2026-05-19/survey.before-skin-helper-subflow.html`
-- `docs/code-backups/2026-05-19/survey.skin-helper-subflow.html`
-- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-skin-helper-subflow.md`
 
 ## Restore
 

@@ -724,3 +724,32 @@ Verification:
 - Step 4 이미지 카드 4개 렌더링 확인
 - 네 개 이미지 모두 `complete: true`, `naturalWidth > 0`으로 정상 로드 확인
 - 각 카드의 value, 제목, 이미지 경로가 의도한 답변과 매칭되는지 확인
+
+### Step 3 Not sure 피부 타입 판별 서브 플로우 추가
+
+Purpose:
+Step 3 피부 타입 선택에서 `Not sure`를 누르면 Figma/레퍼런스 플로우처럼 `3-1 → 3-2 → 3-3 → 3-4` 피부 타입 판별 질문을 거친 뒤 다시 Step 4 피부 고민 페이지로 이어지도록 구현했다. 사용자가 지적한 체크 박스 위계 차이는 기존 1/2페이지의 오른쪽 체크 선택 스타일을 사용해 통일했다.
+
+Changed files:
+- `pages/survey.html`
+- `docs/BACKUP-POLICY.md`
+- `docs/code-backups/2026-05-19/survey.before-skin-helper-subflow.html`
+- `docs/code-backups/2026-05-19/survey.skin-helper-subflow.html`
+- `docs/code-backups/2026-05-19/BACKUP-POLICY.before-skin-helper-subflow.md`
+
+Main implementation:
+- `data-step="3-1"`, `3-2`, `3-3`, `3-4` 서브 페이지 추가
+- 각 페이지 질문/설명/답변을 사용자 제공 레퍼런스 이미지 기준으로 구성
+- 서브 페이지 선택 카드는 기존 `.option-card`, `.check-circle` 기반 오른쪽 체크 디자인을 재사용
+- 진행바는 서브 페이지에서 3번 단계 진행률을 유지하고, 표시 문구는 `Page 3-1`처럼 출력
+- `Not sure` 선택 시 `3-1`로 이동
+- `3-1 → 3-2 → 3-3 → 3-4 → 4` 이동 로직 추가
+- 3-4 완료 시 서브 답변 평균/패턴으로 `Dry`, `Normal`, `Combination`, `Oily` 중 하나를 추론해 실제 `skinType` 값에 반영
+- Step 4에서 Back을 누르면 서브 플로우를 완료한 경우 `3-4`로 돌아가도록 처리
+
+Verification:
+- `http://127.0.0.1:8123/pages/survey.html?survey=1&step=3&helperFlow=1779160500000`에서 Step 3 로드 확인
+- `Not sure` 선택 후 `Page 3-1`로 이동하는 흐름 확인
+- `3-1`, `3-2`, `3-3`, `3-4` 각 질문 제목과 indicator 확인
+- 3-4 마지막 답변 후 `Page 4 of 10`, `What’s bothering your skin the most?`로 이동 확인
+- 테스트 답변 패턴에서 `skinType=Combination`으로 추론되어 실제 선택 값에 반영되는 것 확인

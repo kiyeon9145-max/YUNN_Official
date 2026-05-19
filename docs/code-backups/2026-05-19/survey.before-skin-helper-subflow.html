@@ -1427,70 +1427,6 @@
             line-height: 1.45;
         }
 
-        /* Skin Type Helper Subflow */
-        .skin-helper-title {
-            color: #000;
-            font-size: 22px;
-            font-weight: 700;
-            line-height: 1.25;
-            margin-bottom: 14px;
-        }
-
-        .skin-helper-title span {
-            color: var(--primary);
-        }
-
-        .skin-helper-copy {
-            color: #000;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.7;
-            letter-spacing: 0.1px;
-            margin-bottom: 18px;
-        }
-
-        .skin-helper-options {
-            gap: 14px;
-        }
-
-        .skin-helper-options .option-card {
-            min-height: 64px;
-            border: 1px solid #CCCCCC;
-            border-radius: 5px;
-            background: var(--white);
-            box-shadow: none;
-            padding: 16px 20px;
-            gap: 14px;
-        }
-
-        .skin-helper-options .option-card.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .skin-helper-options .option-text {
-            color: #000;
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 1.35;
-            letter-spacing: 0;
-        }
-
-        .skin-helper-options .helper-subtext {
-            display: block;
-            color: var(--text-light);
-            font-size: 11px;
-            font-weight: 400;
-            margin-top: 2px;
-        }
-
-        .skin-helper-options .check-circle {
-            margin-left: auto;
-            width: 24px;
-            height: 24px;
-            border-width: 2px;
-        }
-
     </style>
 </head>
 <body>
@@ -1790,94 +1726,6 @@
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
-                    </div>
-                </div>
-
-
-                <!-- Step 3-1: Skin Helper - Cleansing Feel -->
-                <div class="survey-step" data-step="3-1">
-                    <h2 class="skin-helper-title">Right after cleansing,<br><span>how does your skin feel?</span></h2>
-                    <p class="skin-helper-copy">Choose the option that best describes<br>the condition of your skin right after cleansing.</p>
-                    <div class="option-list radio-group skin-helper-options">
-                        <label class="option-card"><input type="radio" name="skinHelperCleanse" value="1"><span class="option-text">Not tight at all</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperCleanse" value="2"><span class="option-text">Barely tight</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperCleanse" value="3"><span class="option-text">Slightly tight</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperCleanse" value="4"><span class="option-text">Quite tight</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperCleanse" value="5"><span class="option-text">Very tight and uncomfortable</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                    </div>
-
-                    <div class="bottom-action">
-                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
-                    </div>
-                    <div class="secure-text">
-                        <i class="ph-light ph-lock-key"></i> Your information is private and secure
-                    </div>
-                </div>
-
-
-                <!-- Step 3-2: Skin Helper - After Hours -->
-                <div class="survey-step" data-step="3-2">
-                    <h2 class="skin-helper-title">A few hours after cleansing,<br><span>what happens</span> to your skin?</h2>
-                    <p class="skin-helper-copy">Choose the option that best describes<br>your skin after 2~3 hours.</p>
-                    <div class="option-list radio-group skin-helper-options">
-                        <label class="option-card"><input type="radio" name="skinHelperAfterHours" value="1"><span class="option-text">Still feels dry or tight</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperAfterHours" value="2"><span class="option-text">Still feels comfortable</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperAfterHours" value="3"><span class="option-text">Becomes a bit oily in the T-zone<span class="helper-subtext">(forehead, nose, chin)</span></span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperAfterHours" value="4"><span class="option-text">Becomes oily in most areas</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperAfterHours" value="5"><span class="option-text">Becomes very oily all over</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                    </div>
-
-                    <div class="bottom-action">
-                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
-                    </div>
-                    <div class="secure-text">
-                        <i class="ph-light ph-lock-key"></i> Your information is private and secure
-                    </div>
-                </div>
-
-
-                <!-- Step 3-3: Skin Helper - During Day -->
-                <div class="survey-step" data-step="3-3">
-                    <h2 class="skin-helper-title">How does your skin behave<br><span>during the day?</span></h2>
-                    <p class="skin-helper-copy">Choose the option that best describes<br>your skin throughout the day.</p>
-                    <div class="option-list radio-group skin-helper-options">
-                        <label class="option-card"><input type="radio" name="skinHelperDay" value="1"><span class="option-text">Feels dry and tight,<br>makeup flakes or looks patchy</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperDay" value="2"><span class="option-text">Stays comfortable and balanced<br>throughout the day</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperDay" value="3"><span class="option-text">Gets shiny in the T-Zone<br>but cheeks feel normal</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperDay" value="4"><span class="option-text">Gets shiny in most areas</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperDay" value="5"><span class="option-text">Gets very oily all over<br>and needs blotting often</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                    </div>
-
-                    <div class="bottom-action">
-                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
-                    </div>
-                    <div class="secure-text">
-                        <i class="ph-light ph-lock-key"></i> Your information is private and secure
-                    </div>
-                </div>
-
-
-                <!-- Step 3-4: Skin Helper - Texture -->
-                <div class="survey-step" data-step="3-4">
-                    <h2 class="skin-helper-title">Which description matches<br><span>your skin</span> best?</h2>
-                    <p class="skin-helper-copy">This helps us understand your pores and<br>texture better.</p>
-                    <div class="option-list radio-group skin-helper-options">
-                        <label class="option-card"><input type="radio" name="skinHelperTexture" value="1"><span class="option-text">Small pores,<br>flaky or rough texture</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperTexture" value="2"><span class="option-text">Smooth texture,<br>pores are barely visible</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperTexture" value="3"><span class="option-text">Somewhat visible pores<br>mainly in the T-zone</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperTexture" value="4"><span class="option-text">Visible pores in most areas<br>and uneven texture</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                        <label class="option-card"><input type="radio" name="skinHelperTexture" value="5"><span class="option-text">Large pores,<br>oily texture with uneven skin</span><div class="check-circle"><i class="ph-bold ph-check"></i></div></label>
-                    </div>
-
-                    <div class="bottom-action">
-                        <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
-                    </div>
-                    <div class="secure-text">
-                        <i class="ph-light ph-lock-key"></i> Your information is private and secure
                     </div>
                 </div>
 
@@ -2512,131 +2360,52 @@
             }
         };
 
-        let currentStep = '1';
+        let currentStep = 1;
         const totalSteps = 10;
         const displayedSurveyPages = 10;
         const progressBar = document.getElementById('progress-bar');
         const steps = document.querySelectorAll('.survey-step');
-        const skinHelperSteps = ['3-1', '3-2', '3-3', '3-4'];
-        let skinHelperCompleted = false;
 
         function updateProgress() {
-            const isSkinHelper = skinHelperSteps.includes(String(currentStep));
-            const displayStep = isSkinHelper ? String(currentStep) : String(Math.min(Number(currentStep), displayedSurveyPages));
-            const progressStep = isSkinHelper ? 3 : Math.min(Number(currentStep), displayedSurveyPages);
-            const percent = (progressStep / displayedSurveyPages) * 100;
+            const displayStep = Math.min(currentStep, displayedSurveyPages);
+            const percent = (displayStep / displayedSurveyPages) * 100;
             progressBar.style.width = percent + '%';
             const indicator = document.getElementById('step-indicator');
-            if (indicator) indicator.innerText = isSkinHelper ? 'Page ' + displayStep : 'Page ' + displayStep + ' of ' + displayedSurveyPages;
+            if (indicator) indicator.innerText = 'Page ' + displayStep + ' of ' + displayedSurveyPages;
         }
 
         function goToStep(step) {
-            const targetStep = String(step);
-            if (!document.querySelector(`.survey-step[data-step="${targetStep}"]`)) return;
+            if (step < 1 || step > totalSteps) return;
             steps.forEach(s => s.classList.remove('active'));
-            document.querySelector(`.survey-step[data-step="${targetStep}"]`).classList.add('active');
-            currentStep = targetStep;
+            document.querySelector(`.survey-step[data-step="${step}"]`).classList.add('active');
+            currentStep = step;
             updateProgress();
             window.scrollTo(0, 0);
         }
 
-        function isSkinHelperStep(step = currentStep) {
-            return skinHelperSteps.includes(String(step));
-        }
-
-        function isCurrentSkinHelperStepComplete() {
-            const activeStep = document.querySelector(`.survey-step[data-step="${currentStep}"]`);
-            return Boolean(activeStep && activeStep.querySelector('input[type="radio"]:checked'));
-        }
-
-        function inferSkinTypeFromHelper() {
-            const values = ['skinHelperCleanse', 'skinHelperAfterHours', 'skinHelperDay', 'skinHelperTexture']
-                .map(name => Number(document.querySelector(`input[name="${name}"]:checked`)?.value || 0));
-            const avg = values.reduce((sum, value) => sum + value, 0) / values.length;
-            const hasTZonePattern = values.includes(3);
-            let inferredType = 'Normal';
-
-            if (avg <= 1.8) {
-                inferredType = 'Dry';
-            } else if (avg >= 4.2) {
-                inferredType = 'Oily';
-            } else if (hasTZonePattern || (avg > 2.6 && avg < 4.2)) {
-                inferredType = 'Combination';
-            }
-
-            const targetInput = document.querySelector(`input[name="skinType"][value="${inferredType}"]`);
-            if (targetInput) {
-                document.querySelectorAll('input[name="skinType"]').forEach(input => {
-                    input.checked = false;
-                    input.closest('.option-card')?.classList.remove('selected');
-                });
-                targetInput.checked = true;
-                targetInput.closest('.option-card')?.classList.add('selected');
-            }
-
-            return inferredType;
-        }
-
         function nextStep() {
             // Very simple validation
-            if (currentStep === '1') {
+            if (currentStep === 1) {
                 const stepOneReady = validateStepOne({ revealEmailError: true, revealPhoneError: true });
                 if(!stepOneReady) {
                     alert("Please fill out all fields.");
                     return;
                 }
             }
-            if (currentStep === '2' && !isStepTwoComplete()) {
+            if (currentStep === 2 && !isStepTwoComplete()) {
                 alert("Please select your gender and age.");
                 return;
             }
-
-            if (currentStep === '3') {
-                const selectedSkinType = document.querySelector('input[name="skinType"]:checked')?.value;
-                if (!selectedSkinType) {
-                    alert("Please select your skin type.");
-                    return;
-                }
-                if (selectedSkinType === 'NotSure') {
-                    goToStep('3-1');
-                    return;
-                }
-            }
-
-            if (isSkinHelperStep()) {
-                if (!isCurrentSkinHelperStepComplete()) {
-                    alert("Please choose one option.");
-                    return;
-                }
-
-                const helperIndex = skinHelperSteps.indexOf(currentStep);
-                if (helperIndex < skinHelperSteps.length - 1) {
-                    goToStep(skinHelperSteps[helperIndex + 1]);
-                } else {
-                    inferSkinTypeFromHelper();
-                    skinHelperCompleted = true;
-                    goToStep('4');
-                }
-                return;
-            }
-
-            if (Number(currentStep) === totalSteps) {
+            if (currentStep === totalSteps) {
                 startAnalysis();
             } else {
-                goToStep(String(Number(currentStep) + 1));
+                goToStep(currentStep + 1);
             }
         }
 
         function goBack() {
-            if (isSkinHelperStep()) {
-                const helperIndex = skinHelperSteps.indexOf(currentStep);
-                goToStep(helperIndex === 0 ? '3' : skinHelperSteps[helperIndex - 1]);
-            } else if (Number(currentStep) > 1) {
-                if (currentStep === '4' && skinHelperCompleted) {
-                    goToStep('3-4');
-                } else {
-                    goToStep(String(Number(currentStep) - 1));
-                }
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
             } else {
                 // Go back to intro
                 document.getElementById('survey-screen').classList.remove('active');
@@ -2658,7 +2427,7 @@
 
         if (new URLSearchParams(window.location.search).has('survey')) {
             startSurvey();
-            const requestedStep = new URLSearchParams(window.location.search).get('step');
+            const requestedStep = Number(new URLSearchParams(window.location.search).get('step'));
             if (requestedStep) {
                 goToStep(requestedStep);
             }
@@ -2684,17 +2453,16 @@
                 const radio = this.querySelector('input[type="radio"]');
                 if (radio) {
                     const step = this.closest('.survey-step');
-                    step.querySelectorAll(`input[name="${radio.name}"]`).forEach(input => {
-                        input.closest('.option-card')?.classList.remove('selected');
-                    });
+                    const group = this.closest('.radio-group') || step;
+                    group.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
                     this.classList.add('selected');
                     radio.checked = true;
 
-                    if (currentStep === '2') {
+                    if (currentStep === 2) {
                         updateStepTwoState();
                         if (isStepTwoComplete()) {
                             setTimeout(() => {
-                                goToStep('3');
+                                goToStep(3);
                             }, 300);
                         }
                         return;
