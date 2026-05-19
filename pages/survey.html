@@ -3099,8 +3099,8 @@
         function isValidIndianMvpEmail(value) {
             const email = normalizeEmail(value);
             if (!email) return false;
-            if (email !== value.trim()) return false;
-            if (/\s/.test(email)) return false;
+            // Removed strict case-sensitive check: if (email !== value.trim()) return false;
+            if (/\s/.test(value.trim())) return false; // Ensure no internal spaces
             if (/[^\x00-\x7F]/.test(email)) return false;
 
             const parts = email.split('@');
