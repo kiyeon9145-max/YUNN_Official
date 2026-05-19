@@ -1774,11 +1774,25 @@
 
         .step10-actions .action-row {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             margin-bottom: 12px;
         }
         .step10-actions .action-row button {
             flex: 1;
+            height: 54px;
+            font-size: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            white-space: nowrap;
+        }
+        .step10-actions .action-row .btn-outline {
+            flex: 0.8;
+        }
+        .step10-actions .action-row .btn-primary {
+            flex: 1.2;
         }
         .step10-actions .skip-btn {
             width: 100%;
@@ -1787,7 +1801,10 @@
             border: 1px solid #EBEBEB;
             font-weight: 500;
             border-radius: 12px;
-            padding: 16px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 15px;
             cursor: pointer;
             transition: background 0.2s;
@@ -2374,7 +2391,7 @@
                 <!-- Step 10: Photo Upload -->
                 <div class="survey-step" data-step="10">
                     <h2 class="question-title">One last step.<br>Let's <span class="diagnosis-highlight">track your progress</span>.</h2>
-                    <p class="question-subtitle" style="margin-bottom: 24px; line-height: 1.4;">Upload a clear photo of your skin in natural lighting.<br>We'll use this to measure your skin progress over time.</p>
+                    <p class="question-subtitle" style="font-size: 13px; margin-bottom: 24px; line-height: 1.4; letter-spacing: -0.2px;">Upload a clear photo of your skin in natural lighting.<br>We'll use this to measure your skin progress over time.</p>
                     
                     <div class="photo-upload-container">
                         <div class="photo-upload-inner">
