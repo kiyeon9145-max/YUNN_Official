@@ -114,12 +114,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-20/survey.skin-helper-card-hierarchy.html`
 - `docs/code-backups/2026-05-20/BACKUP-POLICY.before-skin-helper-card-hierarchy.md`
 - `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-skin-helper-card-hierarchy.md`
-- `docs/code-backups/2026-05-20/survey.before-step3-2-tzone-linebreak.html`
-- `docs/code-backups/2026-05-20/survey.step3-2-tzone-linebreak.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-step3-2-tzone-linebreak.md`
-- `docs/code-backups/2026-05-20/survey.before-step3-3-balanced-linebreak.html`
-- `docs/code-backups/2026-05-20/survey.step3-3-balanced-linebreak.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-step3-3-balanced-linebreak.md`
 
 ## Restore
 
