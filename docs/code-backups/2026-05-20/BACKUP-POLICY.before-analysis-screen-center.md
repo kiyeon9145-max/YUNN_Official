@@ -120,14 +120,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-20/survey.before-step3-3-balanced-linebreak.html`
 - `docs/code-backups/2026-05-20/survey.step3-3-balanced-linebreak.html`
 - `docs/code-backups/2026-05-20/BACKUP-POLICY.before-step3-3-balanced-linebreak.md`
-- `docs/code-backups/2026-05-20/survey.before-analysis-screen-center.html`
-- `docs/code-backups/2026-05-20/survey.analysis-screen-centered.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-analysis-screen-center.md`
-- `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-analysis-screen-center.md`
-- `docs/code-backups/2026-05-20/survey.before-result-page-v1.html`
-- `docs/code-backups/2026-05-20/survey.result-page-v1.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-result-page-v1.md`
-- `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-result-page-v1.md`
 
 ## Restore
 
