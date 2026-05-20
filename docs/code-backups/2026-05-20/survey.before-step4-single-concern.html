@@ -2883,10 +2883,10 @@
                 <!-- Step 4: Skin Concerns -->
                 <div class="survey-step" data-step="4">
                     <h2 class="question-title concern-title">What’s bothering<br><span>your skin</span> the most?</h2>
-                    <p class="concern-copy">Select your biggest skin concern.<br>This helps us create a routine<br>that targets your main priority.</p>
-                    <div class="option-list concern-grid" id="primary-concern-grid">
-                        <label class="option-card concern-image-card">
-                            <input type="radio" name="concerns" value="Acne">
+                    <p class="concern-copy">Select all that apply.<br>This helps us create a routine<br>that targets your main skin concerns.</p>
+                    <div class="option-list checkbox-group concern-grid">
+                        <label class="option-card checkbox-card concern-image-card">
+                            <input type="checkbox" name="concerns" value="Acne">
                             <img src="../assets/image/Acne : Breaksout .png" alt="Acne and breakouts">
                             <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
                             <div class="concern-card-content">
@@ -2894,8 +2894,8 @@
                                 <div class="concern-card-desc">Active pimples,<br>redness, inflamed bumps</div>
                             </div>
                         </label>
-                        <label class="option-card concern-image-card">
-                            <input type="radio" name="concerns" value="Acne marks">
+                        <label class="option-card checkbox-card concern-image-card">
+                            <input type="checkbox" name="concerns" value="Acne marks">
                             <img src="../assets/image/Acne Marks.png" alt="Acne marks">
                             <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
                             <div class="concern-card-content">
@@ -2903,8 +2903,8 @@
                                 <div class="concern-card-desc">Dark spots or marks<br>left after breakouts</div>
                             </div>
                         </label>
-                        <label class="option-card concern-image-card">
-                            <input type="radio" name="concerns" value="Pigmentation">
+                        <label class="option-card checkbox-card concern-image-card">
+                            <input type="checkbox" name="concerns" value="Pigmentation">
                             <img src="../assets/image/Pigmentation : Dark Spots.png" alt="Pigmentation and dark spots">
                             <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
                             <div class="concern-card-content">
@@ -2912,8 +2912,8 @@
                                 <div class="concern-card-desc">Brown spots, sun spots,<br>or hyperpigmentation</div>
                             </div>
                         </label>
-                        <label class="option-card concern-image-card">
-                            <input type="radio" name="concerns" value="Uneven skin tone">
+                        <label class="option-card checkbox-card concern-image-card">
+                            <input type="checkbox" name="concerns" value="Uneven skin tone">
                             <img src="../assets/image/Uneven skin tone .png" alt="Uneven skin tone">
                             <div class="concern-check-square"><i class="ph-bold ph-check"></i></div>
                             <div class="concern-card-content">
@@ -3918,11 +3918,6 @@
                     goToStep('3-1');
                     return;
                 }
-            }
-
-            if (currentStep === '4' && !document.querySelector('input[name="concerns"]:checked')) {
-                alert("Please select your biggest skin concern.");
-                return;
             }
 
             if (currentStep === '7' && !isStepSevenComplete()) {

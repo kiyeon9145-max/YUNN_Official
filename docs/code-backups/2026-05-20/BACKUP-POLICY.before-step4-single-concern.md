@@ -128,10 +128,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-20/survey.result-page-v1.html`
 - `docs/code-backups/2026-05-20/BACKUP-POLICY.before-result-page-v1.md`
 - `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-result-page-v1.md`
-- `docs/code-backups/2026-05-20/survey.before-step4-single-concern.html`
-- `docs/code-backups/2026-05-20/survey.step4-single-concern.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-step4-single-concern.md`
-- `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-step4-single-concern.md`
 
 ## Restore
 
