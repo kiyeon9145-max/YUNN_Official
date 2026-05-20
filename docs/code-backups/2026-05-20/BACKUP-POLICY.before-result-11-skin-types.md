@@ -132,12 +132,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-20/survey.step4-single-concern.html`
 - `docs/code-backups/2026-05-20/BACKUP-POLICY.before-step4-single-concern.md`
 - `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-step4-single-concern.md`
-- `docs/code-backups/2026-05-20/survey.before-result-11-skin-types.html`
-- `docs/code-backups/2026-05-20/survey.result-11-skin-types.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-result-11-skin-types.md`
-- `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-result-11-skin-types.md`
-- `docs/YUNN-SKIN-TYPE-MATRIX.md`
-- `docs/code-backups/2026-05-20/YUNN-SKIN-TYPE-MATRIX.result-11-skin-types.md`
 
 ## Restore
 

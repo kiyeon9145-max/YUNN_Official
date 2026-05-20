@@ -1331,10 +1331,6 @@
             margin-top: 20px;
         }
 
-        .result-type-suffix {
-            color: var(--primary);
-        }
-
         .result-face-card {
             position: absolute;
             right: 0;
@@ -3792,111 +3788,6 @@
             });
         });
 
-        const RESULT_TYPE_PROFILES = {
-            'Oily|Acne': {
-                skinTypeName: 'Oil Clear',
-                keywords: ['Oily', 'Acne-prone', 'Sebum Control'],
-                focus: 'consistent oil control',
-                summary: "Your skin tends to produce more oil than it needs — and in India's heat and humidity, that builds up fast. Lightweight hydration and consistent oil control can help keep your skin clear, calm, and balanced through the day."
-            },
-            'Oily|Marks': {
-                skinTypeName: 'Glow Restore',
-                keywords: ['Oily', 'Post-acne', 'Repair'],
-                focus: 'gentle brightening care',
-                summary: 'Your skin is still recovering from past breakouts — and UV exposure can make those marks linger longer than expected. With steady barrier support and gentle brightening care, your skin tone can gradually become clearer and more even.'
-            },
-            'Oily|Pigmentation': {
-                skinTypeName: 'Radiance Shield',
-                keywords: ['Oily', 'Pigmentation', 'UV Defense'],
-                focus: 'Consistent sunscreen and brightening care',
-                summary: 'Your skin may be more reactive to pigmentation triggers — and daily UV exposure makes that harder to manage without the right protection. Consistent sunscreen and brightening care can help prevent dark spots from deepening and keep your natural radiance visible.'
-            },
-            'Oily|Tone': {
-                skinTypeName: 'Bright Balance',
-                keywords: ['Oily', 'Uneven Tone', 'Glow'],
-                focus: 'Lightweight hydration and tone-balancing care',
-                summary: 'Your skin is producing more oil than it needs, and that imbalance is showing up as shine and uneven tone. Lightweight hydration and tone-balancing care can help your skin find its natural rhythm — and bring back its glow.'
-            },
-            'Dry|Acne': {
-                skinTypeName: 'Calm Repair',
-                keywords: ['Dry', 'Breakout', 'Barrier'],
-                focus: 'Calming hydration and barrier-focused care',
-                summary: 'Your skin is dealing with dryness and breakouts at the same time — which happens when the skin barrier becomes weakened and more reactive. Calming hydration and barrier-focused care can help reduce irritation and bring your skin back to a more comfortable balance.'
-            },
-            'Dry|Marks': {
-                skinTypeName: 'Barrier Glow',
-                keywords: ['Dry', 'Repair', 'Barrier Stress'],
-                focus: 'Rebuilding your skin barrier',
-                summary: 'Your skin is in recovery mode — and without enough moisture, post-acne marks tend to stay more visible and healing feels slower. Rebuilding your skin barrier with gentle, nourishing care can help speed up recovery and bring back a healthy glow over time.'
-            },
-            'Dry|Pigmentation': {
-                skinTypeName: 'Velvet Glow',
-                keywords: ['Dry', 'Pigmentation', 'Dehydrated'],
-                focus: 'Deep hydration and consistent brightening care',
-                summary: 'Your skin is low on moisture — and when hydration drops, dark spots and uneven areas tend to look more visible than they actually are. Deep hydration and consistent brightening care can help even out your tone and bring your natural glow back to the surface.'
-            },
-            'Dry|Tone': {
-                skinTypeName: 'Velvet Bright',
-                keywords: ['Dry', 'Hydration', 'Even Tone'],
-                focus: 'moisture levels are well maintained',
-                summary: 'Your skin has natural glow — it just needs more hydration to show it. When moisture levels are well maintained, skin looks noticeably smoother, more even, and more radiant.'
-            },
-            'Combination|Acne': {
-                skinTypeName: 'Clear Harmony',
-                keywords: ['Combination', 'Acne-prone', 'Oil Balance'],
-                focus: 'Balanced oil control and lightweight hydration',
-                summary: 'Your skin runs oily in some areas and feels tight or irritated in others — making breakouts harder to predict and manage. Balanced oil control and lightweight hydration working together can help your skin feel more settled and consistently clearer.'
-            },
-            'Combination|Marks': {
-                skinTypeName: 'Clear Harmony',
-                keywords: ['Combination', 'Acne-prone', 'Oil Balance'],
-                focus: 'Balanced oil control and lightweight hydration',
-                summary: 'Your skin runs oily in some areas and feels tight or irritated in others — making breakouts harder to predict and manage. Balanced oil control and lightweight hydration working together can help your skin feel more settled and consistently clearer.'
-            },
-            'Combination|Pigmentation': {
-                skinTypeName: 'Radiance Harmony',
-                keywords: ['Combination', 'Uneven Tone', 'Radiance'],
-                focus: 'Tone-balancing care, lightweight hydration, and daily sun protection',
-                summary: "Your skin is dealing with both oil imbalance and uneven tone — and UV exposure makes it harder for your skin to stay bright and balanced. Tone-balancing care, lightweight hydration, and daily sun protection can work together to bring your skin's radiance back into harmony."
-            },
-            'Combination|Tone': {
-                skinTypeName: 'Radiance Harmony',
-                keywords: ['Combination', 'Uneven Tone', 'Radiance'],
-                focus: 'Tone-balancing care, lightweight hydration, and daily sun protection',
-                summary: "Your skin is dealing with both oil imbalance and uneven tone — and UV exposure makes it harder for your skin to stay bright and balanced. Tone-balancing care, lightweight hydration, and daily sun protection can work together to bring your skin's radiance back into harmony."
-            },
-            'Normal|Acne': {
-                skinTypeName: 'Pure Radiance',
-                keywords: ['Normal', 'Natural Glow', 'Balanced'],
-                focus: 'hydration and sun protection',
-                summary: 'Your skin is in a genuinely good place — balanced, resilient, and responding well to daily care. Keeping up with hydration and sun protection is what helps your natural radiance stay exactly where it is.'
-            },
-            'Normal|Marks': {
-                skinTypeName: 'Pure Radiance',
-                keywords: ['Normal', 'Natural Glow', 'Balanced'],
-                focus: 'hydration and sun protection',
-                summary: 'Your skin is in a genuinely good place — balanced, resilient, and responding well to daily care. Keeping up with hydration and sun protection is what helps your natural radiance stay exactly where it is.'
-            },
-            'Normal|Pigmentation': {
-                skinTypeName: 'Pure Radiance',
-                keywords: ['Normal', 'Natural Glow', 'Balanced'],
-                focus: 'hydration and sun protection',
-                summary: 'Your skin is in a genuinely good place — balanced, resilient, and responding well to daily care. Keeping up with hydration and sun protection is what helps your natural radiance stay exactly where it is.'
-            },
-            'Normal|Tone': {
-                skinTypeName: 'Pure Radiance',
-                keywords: ['Normal', 'Natural Glow', 'Balanced'],
-                focus: 'hydration and sun protection',
-                summary: 'Your skin is in a genuinely good place — balanced, resilient, and responding well to daily care. Keeping up with hydration and sun protection is what helps your natural radiance stay exactly where it is.'
-            }
-        };
-
-        Object.entries(RESULT_TYPE_PROFILES).forEach(([profileKey, profile]) => {
-            if (RESULT_RECOMMENDATION_CONFIG[profileKey]) {
-                Object.assign(RESULT_RECOMMENDATION_CONFIG[profileKey], profile);
-            }
-        });
-
         const RESULT_PRODUCTS = [
             {
                 id: 'cleanser-foam',
@@ -4391,12 +4282,7 @@
         }
 
         function getResultConfig(data) {
-            const key = `${data.skinType}|${data.concernType}`;
-            const baseConfig = RESULT_RECOMMENDATION_CONFIG[key] || RESULT_RECOMMENDATION_CONFIG['Oily|Acne'];
-            return {
-                ...baseConfig,
-                ...(RESULT_TYPE_PROFILES[key] || RESULT_TYPE_PROFILES['Oily|Acne'])
-            };
+            return RESULT_RECOMMENDATION_CONFIG[`${data.skinType}|${data.concernType}`] || RESULT_RECOMMENDATION_CONFIG['Oily|Acne'];
         }
 
         function getBalanceStatus(value) {
@@ -4441,7 +4327,7 @@
 
         function renderResultHeader(data, config) {
             document.getElementById('result-user-name').textContent = data.name;
-            document.getElementById('result-type-name').innerHTML = `${escapeHTML(config.skinTypeName)} <span class="result-type-suffix">type</span>`;
+            document.getElementById('result-type-name').textContent = config.skinTypeName;
 
             const faceImage = document.getElementById('result-face-image');
             const fallback = data.gender === 'Male' ? RESULT_ASSETS.userFallbackMale : RESULT_ASSETS.userFallbackFemale;
