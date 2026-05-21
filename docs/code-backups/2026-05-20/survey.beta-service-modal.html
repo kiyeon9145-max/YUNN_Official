@@ -9,7 +9,7 @@
     <style>
 
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        
+
         :root {
             --primary: #3AAE92;
             --primary-dark: #2F8E76;
@@ -126,7 +126,7 @@
             transition: opacity 0.3s ease;
         }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
-        
+
         .sidebar-menu {
             position: fixed;
             top: 0; left: 0; width: 50%; max-width: 280px; height: 100vh;
@@ -138,7 +138,7 @@
         .sidebar-menu.active { transform: translateX(0); }
         .sidebar-menu ul { list-style: none; margin-top: 40px; }
         .sidebar-menu li { margin-bottom: 24px; font-size: 18px; font-weight: 500; color: var(--text-main); cursor:pointer;}
-        
+
         /* --- Step 0: Intro Screen (Figma Diagnosis Start) --- */
         #intro-screen {
             display: none;
@@ -528,7 +528,7 @@
             background: #000;
         }
 
-        
+
         /* --- Survey Core CSS (Kept from original) --- */
         #survey-screen {
             display: none;
@@ -2671,7 +2671,7 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; display: none; z-index: 2;
         }
-        
+
         .secure-text-wrap {
             display: flex;
             align-items: center;
@@ -2753,7 +2753,7 @@
             <li>About Us</li>
         </ul>
     </div>
-    
+
     <!-- STEP 0: Intro -->
     <div id="intro-screen" class="active">
         <div class="diagnosis-shell">
@@ -3316,7 +3316,7 @@
                 <div class="survey-step" data-step="10">
                     <h2 class="question-title">One last step.<br>Let's <span class="diagnosis-highlight">track your progress</span>.</h2>
                     <p class="question-subtitle" style="font-size: 13px; margin-bottom: 24px; line-height: 1.4; letter-spacing: -0.2px;">Upload a clear photo of your skin in natural lighting.<br>We'll use this to measure your skin progress over time.</p>
-                    
+
                     <div class="photo-upload-container">
                         <div class="photo-upload-inner">
                             <div class="camera-icon-wrap">
@@ -3509,7 +3509,7 @@
             <p class="beta-thanks-note">As a thank you, beta users who share feedback will receive an additional launch discount.</p>
         </section>
     </div>
-    
+
 
     <script>
 
@@ -3603,7 +3603,7 @@
 
         // --- Navigation Logic ---
         let isLoggedIn = false; // Mock login state
-        
+
         function toggleSidebar() {
             document.getElementById('sidebar-menu').classList.toggle('active');
             document.getElementById('sidebar-overlay').classList.toggle('active');
@@ -4628,7 +4628,7 @@
         function startAnalysis() {
             document.getElementById('survey-screen').style.display = 'none';
             document.getElementById('analysis-screen').style.display = 'block';
-            
+
             const statusMessages = ["Analysing skin concern patterns...", "Mapping daily environment...", "Calibrating routine intensity...", "Finalising your plan..."];
             let i = 0;
             const interval = setInterval(() => {
@@ -4978,7 +4978,7 @@
             showResults();
         }
 
-    
+
     </script>
 </body>
 </html>

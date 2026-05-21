@@ -138,10 +138,6 @@ Created on 2026-05-18:
 - `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-result-11-skin-types.md`
 - `docs/YUNN-SKIN-TYPE-MATRIX.md`
 - `docs/code-backups/2026-05-20/YUNN-SKIN-TYPE-MATRIX.result-11-skin-types.md`
-- `docs/code-backups/2026-05-20/survey.before-beta-service-modal.html`
-- `docs/code-backups/2026-05-20/survey.beta-service-modal.html`
-- `docs/code-backups/2026-05-20/BACKUP-POLICY.before-beta-service-modal.md`
-- `docs/code-backups/2026-05-20/IMPLEMENTATION-LOG.before-beta-service-modal.md`
 
 ## Restore
 
