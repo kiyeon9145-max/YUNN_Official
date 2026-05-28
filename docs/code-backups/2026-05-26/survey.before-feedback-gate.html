@@ -9,7 +9,7 @@
     <style>
 
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        
+
         :root {
             --primary: #3AAE92;
             --primary-dark: #2F8E76;
@@ -126,7 +126,7 @@
             transition: opacity 0.3s ease;
         }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
-        
+
         .sidebar-menu {
             position: fixed;
             top: 0; left: 0; width: 50%; max-width: 280px; height: 100vh;
@@ -138,7 +138,7 @@
         .sidebar-menu.active { transform: translateX(0); }
         .sidebar-menu ul { list-style: none; margin-top: 40px; }
         .sidebar-menu li { margin-bottom: 24px; font-size: 18px; font-weight: 500; color: var(--text-main); cursor:pointer;}
-        
+
         /* --- Step 0: Intro Screen (Figma Diagnosis Start) --- */
         #intro-screen {
             display: none;
@@ -528,7 +528,7 @@
             background: #000;
         }
 
-        
+
         /* --- Survey Core CSS (Kept from original) --- */
         #survey-screen {
             display: none;
@@ -1314,7 +1314,7 @@
             font-size: 20px;
             font-weight: 700;
             line-height: 1.35;
-            letter-spacing: 0;
+            letter-spacing: -0.01em;
         }
 
         .result-label {
@@ -1322,23 +1322,17 @@
         }
 
         .result-type-name {
-            width: 232px;
+            width: 220px;
             color: var(--primary);
-            font-size: 32px;
+            font-size: 27px;
             font-weight: 700;
-            line-height: 1.08;
-            letter-spacing: 0;
-            margin-top: 18px;
-            word-break: keep-all;
-        }
-
-        .result-type-main {
-            display: inline;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-top: 20px;
         }
 
         .result-type-suffix {
             color: var(--primary);
-            white-space: nowrap;
         }
 
         .result-face-card {
@@ -1363,42 +1357,32 @@
         .result-keywords {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 14px;
+            gap: 10px;
+            margin-top: 13px;
         }
 
         .result-keyword {
-            min-height: 22px;
-            padding: 0 13px;
+            min-width: 58px;
+            height: 20px;
+            padding: 0 12px;
             border-radius: 999px;
             background: #E9F4F1;
             color: #000;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            line-height: 1;
-            letter-spacing: 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            white-space: nowrap;
         }
 
         .result-summary {
-            margin-top: 30px;
+            margin-top: 29px;
             text-align: center;
             color: #000;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 400;
-            line-height: 1.78;
-            letter-spacing: 0;
-        }
-
-        .result-summary p {
-            margin: 0;
-        }
-
-        .result-summary p + p {
-            margin-top: 18px;
+            line-height: 1.9;
+            letter-spacing: -0.01em;
         }
 
         .result-summary strong {
@@ -2158,304 +2142,6 @@
             padding: 0 10px 8px;
         }
 
-        .locked-result-content {
-            position: relative;
-            margin-top: 25px;
-        }
-
-        .locked-result-content.locked .routine-tabs,
-        .locked-result-content.locked #result-routine-list,
-        .locked-result-content.locked .products-section {
-            filter: blur(7px);
-            opacity: 0.48;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .unlock-preview-card {
-            display: none;
-            position: sticky;
-            bottom: 68px;
-            z-index: 40;
-            margin: -14px 0 24px;
-            border: 1px solid #DDEEEA;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.94);
-            box-shadow: 0 16px 38px rgba(25, 66, 55, 0.16);
-            padding: 18px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .locked-result-content.locked .unlock-preview-card {
-            display: block;
-        }
-
-        .unlock-preview-title {
-            color: #111111;
-            font-size: 19px;
-            font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
-        }
-
-        .unlock-preview-copy {
-            color: #4C535C;
-            font-size: 14px;
-            line-height: 1.55;
-            margin-top: 8px;
-        }
-
-        .unlock-preview-button {
-            width: 100%;
-            min-height: 54px;
-            border: 0;
-            border-radius: 16px;
-            background: #080A0D;
-            color: #FFFFFF;
-            font-size: 17px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 16px;
-            cursor: pointer;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.13);
-        }
-
-        .unlock-preview-button i {
-            font-size: 24px;
-        }
-
-        .feedback-gate-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 2100;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.58);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.24s ease, visibility 0.24s ease;
-        }
-
-        .feedback-gate-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .feedback-gate-sheet {
-            width: 100%;
-            max-width: 393px;
-            max-height: calc(100vh - 28px);
-            overflow-y: auto;
-            border-radius: 32px 32px 0 0;
-            background:
-                radial-gradient(circle at 16% 12%, rgba(92, 193, 166, 0.13), rgba(255,255,255,0) 32%),
-                linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 72%, #F8FAF9 100%);
-            padding: 24px 24px 28px;
-            box-shadow: 0 -16px 44px rgba(0, 0, 0, 0.2);
-            transform: translateY(100%);
-            transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .feedback-gate-overlay.active .feedback-gate-sheet {
-            transform: translateY(0);
-        }
-
-        .feedback-gate-handle {
-            width: 42px;
-            height: 5px;
-            border-radius: 999px;
-            background: #B7B4BA;
-            margin: 0 auto 24px;
-        }
-
-        .feedback-gate-close {
-            position: absolute;
-            top: 38px;
-            right: 24px;
-            z-index: 2;
-            width: 44px;
-            height: 44px;
-            border: 0;
-            background: transparent;
-            color: #111111;
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .feedback-gate-lock {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            height: 34px;
-            border-radius: 999px;
-            background: #EAF8F4;
-            color: #3AAE92;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 0 13px;
-            margin-bottom: 16px;
-        }
-
-        .feedback-gate-title {
-            color: #111111;
-            font-size: 27px;
-            font-weight: 700;
-            line-height: 1.22;
-            letter-spacing: -0.025em;
-            padding-right: 44px;
-        }
-
-        .feedback-gate-copy {
-            color: #262A33;
-            font-size: 16px;
-            line-height: 1.62;
-            letter-spacing: -0.01em;
-            margin-top: 14px;
-        }
-
-        .feedback-gate-card {
-            margin-top: 24px;
-            border: 1px solid #DDEEEA;
-            border-radius: 18px;
-            background: rgba(248, 252, 251, 0.94);
-            padding: 18px;
-            box-shadow: 0 12px 28px rgba(25, 66, 55, 0.08);
-        }
-
-        .feedback-gate-card-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #111111;
-            font-size: 17px;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        .feedback-gate-card-title i {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #DDF4EE;
-            color: #3AAE92;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .feedback-gate-steps {
-            display: grid;
-            gap: 12px;
-            margin-top: 17px;
-        }
-
-        .feedback-gate-step {
-            display: grid;
-            grid-template-columns: 26px 1fr;
-            gap: 11px;
-            align-items: start;
-            color: #30343D;
-            font-size: 14px;
-            line-height: 1.45;
-        }
-
-        .feedback-gate-step span {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: #5CC1A6;
-            color: #FFFFFF;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .feedback-gate-primary {
-            width: 100%;
-            height: 58px;
-            border: 0;
-            border-radius: 18px;
-            background: #080A0D;
-            color: #FFFFFF;
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            margin-top: 26px;
-            cursor: pointer;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.13);
-        }
-
-        .feedback-gate-primary i {
-            font-size: 26px;
-        }
-
-        .feedback-gate-status {
-            margin-top: 18px;
-            border-radius: 16px;
-            background: #F0FAF7;
-            color: #1F4E43;
-            padding: 15px;
-            display: grid;
-            grid-template-columns: 28px 1fr;
-            gap: 12px;
-            align-items: start;
-        }
-
-        .feedback-gate-status i {
-            color: #3AAE92;
-            font-size: 25px;
-        }
-
-        .feedback-gate-status strong {
-            display: block;
-            color: #1F4E43;
-            font-size: 14px;
-            line-height: 1.35;
-        }
-
-        .feedback-gate-status span {
-            display: block;
-            color: #4D6C64;
-            font-size: 13px;
-            line-height: 1.45;
-            margin-top: 4px;
-        }
-
-        .feedback-gate-actions {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            margin-top: 20px;
-        }
-
-        .feedback-gate-link {
-            border: 0;
-            background: transparent;
-            color: #777777;
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            cursor: pointer;
-        }
-
         /* Skin Type Grid Specific */
         .diagnosis-highlight {
             color: var(--primary);
@@ -2985,7 +2671,7 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; display: none; z-index: 2;
         }
-        
+
         .secure-text-wrap {
             display: flex;
             align-items: center;
@@ -3067,7 +2753,7 @@
             <li>About Us</li>
         </ul>
     </div>
-    
+
     <!-- STEP 0: Intro -->
     <div id="intro-screen" class="active">
         <div class="diagnosis-shell">
@@ -3630,7 +3316,7 @@
                 <div class="survey-step" data-step="10">
                     <h2 class="question-title">One last step.<br>Let's <span class="diagnosis-highlight">track your progress</span>.</h2>
                     <p class="question-subtitle" style="font-size: 13px; margin-bottom: 24px; line-height: 1.4; letter-spacing: -0.2px;">Upload a clear photo of your skin in natural lighting.<br>We'll use this to measure your skin progress over time.</p>
-                    
+
                     <div class="photo-upload-container">
                         <div class="photo-upload-inner">
                             <div class="camera-icon-wrap">
@@ -3736,46 +3422,35 @@
                     <div class="result-note">＊ Results are based on your answers and lifestyle data. Not a medical diagnosis.</div>
                 </section>
 
-                <div class="locked-result-content locked" id="locked-result-content">
-                    <section class="routine-tabs" aria-label="Routine tabs">
-                        <button type="button" class="routine-tab active" id="morning-tab" onclick="switchRoutineTab('morning')">
-                            <i class="ph-fill ph-sun"></i>
-                            <span>
-                                <span class="routine-tab-title">Morning Routine</span>
-                                <span class="routine-tab-subtitle">Protect & Glow</span>
-                            </span>
-                        </button>
-                        <button type="button" class="routine-tab" id="evening-tab" onclick="switchRoutineTab('evening')">
-                            <i class="ph-fill ph-moon"></i>
-                            <span>
-                                <span class="routine-tab-title">Evening Routine</span>
-                                <span class="routine-tab-subtitle">Repair & Recover</span>
-                            </span>
-                        </button>
-                    </section>
+                <section class="routine-tabs" aria-label="Routine tabs">
+                    <button type="button" class="routine-tab active" id="morning-tab" onclick="switchRoutineTab('morning')">
+                        <i class="ph-fill ph-sun"></i>
+                        <span>
+                            <span class="routine-tab-title">Morning Routine</span>
+                            <span class="routine-tab-subtitle">Protect & Glow</span>
+                        </span>
+                    </button>
+                    <button type="button" class="routine-tab" id="evening-tab" onclick="switchRoutineTab('evening')">
+                        <i class="ph-fill ph-moon"></i>
+                        <span>
+                            <span class="routine-tab-title">Evening Routine</span>
+                            <span class="routine-tab-subtitle">Repair & Recover</span>
+                        </span>
+                    </button>
+                </section>
 
-                    <section id="result-routine-list"></section>
+                <section id="result-routine-list"></section>
 
-                    <section class="products-section">
-                        <h2 class="products-title">Products selected to reduce<br>trial-and-error</h2>
-                        <p class="products-copy">Based on your responses, our Skin AI recommends the following products for you.</p>
-                        <div class="product-grid" id="result-product-grid"></div>
-                        <button type="button" class="add-all-cart" onclick="addAllRecommendedToCart()">
-                            <i class="ph-bold ph-plus"></i>
-                            Add All to Cart
-                        </button>
-                        <button type="button" class="retake-link" onclick="retakeQuiz()">Retake Quiz</button>
-                    </section>
-
-                    <section class="unlock-preview-card" aria-live="polite">
-                        <div class="unlock-preview-title">Your 14-day routine plan is ready.</div>
-                        <p class="unlock-preview-copy">Answer one quick feedback form to unlock the full morning routine, evening routine, and product plan.</p>
-                        <button type="button" class="unlock-preview-button" onclick="openFeedbackGateModal('ready')">
-                            <span>Unlock My Full Routine</span>
-                            <i class="ph ph-arrow-right"></i>
-                        </button>
-                    </section>
-                </div>
+                <section class="products-section">
+                    <h2 class="products-title">Products curated<br>for your routine</h2>
+                    <p class="products-copy">Based on your responses, our Skin AI recommends the following products for you.</p>
+                    <div class="product-grid" id="result-product-grid"></div>
+                    <button type="button" class="add-all-cart" onclick="addAllRecommendedToCart()">
+                        <i class="ph-bold ph-plus"></i>
+                        Add All to Cart
+                    </button>
+                    <button type="button" class="retake-link" onclick="retakeQuiz()">Retake Quiz</button>
+                </section>
             </main>
 
             <nav class="result-bottom-nav" aria-label="Result bottom navigation">
@@ -3835,56 +3510,8 @@
         </section>
     </div>
 
-    <div class="feedback-gate-overlay" id="feedback-gate-modal" aria-hidden="true" onclick="handleFeedbackGateBackdrop(event)">
-        <section class="feedback-gate-sheet" role="dialog" aria-modal="true" aria-labelledby="feedback-gate-title">
-            <div class="feedback-gate-handle" aria-hidden="true"></div>
-            <button type="button" class="feedback-gate-close" onclick="closeFeedbackGateModal(event)" aria-label="Close full routine unlock notice">
-                <i class="ph ph-x"></i>
-            </button>
-            <div class="feedback-gate-lock"><i class="ph ph-lock-key"></i> Full routine locked</div>
-            <h2 class="feedback-gate-title" id="feedback-gate-title">Before unlocking your full routine</h2>
-            <p class="feedback-gate-copy">We’d love to understand how this result felt for you. Your feedback helps us build skincare guidance that feels simpler, more personalized, and easier to follow.</p>
-
-            <div class="feedback-gate-card">
-                <div class="feedback-gate-card-title">
-                    <i class="ph ph-clipboard-text"></i>
-                    <span>Less than 1 minute</span>
-                </div>
-                <div class="feedback-gate-steps">
-                    <div class="feedback-gate-step"><span>1</span><div>Complete the short Google Form.</div></div>
-                    <div class="feedback-gate-step"><span>2</span><div>Tap the return link on the confirmation screen.</div></div>
-                    <div class="feedback-gate-step"><span>3</span><div>Your morning, evening, and product routine will unlock here.</div></div>
-                </div>
-            </div>
-
-            <button type="button" class="feedback-gate-primary" onclick="openFeedbackSurvey()">
-                <span>Continue to Unlock</span>
-                <i class="ph ph-arrow-square-out"></i>
-            </button>
-
-            <div class="feedback-gate-status" id="feedback-gate-status">
-                <i class="ph ph-clock"></i>
-                <div>
-                    <strong>Your full routine stays saved here</strong>
-                    <span>Close this sheet anytime. The consultation above remains visible, and the routine unlocks after the feedback step.</span>
-                </div>
-            </div>
-
-            <div class="feedback-gate-actions">
-                <button type="button" class="feedback-gate-link" onclick="verifyFeedbackAndUnlock()">Check submission</button>
-                <button type="button" class="feedback-gate-link" onclick="closeFeedbackGateModal(event)">Not now</button>
-            </div>
-        </section>
-    </div>
-    
 
     <script>
-
-        // --- Feedback gate configuration ---
-        const YUNN_FEEDBACK_FORM_URL = 'https://docs.google.com/forms/d/1ME2EU6G3LxnB6VPH6HUO7f-H850CGKt5Gs4lA1t8Wa8/viewform';
-        const YUNN_FEEDBACK_SESSION_ENTRY_ID = '';
-        const YUNN_FEEDBACK_VERIFY_URL = '';
-        const YUNN_FEEDBACK_RETURN_PARAM = 'returnFromSurvey';
 
         // --- Live status bars ---
         function initMobileChrome() {
@@ -3976,7 +3603,7 @@
 
         // --- Navigation Logic ---
         let isLoggedIn = false; // Mock login state
-        
+
         function toggleSidebar() {
             document.getElementById('sidebar-menu').classList.toggle('active');
             document.getElementById('sidebar-overlay').classList.toggle('active');
@@ -4472,7 +4099,7 @@
                 summary: 'Your skin may be more reactive to pigmentation triggers — and daily UV exposure makes that harder to manage without the right protection. Consistent sunscreen and brightening care can help prevent dark spots from deepening and keep your natural radiance visible.'
             },
             'Oily|Tone': {
-                skinTypeName: 'Glow Balance',
+                skinTypeName: 'Bright Balance',
                 keywords: ['Oily', 'Uneven Tone', 'Glow'],
                 focus: 'Lightweight hydration and tone-balancing care',
                 summary: 'Your skin is producing more oil than it needs, and that imbalance is showing up as shine and uneven tone. Lightweight hydration and tone-balancing care can help your skin find its natural rhythm — and bring back its glow.'
@@ -4490,13 +4117,13 @@
                 summary: 'Your skin is in recovery mode — and without enough moisture, post-acne marks tend to stay more visible and healing feels slower. Rebuilding your skin barrier with gentle, nourishing care can help speed up recovery and bring back a healthy glow over time.'
             },
             'Dry|Pigmentation': {
-                skinTypeName: 'Soft Glow',
+                skinTypeName: 'Velvet Glow',
                 keywords: ['Dry', 'Pigmentation', 'Dehydrated'],
                 focus: 'Deep hydration and consistent brightening care',
                 summary: 'Your skin is low on moisture — and when hydration drops, dark spots and uneven areas tend to look more visible than they actually are. Deep hydration and consistent brightening care can help even out your tone and bring your natural glow back to the surface.'
             },
             'Dry|Tone': {
-                skinTypeName: 'Soft Bright',
+                skinTypeName: 'Velvet Bright',
                 keywords: ['Dry', 'Hydration', 'Even Tone'],
                 focus: 'moisture levels are well maintained',
                 summary: 'Your skin has natural glow — it just needs more hydration to show it. When moisture levels are well maintained, skin looks noticeably smoother, more even, and more radiant.'
@@ -4514,13 +4141,13 @@
                 summary: 'Your skin runs oily in some areas and feels tight or irritated in others — making breakouts harder to predict and manage. Balanced oil control and lightweight hydration working together can help your skin feel more settled and consistently clearer.'
             },
             'Combination|Pigmentation': {
-                skinTypeName: 'Glow Harmony',
+                skinTypeName: 'Radiance Harmony',
                 keywords: ['Combination', 'Uneven Tone', 'Radiance'],
                 focus: 'Tone-balancing care, lightweight hydration, and daily sun protection',
                 summary: "Your skin is dealing with both oil imbalance and uneven tone — and UV exposure makes it harder for your skin to stay bright and balanced. Tone-balancing care, lightweight hydration, and daily sun protection can work together to bring your skin's radiance back into harmony."
             },
             'Combination|Tone': {
-                skinTypeName: 'Glow Harmony',
+                skinTypeName: 'Radiance Harmony',
                 keywords: ['Combination', 'Uneven Tone', 'Radiance'],
                 focus: 'Tone-balancing care, lightweight hydration, and daily sun protection',
                 summary: "Your skin is dealing with both oil imbalance and uneven tone — and UV exposure makes it harder for your skin to stay bright and balanced. Tone-balancing care, lightweight hydration, and daily sun protection can work together to bring your skin's radiance back into harmony."
@@ -5007,7 +4634,7 @@
             const interval = setInterval(() => {
                 document.getElementById('cycling-status').innerText = statusMessages[i % statusMessages.length];
                 i++;
-                if (i === 4) {
+                if (i === 12) {
                     clearInterval(interval);
                     showResults();
                 }
@@ -5030,41 +4657,23 @@
             if (values.includes('Pigmentation')) return 'Pigmentation';
             if (values.includes('Uneven skin tone')) return 'Tone';
             if (values.includes('Acne marks')) return 'Marks';
-            if (values.includes('Acne')) return 'Acne';
-            return '';
-        }
-
-        function readPendingResultData() {
-            try {
-                return JSON.parse(localStorage.getItem('yunn_pending_result_data') || '{}');
-            } catch {
-                return {};
-            }
-        }
-
-        function savePendingResultData(data) {
-            try {
-                localStorage.setItem('yunn_pending_result_data', JSON.stringify(data));
-            } catch {
-                // Result state persistence is best-effort for the Google Form handoff.
-            }
+            return 'Acne';
         }
 
         function getResultSurveyData() {
-            const saved = readPendingResultData();
             const genderValue = document.querySelector('input[name="gender"]:checked')?.value || 'Female';
-            const skinType = document.querySelector('input[name="skinType"]:checked')?.value || saved.skinType || 'Oily';
+            const skinType = document.querySelector('input[name="skinType"]:checked')?.value || 'Oily';
             return {
-                name: document.getElementById('userName')?.value.trim() || saved.name || 'Guest',
-                gender: document.querySelector('input[name="gender"]:checked')?.value || saved.gender || genderValue,
+                name: document.getElementById('userName')?.value.trim() || 'Guest',
+                gender: genderValue,
                 skinType,
-                concernType: getPrimaryConcernType() || saved.concernType || 'Acne',
-                age: document.querySelector('input[name="age"]:checked')?.value || saved.age || '',
-                sleep: document.querySelector('input[name="sleep"]:checked')?.value || saved.sleep || '',
-                stress: document.querySelector('input[name="stress"]:checked')?.value || saved.stress || '',
-                sensitivity: document.querySelector('input[name="sensitivity"]:checked')?.value || saved.sensitivity || '',
-                outdoor: document.querySelector('input[name="outdoor"]:checked')?.value || saved.outdoor || '',
-                sunscreen: document.querySelector('input[name="sunscreen"]:checked')?.value || saved.sunscreen || ''
+                concernType: getPrimaryConcernType(),
+                age: document.querySelector('input[name="age"]:checked')?.value || '',
+                sleep: document.querySelector('input[name="sleep"]:checked')?.value || '',
+                stress: document.querySelector('input[name="stress"]:checked')?.value || '',
+                sensitivity: document.querySelector('input[name="sensitivity"]:checked')?.value || '',
+                outdoor: document.querySelector('input[name="outdoor"]:checked')?.value || '',
+                sunscreen: document.querySelector('input[name="sunscreen"]:checked')?.value || ''
             };
         }
 
@@ -5117,37 +4726,9 @@
             }
         }
 
-        function formatResultSummary(config) {
-            const focus = config.focus || '';
-            const paragraphs = Array.isArray(config.summaryParagraphs)
-                ? config.summaryParagraphs
-                : [];
-
-            const safeParagraphs = paragraphs.length ? paragraphs : (() => {
-                const extracted = [];
-                String(config.summary || '').replace(/[^.!?]+[.!?]+|[^.!?]+$/g, match => {
-                    const trimmed = match.trim();
-                    if (trimmed) extracted.push(trimmed);
-                    return match;
-                });
-                return extracted;
-            })();
-
-            return safeParagraphs.map(paragraph => {
-                let safeParagraph = escapeHTML(paragraph);
-                if (focus && paragraph.includes(focus)) {
-                    safeParagraph = safeParagraph.replace(
-                        escapeHTML(focus),
-                        `<strong>${escapeHTML(focus)}</strong>`
-                    );
-                }
-                return `<p>${safeParagraph}</p>`;
-            }).join('');
-        }
-
         function renderResultHeader(data, config) {
             document.getElementById('result-user-name').textContent = data.name;
-            document.getElementById('result-type-name').innerHTML = `<span class="result-type-main">${escapeHTML(config.skinTypeName)}</span> <span class="result-type-suffix">type</span>`;
+            document.getElementById('result-type-name').innerHTML = `${escapeHTML(config.skinTypeName)} <span class="result-type-suffix">type</span>`;
 
             const faceImage = document.getElementById('result-face-image');
             const fallback = data.gender === 'Male' ? RESULT_ASSETS.userFallbackMale : RESULT_ASSETS.userFallbackFemale;
@@ -5157,7 +4738,8 @@
                 .map(keyword => `<span class="result-keyword">${escapeHTML(keyword)}</span>`)
                 .join('');
 
-            document.getElementById('result-summary').innerHTML = formatResultSummary(config);
+            document.getElementById('result-summary').innerHTML = escapeHTML(config.summary)
+                .replace(escapeHTML(config.focus), `<strong>${escapeHTML(config.focus)}</strong>`);
         }
 
         function renderBalance(data, config) {
@@ -5346,16 +4928,6 @@
         window.addAllRecommendedToCart = addAllRecommendedToCart;
 
         function retakeQuiz() {
-            const feedbackGate = document.getElementById('feedback-gate-modal');
-            if (feedbackGate) {
-                feedbackGate.classList.remove('active');
-                feedbackGate.setAttribute('aria-hidden', 'true');
-            }
-            const betaModal = document.getElementById('beta-service-modal');
-            if (betaModal) {
-                betaModal.classList.remove('active', 'closing');
-                betaModal.setAttribute('aria-hidden', 'true');
-            }
             document.getElementById('result-screen').style.display = 'none';
             document.getElementById('analysis-screen').style.display = 'none';
             document.getElementById('survey-screen').classList.remove('active');
@@ -5383,155 +4955,9 @@
         }
         window.shareResult = shareResult;
 
-        function getYunnSessionId() {
-            let sessionId = localStorage.getItem('yunn_session_id');
-            if (!sessionId) {
-                if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-                    sessionId = `yunn_${crypto.randomUUID()}`;
-                } else {
-                    sessionId = `yunn_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-                }
-                localStorage.setItem('yunn_session_id', sessionId);
-            }
-            return sessionId;
-        }
-
-        function isFeedbackVerifiedLocally() {
-            return localStorage.getItem('yunn_feedback_verified_session') === getYunnSessionId();
-        }
-
-        function markFeedbackVerified() {
-            localStorage.setItem('yunn_feedback_verified_session', getYunnSessionId());
-            localStorage.setItem('yunn_feedback_verified_at', new Date().toISOString());
-        }
-
-        function buildFeedbackSurveyUrl() {
-            const url = new URL(YUNN_FEEDBACK_FORM_URL);
-            url.searchParams.set('usp', 'pp_url');
-            if (YUNN_FEEDBACK_SESSION_ENTRY_ID) {
-                url.searchParams.set(YUNN_FEEDBACK_SESSION_ENTRY_ID, getYunnSessionId());
-            }
-            return url.toString();
-        }
-
-        function setFeedbackGateStatus(iconClass, title, copy) {
-            const status = document.getElementById('feedback-gate-status');
-            if (!status) return;
-            status.innerHTML = `
-                <i class="${escapeHTML(iconClass)}"></i>
-                <div>
-                    <strong>${escapeHTML(title)}</strong>
-                    <span>${escapeHTML(copy)}</span>
-                </div>
-            `;
-        }
-
-        function openFeedbackGateModal(mode = 'ready') {
-            const modal = document.getElementById('feedback-gate-modal');
-            if (!modal) return;
-            modal.classList.add('active');
-            modal.setAttribute('aria-hidden', 'false');
-
-            if (mode === 'checking') {
-                setFeedbackGateStatus('ph ph-circle-notch', 'Checking your submission', 'Please wait a moment while YUNN verifies your Google Form response.');
-            } else if (mode === 'pending') {
-                setFeedbackGateStatus('ph ph-warning-circle', 'Submission not confirmed yet', 'Please complete the Google Form first, then return to this page from the confirmation screen.');
-            } else {
-                setFeedbackGateStatus('ph ph-lock-key', 'Your full routine stays saved here', 'Close this sheet anytime. The consultation above remains visible, and the routine unlocks after the feedback step.');
-            }
-        }
-        window.openFeedbackGateModal = openFeedbackGateModal;
-
-        function closeFeedbackGateModal(event) {
-            if (event) event.stopPropagation();
-            const modal = document.getElementById('feedback-gate-modal');
-            if (!modal) return;
-            modal.classList.remove('active');
-            modal.setAttribute('aria-hidden', 'true');
-        }
-        window.closeFeedbackGateModal = closeFeedbackGateModal;
-
-        function handleFeedbackGateBackdrop(event) {
-            if (event.target && event.target.id === 'feedback-gate-modal') {
-                closeFeedbackGateModal();
-            }
-        }
-        window.handleFeedbackGateBackdrop = handleFeedbackGateBackdrop;
-
-        function setRoutineUnlockState(isUnlocked) {
-            const lockedContent = document.getElementById('locked-result-content');
-            if (!lockedContent) return;
-            lockedContent.classList.toggle('locked', !isUnlocked);
-            lockedContent.setAttribute('data-unlocked', isUnlocked ? 'true' : 'false');
-        }
-
-        function openFeedbackSurvey() {
-            savePendingResultData(getResultSurveyData());
-            localStorage.setItem('yunn_feedback_gate_started_at', new Date().toISOString());
-            localStorage.setItem('yunn_feedback_gate_session', getYunnSessionId());
-            window.location.href = buildFeedbackSurveyUrl();
-        }
-        window.openFeedbackSurvey = openFeedbackSurvey;
-
-        function requestFeedbackVerification() {
-            return new Promise((resolve) => {
-                if (isFeedbackVerifiedLocally()) {
-                    resolve({ completed: true, source: 'local' });
-                    return;
-                }
-
-                if (!YUNN_FEEDBACK_VERIFY_URL) {
-                    resolve({
-                        completed: false,
-                        reason: 'verification_not_configured'
-                    });
-                    return;
-                }
-
-                const callbackName = `yunnFeedbackVerify_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-                const script = document.createElement('script');
-                const cleanup = () => {
-                    delete window[callbackName];
-                    script.remove();
-                };
-
-                window[callbackName] = (payload) => {
-                    cleanup();
-                    resolve(payload || { completed: false });
-                };
-
-                const url = new URL(YUNN_FEEDBACK_VERIFY_URL);
-                url.searchParams.set('sessionId', getYunnSessionId());
-                url.searchParams.set('callback', callbackName);
-                script.src = url.toString();
-                script.onerror = () => {
-                    cleanup();
-                    resolve({ completed: false, reason: 'verification_request_failed' });
-                };
-                document.body.appendChild(script);
-            });
-        }
-
-        async function verifyFeedbackAndUnlock() {
-            openFeedbackGateModal('checking');
-            const result = await requestFeedbackVerification();
-            if (result.completed === true) {
-                markFeedbackVerified();
-                closeFeedbackGateModal();
-                setRoutineUnlockState(true);
-                return;
-            }
-
-            if (result.reason === 'verification_not_configured') {
-                setFeedbackGateStatus('ph ph-info', 'Verification setup needed', 'YUNN needs the Google Apps Script verification URL and Form session field before this gate can unlock automatically.');
-                return;
-            }
-
-            openFeedbackGateModal('pending');
-        }
-        window.verifyFeedbackAndUnlock = verifyFeedbackAndUnlock;
-
-        function renderResultScreen(data, config) {
+        function showResults() {
+            const data = getResultSurveyData();
+            const config = getResultConfig(data);
             currentResultConfig = config;
 
             document.getElementById('intro-screen').classList.remove('active');
@@ -5545,30 +4971,14 @@
             renderBalance(data, config);
             renderRoutine('morning');
             renderProducts();
-            setRoutineUnlockState(isFeedbackVerifiedLocally());
             window.scrollTo(0, 0);
         }
 
-        function showResults() {
-            const data = getResultSurveyData();
-            const config = getResultConfig(data);
-            savePendingResultData(data);
-            closeFeedbackGateModal();
-            renderResultScreen(data, config);
-        }
-
-        async function handleFeedbackReturn() {
-            showResults();
-            await verifyFeedbackAndUnlock();
-        }
-
-        if (pageParams.has(YUNN_FEEDBACK_RETURN_PARAM)) {
-            handleFeedbackReturn();
-        } else if (pageParams.has('resultDemo')) {
+        if (pageParams.has('resultDemo')) {
             showResults();
         }
 
-    
+
     </script>
 </body>
 </html>

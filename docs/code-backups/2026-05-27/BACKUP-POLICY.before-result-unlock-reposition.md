@@ -154,14 +154,6 @@ Created on 2026-05-26:
 - `docs/SURVEY-QUESTIONS.md`
 - `docs/code-backups/2026-05-26/SURVEY-QUESTIONS.md`
 
-Created on 2026-05-27:
-- `docs/code-backups/2026-05-27/survey.before-result-unlock-reposition.html`
-- `docs/code-backups/2026-05-27/FEEDBACK-GATE-SETUP.before-result-unlock-reposition.md`
-- `docs/code-backups/2026-05-27/IMPLEMENTATION-LOG.before-result-unlock-reposition.md`
-- `docs/code-backups/2026-05-27/BACKUP-POLICY.before-result-unlock-reposition.md`
-- `docs/code-backups/2026-05-27/survey.result-unlock-reposition.html`
-- `docs/code-backups/2026-05-27/FEEDBACK-GATE-SETUP.result-unlock-reposition.md`
-
 ## Restore
 
 홈 화면을 복구하려면:
@@ -175,14 +167,3 @@ cp docs/code-backups/2026-05-18/index.figma-home.html index.html
 ```bash
 cp docs/code-backups/2026-05-18/survey.current-flow.html survey.html
 ```
-
-### 2026-05-28 - Skin Type Copy Update
-
-Backups:
-- `docs/code-backups/2026-05-28/survey.before-skin-type-copy-update.html`
-- `docs/code-backups/2026-05-28/YUNN-SKIN-TYPE-MATRIX.before-skin-type-copy-update.md`
-- `docs/code-backups/2026-05-28/IMPLEMENTATION-LOG.before-skin-type-copy-update.md`
-- `docs/code-backups/2026-05-28/BACKUP-POLICY.before-skin-type-copy-update.md`
-
-Purpose:
-최신 PDF 기준 결과 피부 타입명, 키워드, 설명 문단 표시 방식을 반영하기 전 복구 지점을 남겼다.

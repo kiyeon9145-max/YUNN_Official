@@ -9,33 +9,6 @@
 - Figma 디자인을 기준으로 구현할 때는 Figma 프레임 이름과 웹 파일의 대응 관계를 함께 적는다.
 - 임시 생성 스크립트보다 실제 서비스 진입 파일을 우선 기록한다.
 
-## 2026-05-28
-
-### 결과 피부 타입명 PDF v2 반영 및 결과 헤더 가독성 개선
-
-Purpose:
-`YUNN_16가지_조합_이름.pdf`의 최신 11개 타입 표를 결과 페이지에 반영하고, 모바일에서 타입명/키워드/설명 문단이 더 읽기 좋게 보이도록 정리했다.
-
-Changed files:
-- `pages/survey.html`
-- `docs/YUNN-SKIN-TYPE-MATRIX.md`
-- `docs/code-backups/2026-05-28/survey.before-skin-type-copy-update.html`
-- `docs/code-backups/2026-05-28/YUNN-SKIN-TYPE-MATRIX.before-skin-type-copy-update.md`
-
-Main implementation:
-- 결과 타입명 매핑을 최신 PDF 기준으로 보정: `Glow Balance`, `Soft Glow`, `Soft Bright`, `Glow Harmony`.
-- 결과 헤더에서 타입명은 동적 데이터, `type`은 고정 suffix로 유지되도록 렌더링 구조를 명확히 했다.
-- 키워드 칩의 폰트 크기, 패딩, 줄간격을 모바일 가독성 기준으로 조정했다.
-- 결과 설명 문장을 의미 단위 문단으로 나누어 표시하고, 핵심 focus 문구는 민트 강조를 유지하도록 처리했다.
-- 정규식 lookbehind를 쓰지 않는 문단 분리 로직으로 모바일 브라우저 호환성을 유지했다.
-
-Verification:
-- `index.html`, `pages/landing.html`, `pages/login.html`, `pages/survey.html` 내부 스크립트 파싱 통과.
-- `git diff --check` 통과.
-- 로컬 서버 `http://127.0.0.1:8123/pages/survey.html?resultDemo=1&v=typecopy`에서 결과 화면 DOM 확인.
-- 기본 결과 케이스에서 `Oil Clear type`, `Oily / Acne-prone / Sebum Control` 키워드, 2문단 설명 렌더링 확인.
-- 브라우저 스크린샷 캡처 명령은 타임아웃됐으나 페이지 로드와 DOM 렌더링은 정상 확인.
-
 ## 2026-05-19
 
 ### 피그마 기반 스킨 타입 선택(Step 4) 2x2 이미지 카드 그리드 개편
@@ -1299,35 +1272,3 @@ Main implementation:
 
 Verification:
 - `docs/SURVEY-QUESTIONS.md` 생성 확인
-
-## 2026-05-27
-
-### 결과 페이지 Google Form Unlock 위치 변경
-
-Purpose:
-MVP 2차 기획서 `YUNN_MVP2_Result_Page_Google_Form_Unlock_Flow.md`에 맞춰 Google Form 모달을 결과 페이지 진입 전 강제 게이트가 아니라, 결과 상담 이후 전체 루틴/제품 추천 해금 단계로 이동했다.
-
-Changed files:
-- `pages/survey.html`
-- `docs/FEEDBACK-GATE-SETUP.md`
-- `docs/BACKUP-POLICY.md`
-- `docs/IMPLEMENTATION-LOG.md`
-- `docs/code-backups/2026-05-27/survey.before-result-unlock-reposition.html`
-- `docs/code-backups/2026-05-27/FEEDBACK-GATE-SETUP.before-result-unlock-reposition.md`
-- `docs/code-backups/2026-05-27/IMPLEMENTATION-LOG.before-result-unlock-reposition.md`
-- `docs/code-backups/2026-05-27/BACKUP-POLICY.before-result-unlock-reposition.md`
-- `docs/code-backups/2026-05-27/survey.result-unlock-reposition.html`
-- `docs/code-backups/2026-05-27/FEEDBACK-GATE-SETUP.result-unlock-reposition.md`
-
-Main implementation:
-- 결과 페이지 진입 시 피부 타입, 키워드, 상담 요약, Skin Balance Dashboard는 즉시 공개되도록 변경
-- Morning Routine, Evening Routine, Product Recommendations 전체를 `locked-result-content`로 묶고 잠금 상태에서 blur/opacity/pointer-events 처리
-- `Unlock My Full Routine` CTA를 루틴/제품 영역 위 sticky 카드로 추가
-- 기존 `feedback-gate-modal` 문구를 결과 잠금에서 full routine unlock 문맥으로 수정
-- 모달 닫기 버튼 및 배경 클릭으로 닫히게 하고, 닫아도 루틴/제품 영역은 잠금 유지
-- Google Form 복귀 검증 성공 시 결과 페이지를 다시 숨기지 않고 `setRoutineUnlockState(true)`로 루틴/제품만 해금
-- `FEEDBACK-GATE-SETUP.md`를 새 UX 흐름 기준으로 재작성
-
-Verification:
-- HTML 내 `<script>` 2개를 추출해 JavaScript 파싱 확인
-- 기존 결과 전 강제 게이트 문구(`Result locked`, `Take the 2-minute survey`) 제거 확인

@@ -9,33 +9,6 @@
 - Figma 디자인을 기준으로 구현할 때는 Figma 프레임 이름과 웹 파일의 대응 관계를 함께 적는다.
 - 임시 생성 스크립트보다 실제 서비스 진입 파일을 우선 기록한다.
 
-## 2026-05-28
-
-### 결과 피부 타입명 PDF v2 반영 및 결과 헤더 가독성 개선
-
-Purpose:
-`YUNN_16가지_조합_이름.pdf`의 최신 11개 타입 표를 결과 페이지에 반영하고, 모바일에서 타입명/키워드/설명 문단이 더 읽기 좋게 보이도록 정리했다.
-
-Changed files:
-- `pages/survey.html`
-- `docs/YUNN-SKIN-TYPE-MATRIX.md`
-- `docs/code-backups/2026-05-28/survey.before-skin-type-copy-update.html`
-- `docs/code-backups/2026-05-28/YUNN-SKIN-TYPE-MATRIX.before-skin-type-copy-update.md`
-
-Main implementation:
-- 결과 타입명 매핑을 최신 PDF 기준으로 보정: `Glow Balance`, `Soft Glow`, `Soft Bright`, `Glow Harmony`.
-- 결과 헤더에서 타입명은 동적 데이터, `type`은 고정 suffix로 유지되도록 렌더링 구조를 명확히 했다.
-- 키워드 칩의 폰트 크기, 패딩, 줄간격을 모바일 가독성 기준으로 조정했다.
-- 결과 설명 문장을 의미 단위 문단으로 나누어 표시하고, 핵심 focus 문구는 민트 강조를 유지하도록 처리했다.
-- 정규식 lookbehind를 쓰지 않는 문단 분리 로직으로 모바일 브라우저 호환성을 유지했다.
-
-Verification:
-- `index.html`, `pages/landing.html`, `pages/login.html`, `pages/survey.html` 내부 스크립트 파싱 통과.
-- `git diff --check` 통과.
-- 로컬 서버 `http://127.0.0.1:8123/pages/survey.html?resultDemo=1&v=typecopy`에서 결과 화면 DOM 확인.
-- 기본 결과 케이스에서 `Oil Clear type`, `Oily / Acne-prone / Sebum Control` 키워드, 2문단 설명 렌더링 확인.
-- 브라우저 스크린샷 캡처 명령은 타임아웃됐으나 페이지 로드와 DOM 렌더링은 정상 확인.
-
 ## 2026-05-19
 
 ### 피그마 기반 스킨 타입 선택(Step 4) 2x2 이미지 카드 그리드 개편
