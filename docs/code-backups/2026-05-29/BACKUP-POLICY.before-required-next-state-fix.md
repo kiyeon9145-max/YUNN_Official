@@ -186,14 +186,3 @@ Backups:
 
 Purpose:
 최신 PDF 기준 결과 피부 타입명, 키워드, 설명 문단 표시 방식을 반영하기 전 복구 지점을 남겼다.
-
-### 2026-05-29 - Required Next Button State Fix
-
-Backups:
-- `docs/code-backups/2026-05-29/survey.before-required-next-state-fix.html`
-- `docs/code-backups/2026-05-29/IMPLEMENTATION-LOG.before-required-next-state-fix.md`
-- `docs/code-backups/2026-05-29/BACKUP-POLICY.before-required-next-state-fix.md`
-- `docs/code-backups/2026-05-29/survey.required-next-state-fix.html`
-
-Purpose:
-진단 Step 6 및 다른 필수 답변 단계에서 답변 선택 전 `Next` 버튼이 활성화되지 않도록 보장하는 변경의 전후 복구 지점을 남겼다.

@@ -3346,7 +3346,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
@@ -3368,7 +3368,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> Your information is private and secure
@@ -3390,7 +3390,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> Your information is private and secure
@@ -3412,7 +3412,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> Your information is private and secure
@@ -3434,7 +3434,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next</button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> Your information is private and secure
@@ -3487,7 +3487,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
@@ -3510,7 +3510,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
@@ -3531,7 +3531,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
@@ -3619,7 +3619,7 @@
 
                     <div class="bottom-action">
                         <button type="button" class="btn-outline" onclick="goBack()">Back</button>
-                        <button type="button" class="btn-primary" disabled onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
+                        <button type="button" class="btn-primary" onclick="nextStep()">Next <i class="ph-bold ph-arrow-right" style="margin-left:8px;"></i></button>
                     </div>
                     <div class="secure-text">
                         <i class="ph-light ph-lock-key"></i> YUNN keeps your information safe and secure.
@@ -4608,44 +4608,6 @@
         const skinHelperSteps = ['3-1', '3-2', '3-3', '3-4'];
         let skinHelperCompleted = false;
 
-        const REQUIRED_STEP_INPUT_GROUPS = {
-            '3': ['skinType'],
-            '3-1': ['skinHelperCleanse'],
-            '3-2': ['skinHelperAfterHours'],
-            '3-3': ['skinHelperDay'],
-            '3-4': ['skinHelperTexture'],
-            '4': ['concerns'],
-            '5': ['trigger'],
-            '6': ['sensitivity'],
-            '7': ['outdoor', 'sunscreen'],
-            '8': ['sleep', 'stress'],
-            '9': ['routineLevel']
-        };
-
-        function hasAnsweredInputGroup(groupName) {
-            return Boolean(document.querySelector(`input[name="${groupName}"]:checked`));
-        }
-
-        function isStepComplete(step = currentStep) {
-            const stepKey = String(step);
-            if (stepKey === '1') return validateStepOne();
-            if (stepKey === '2') return isStepTwoComplete();
-            const requiredGroups = REQUIRED_STEP_INPUT_GROUPS[stepKey];
-            if (!requiredGroups) return true;
-            return requiredGroups.every(hasAnsweredInputGroup);
-        }
-
-        function getStepPrimaryButton(step = currentStep) {
-            const activeStep = document.querySelector(`.survey-step[data-step="${String(step)}"]`);
-            return activeStep ? activeStep.querySelector('.btn-primary') : null;
-        }
-
-        function updateStepActionState(step = currentStep) {
-            const button = getStepPrimaryButton(step);
-            if (!button) return;
-            button.disabled = !isStepComplete(step);
-        }
-
         function updateProgress() {
             const isSkinHelper = skinHelperSteps.includes(String(currentStep));
             const displayStep = isSkinHelper ? String(currentStep) : String(Math.min(Number(currentStep), displayedSurveyPages));
@@ -4663,7 +4625,6 @@
             document.querySelector(`.survey-step[data-step="${targetStep}"]`).classList.add('active');
             currentStep = targetStep;
             updateProgress();
-            updateStepActionState(targetStep);
             window.scrollTo(0, 0);
         }
 
@@ -4735,16 +4696,6 @@
                 return;
             }
 
-            if (currentStep === '5' && !document.querySelector('input[name="trigger"]:checked')) {
-                alert("Please select at least one trigger.");
-                return;
-            }
-
-            if (currentStep === '6' && !document.querySelector('input[name="sensitivity"]:checked')) {
-                alert("Please choose one option.");
-                return;
-            }
-
             if (currentStep === '7' && !isStepSevenComplete()) {
                 alert("Please answer both sun habit questions.");
                 return;
@@ -4752,11 +4703,6 @@
 
             if (currentStep === '8' && !isStepEightComplete()) {
                 alert("Please answer both lifestyle questions.");
-                return;
-            }
-
-            if (currentStep === '9' && !document.querySelector('input[name="routineLevel"]:checked')) {
-                alert("Please choose one option.");
                 return;
             }
 
@@ -4836,7 +4782,6 @@
                     } else {
                         this.classList.remove('selected');
                     }
-                    updateStepActionState(currentStep);
                     return;
                 }
 
@@ -4848,7 +4793,6 @@
                     });
                     this.classList.add('selected');
                     radio.checked = true;
-                    updateStepActionState(currentStep);
 
                     if (currentStep === '2') {
                         updateStepTwoState();
@@ -4933,7 +4877,6 @@
         updateStepTwoState();
         updateStepSevenState();
         updateStepEightState();
-        Object.keys(REQUIRED_STEP_INPUT_GROUPS).forEach(step => updateStepActionState(step));
 
         const ALLOWED_INDIAN_EMAIL_DOMAINS = [
             'gmail.com',
