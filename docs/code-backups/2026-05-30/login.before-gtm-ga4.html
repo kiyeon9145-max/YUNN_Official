@@ -4,26 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YUNN - Login</title>
-    <script>
-        window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'yunn_app_bootstrap', page_path: window.location.pathname });
-        (function(w, d, s, l, i) {
-            if (!i || !/^GTM-[A-Z0-9]+$/.test(i)) {
-                w.yunnGtmStatus = 'missing_container_id';
-                return;
-            }
-            w.yunnGtmStatus = 'loading';
-            w[l] = w[l] || [];
-            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-            const firstScript = d.getElementsByTagName(s)[0];
-            const gtmScript = d.createElement(s);
-            const dataLayerParam = l !== 'dataLayer' ? '&l=' + l : '';
-            gtmScript.async = true;
-            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dataLayerParam;
-            firstScript.parentNode.insertBefore(gtmScript, firstScript);
-        })(window, document, 'script', 'dataLayer', window.YUNN_GTM_ID);
-    </script>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -144,9 +124,6 @@
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2NX3N5K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <main class="app-shell">
         <a class="back-link" href="index.html" aria-label="Back"><i class="ph ph-arrow-left"></i></a>
         <img class="logo" src="../assets/image/yuun_logo png.png" alt="YUNN">

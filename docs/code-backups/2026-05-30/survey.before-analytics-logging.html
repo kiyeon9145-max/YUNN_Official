@@ -4,26 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YUNN | Skin Analysis</title>
-    <script>
-        window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'yunn_app_bootstrap', page_path: window.location.pathname });
-        (function(w, d, s, l, i) {
-            if (!i || !/^GTM-[A-Z0-9]+$/.test(i)) {
-                w.yunnGtmStatus = 'missing_container_id';
-                return;
-            }
-            w.yunnGtmStatus = 'loading';
-            w[l] = w[l] || [];
-            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-            const firstScript = d.getElementsByTagName(s)[0];
-            const gtmScript = d.createElement(s);
-            const dataLayerParam = l !== 'dataLayer' ? '&l=' + l : '';
-            gtmScript.async = true;
-            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dataLayerParam;
-            firstScript.parentNode.insertBefore(gtmScript, firstScript);
-        })(window, document, 'script', 'dataLayer', window.YUNN_GTM_ID);
-    </script>
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -3074,9 +3054,6 @@
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2NX3N5K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
     <!-- Modals & Overlays -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -3902,40 +3879,12 @@
     
 
     <script>
-        window.__yunnRuntimeErrors = [];
-        window.addEventListener('error', (event) => {
-            window.__yunnRuntimeErrors.push({
-                message: event.message,
-                source: event.filename,
-                line: event.lineno,
-                column: event.colno
-            });
-        });
 
         // --- Feedback gate configuration ---
         const YUNN_FEEDBACK_FORM_URL = 'https://docs.google.com/forms/d/1ME2EU6G3LxnB6VPH6HUO7f-H850CGKt5Gs4lA1t8Wa8/viewform';
         const YUNN_FEEDBACK_SESSION_ENTRY_ID = '';
         const YUNN_FEEDBACK_VERIFY_URL = '';
         const YUNN_FEEDBACK_RETURN_PARAM = 'returnFromSurvey';
-        const yunnMemoryStorage = {};
-        const yunnStorage = (() => {
-            try {
-                if (window.localStorage) return window.localStorage;
-            } catch {
-                // Some embedded or privacy-restricted browsers block yunnStorage.
-            }
-            return {
-                getItem(key) {
-                    return Object.prototype.hasOwnProperty.call(yunnMemoryStorage, key) ? yunnMemoryStorage[key] : null;
-                },
-                setItem(key, value) {
-                    yunnMemoryStorage[key] = String(value);
-                },
-                removeItem(key) {
-                    delete yunnMemoryStorage[key];
-                }
-            };
-        })();
 
         // --- Live status bars ---
         function initMobileChrome() {
@@ -4024,649 +3973,6 @@
         }
 
         initMobileChrome();
-
-        // --- YUNN Analytics Logging ---
-        const YUNN_ANALYTICS_STORAGE_KEY = 'yunn_analytics_events';
-        const YUNN_ANALYTICS_MAX_EVENTS = 1000;
-        const YUNN_ANALYTICS_ENDPOINT = '';
-        const YUNN_SCROLL_THRESHOLDS = [25, 50, 75, 100];
-        const YUNN_LONG_STAY_SECONDS = 45;
-
-        const STEP_ANALYTICS_CONFIG = {
-            '1': {
-                pageView: 'user_info_page_view',
-                timeSpent: 'user_info_time_spent',
-                abandon: 'page_abandon',
-                optionView: 'progress_bar_view',
-                nextClick: 'next_button_click',
-                backClick: 'back_button_click'
-            },
-            '2': {
-                pageView: 'demographic_page_view',
-                timeSpent: 'demographic_time_spent',
-                abandon: 'page_abandon',
-                optionViewEvents: [
-                    { event: 'gender_option_view', selector: 'input[name="gender"]', property: 'option_list' },
-                    { event: 'age_option_view', selector: 'input[name="age"]', property: 'option_list' }
-                ],
-                nextClick: 'next_button_click',
-                backClick: 'back_button_click'
-            },
-            '3': {
-                pageView: 'skin_type_page_view',
-                timeSpent: 'skin_type_time_spent',
-                abandon: 'page_abandon',
-                optionView: 'skin_type_option_view',
-                nextClick: 'next_button_click'
-            },
-            '3-1': {
-                pageView: 'skin_feel_page_view',
-                timeSpent: 'skin_feel_time_spent',
-                abandon: 'skin_feel_abandon',
-                friction: 'skin_feel_friction_detected',
-                scroll: 'skin_feel_scroll_depth',
-                optionView: 'skin_feel_option_view',
-                select: 'skin_feel_select',
-                change: 'skin_feel_change',
-                nextClick: 'skin_feel_next_click',
-                backClick: 'skin_feel_back_click',
-                selectedProperty: 'selected_feel_level',
-                previousProperty: 'before_level',
-                newProperty: 'after_level'
-            },
-            '3-2': {
-                pageView: 'skin_oil_behavior_page_view',
-                timeSpent: 'skin_oil_behavior_time_spent',
-                abandon: 'skin_oil_behavior_abandon',
-                friction: 'skin_oil_behavior_friction_detected',
-                scroll: 'skin_oil_behavior_scroll_depth',
-                optionView: 'skin_oil_behavior_option_view',
-                select: 'skin_oil_behavior_select',
-                change: 'skin_oil_behavior_change',
-                nextClick: 'skin_oil_behavior_next_click',
-                backClick: 'skin_oil_behavior_back_click',
-                selectedProperty: 'selected_behavior',
-                previousProperty: 'before_behavior',
-                newProperty: 'after_behavior'
-            },
-            '3-3': {
-                pageView: 'skin_day_behavior_page_view',
-                timeSpent: 'skin_day_behavior_time_spent',
-                abandon: 'skin_day_behavior_abandon',
-                friction: 'skin_day_behavior_friction_detected',
-                scroll: 'skin_day_behavior_scroll_depth',
-                optionView: 'skin_day_behavior_option_view',
-                select: 'skin_day_behavior_select',
-                change: 'skin_day_behavior_change',
-                nextClick: 'skin_day_behavior_next_click',
-                backClick: 'skin_day_behavior_back_click',
-                selectedProperty: 'selected_behavior',
-                previousProperty: 'before_behavior',
-                newProperty: 'after_behavior'
-            },
-            '3-4': {
-                pageView: 'skin_texture_page_view',
-                timeSpent: 'skin_texture_time_spent',
-                abandon: 'skin_texture_abandon',
-                friction: 'skin_texture_friction_detected',
-                scroll: 'skin_texture_scroll_depth',
-                optionView: 'skin_texture_option_view',
-                select: 'skin_texture_select',
-                change: 'skin_texture_change',
-                nextClick: 'skin_texture_next_click',
-                backClick: 'skin_texture_back_click',
-                selectedProperty: 'selected_texture_type',
-                previousProperty: 'before_texture',
-                newProperty: 'after_texture'
-            },
-            '4': {
-                pageView: 'skin_concern_page_view',
-                timeSpent: 'skin_concern_time_spent',
-                abandon: 'skin_concern_abandon',
-                friction: 'skin_concern_friction_detected',
-                scroll: 'skin_concern_scroll_depth',
-                optionView: 'skin_concern_option_view',
-                select: 'skin_concern_select',
-                change: 'skin_concern_change',
-                nextClick: 'skin_concern_next_click',
-                backClick: 'skin_concern_back_click',
-                selectedProperty: 'selected_concern',
-                previousProperty: 'before_concern',
-                newProperty: 'after_concern'
-            },
-            '5': {
-                pageView: 'skin_trigger_page_view',
-                timeSpent: 'skin_trigger_time_spent',
-                abandon: 'skin_trigger_abandon',
-                friction: 'skin_trigger_friction_detected',
-                scroll: 'skin_trigger_scroll_depth',
-                optionView: 'skin_trigger_option_view',
-                select: 'skin_trigger_select',
-                unselect: 'skin_trigger_unselect',
-                combination: 'skin_trigger_combination',
-                nextClick: 'skin_trigger_next_click',
-                backClick: 'skin_trigger_back_click'
-            },
-            '6': {
-                pageView: 'skin_reactivity_page_view',
-                timeSpent: 'skin_reactivity_time_spent',
-                abandon: 'skin_reactivity_abandon',
-                friction: 'skin_reactivity_friction_detected',
-                scroll: 'skin_reactivity_scroll_depth',
-                optionView: 'skin_reactivity_option_view',
-                select: 'skin_reactivity_select',
-                change: 'skin_reactivity_change',
-                nextClick: 'skin_reactivity_next_click',
-                backClick: 'skin_reactivity_back_click',
-                selectedProperty: 'selected_reactivity_level',
-                previousProperty: 'previous_option',
-                newProperty: 'new_option'
-            },
-            '7': {
-                pageView: 'outdoor_time_page_view',
-                timeSpent: 'outdoor_time_time_spent',
-                abandon: 'outdoor_time_page_abandon',
-                friction: 'outdoor_time_friction_detected',
-                scroll: 'outdoor_time_scroll_depth',
-                nextClick: 'outdoor_time_next_click',
-                backClick: 'outdoor_time_back_click'
-            },
-            '8': {
-                pageView: 'sleep_stress_page_view',
-                timeSpent: 'sleep_stress_time_spent',
-                abandon: 'sleep_stress_abandon',
-                friction: 'sleep_stress_friction_detected',
-                scroll: 'sleep_stress_scroll_depth',
-                nextClick: 'sleep_stress_next_click',
-                backClick: 'sleep_stress_back_click'
-            },
-            '9': {
-                pageView: 'routine_page_view',
-                timeSpent: 'routine_time_spent',
-                abandon: 'routine_abandon',
-                friction: 'routine_friction_detected',
-                scroll: 'routine_scroll_depth',
-                optionView: 'routine_option_view',
-                select: 'routine_level_select',
-                change: 'routine_level_change',
-                nextClick: 'routine_next_click',
-                backClick: 'routine_back_click',
-                selectedProperty: 'selected_routine_level',
-                previousProperty: 'previous_value',
-                newProperty: 'new_value'
-            },
-            '10': {
-                pageView: 'final_page_view',
-                timeSpent: 'photo_upload_time_spent',
-                abandon: 'photo_upload_abandon',
-                friction: 'photo_upload_friction_detected',
-                scroll: 'photo_upload_scroll_depth'
-            }
-        };
-
-        const INPUT_ANALYTICS_CONFIG = {
-            gender: {
-                select: 'gender_select',
-                change: 'gender_change',
-                selectedProperty: 'selected_gender',
-                previousProperty: 'before_gender',
-                newProperty: 'after_gender'
-            },
-            age: {
-                select: 'age_select',
-                change: 'age_change',
-                selectedProperty: 'selected_age_range',
-                previousProperty: 'before_age',
-                newProperty: 'after_age'
-            },
-            skinType: {
-                select: 'skin_type_select',
-                change: 'skin_type_change',
-                selectedProperty: 'selected_skin_type',
-                previousProperty: 'before_type',
-                newProperty: 'after_type'
-            },
-            outdoor: {
-                select: 'outdoor_time_option_select',
-                change: 'outdoor_time_selection_change',
-                selectedProperty: 'selected_outdoor_time',
-                previousProperty: 'previous_value',
-                newProperty: 'new_value'
-            },
-            sunscreen: {
-                select: 'sunscreen_frequency_select',
-                change: 'sunscreen_selection_change',
-                selectedProperty: 'selected_sunscreen_frequency',
-                previousProperty: 'previous_value',
-                newProperty: 'new_value'
-            },
-            sleep: {
-                select: 'sleep_duration_select',
-                change: 'sleep_duration_change',
-                selectedProperty: 'selected_sleep_duration',
-                previousProperty: 'previous_value',
-                newProperty: 'new_value'
-            },
-            stress: {
-                select: 'stress_level_select',
-                change: 'stress_level_change',
-                selectedProperty: 'selected_stress_level',
-                previousProperty: 'previous_value',
-                newProperty: 'new_value'
-            }
-        };
-
-        const yunnAnalyticsState = {
-            currentScreen: 'intro',
-            currentStep: '',
-            screenStartedAt: Date.now(),
-            maxScrollByScreen: {},
-            emittedScrollByScreen: {},
-            viewedScreens: new Set(),
-            frictionScreens: new Set(),
-            firstInteractionTracked: false,
-            lastVisibleResultSection: '',
-            uploadStartedAt: 0,
-            uploadAttemptCount: 0
-        };
-
-        function getTrafficSource() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('utm_source') || params.get('source') || document.referrer || 'direct';
-        }
-
-        function getDeviceType() {
-            if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
-            if (window.matchMedia('(max-width: 1024px)').matches) return 'tablet';
-            return 'desktop';
-        }
-
-        function getNetworkType() {
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            return connection && (connection.effectiveType || connection.type) ? String(connection.effectiveType || connection.type) : 'unknown';
-        }
-
-        function readAnalyticsEvents() {
-            try {
-                return JSON.parse(yunnStorage.getItem(YUNN_ANALYTICS_STORAGE_KEY) || '[]');
-            } catch {
-                return [];
-            }
-        }
-
-        function persistAnalyticsEvent(eventPayload) {
-            try {
-                const events = readAnalyticsEvents();
-                events.push(eventPayload);
-                yunnStorage.setItem(YUNN_ANALYTICS_STORAGE_KEY, JSON.stringify(events.slice(-YUNN_ANALYTICS_MAX_EVENTS)));
-            } catch {
-                // Analytics persistence is best-effort and must never block the user journey.
-            }
-        }
-
-        function trackYunnEvent(eventName, properties = {}) {
-            const eventPayload = {
-                event: eventName,
-                event_name: eventName,
-                session_id: getYunnSessionId(),
-                timestamp: new Date().toISOString(),
-                page_path: window.location.pathname,
-                page_url: window.location.href,
-                screen: yunnAnalyticsState.currentScreen,
-                step: yunnAnalyticsState.currentStep || '',
-                traffic_source: getTrafficSource(),
-                device_type: getDeviceType(),
-                network: getNetworkType(),
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                ...properties
-            };
-
-            persistAnalyticsEvent(eventPayload);
-
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push(eventPayload);
-
-            if (YUNN_ANALYTICS_ENDPOINT && navigator.sendBeacon) {
-                try {
-                    navigator.sendBeacon(YUNN_ANALYTICS_ENDPOINT, JSON.stringify(eventPayload));
-                } catch {
-                    // Remote analytics must never block the UI.
-                }
-            }
-
-            window.dispatchEvent(new CustomEvent('yunn:analytics', { detail: eventPayload }));
-            return eventPayload;
-        }
-        window.trackYunnEvent = trackYunnEvent;
-
-        function getScreenKey(step = yunnAnalyticsState.currentStep) {
-            return step ? `step_${step}` : yunnAnalyticsState.currentScreen;
-        }
-
-        function getScrollPercent() {
-            const doc = document.documentElement;
-            const maxScrollable = Math.max(1, doc.scrollHeight - window.innerHeight);
-            return Math.min(100, Math.round((window.scrollY / maxScrollable) * 100));
-        }
-
-        function getCurrentStepSelectedValues(step = currentStep) {
-            const activeStep = document.querySelector(`.survey-step[data-step="${String(step)}"]`);
-            if (!activeStep) return {};
-            const values = {};
-            activeStep.querySelectorAll('input:checked').forEach(input => {
-                if (!values[input.name]) values[input.name] = [];
-                values[input.name].push(input.value);
-            });
-            return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, value.length === 1 ? value[0] : value]));
-        }
-
-        function getStepOptionList(step = currentStep) {
-            const activeStep = document.querySelector(`.survey-step[data-step="${String(step)}"]`);
-            if (!activeStep) return [];
-            return [...activeStep.querySelectorAll('input[type="radio"], input[type="checkbox"]')].map(input => input.value);
-        }
-
-        function getStepCompletionStatus(step = currentStep) {
-            const selectedValues = getCurrentStepSelectedValues(step);
-            return Object.keys(selectedValues).length ? 'partial_or_complete' : 'empty';
-        }
-
-        function emitStepOptionView(step) {
-            const config = STEP_ANALYTICS_CONFIG[String(step)];
-            if (!config) return;
-            if (Array.isArray(config.optionViewEvents)) {
-                config.optionViewEvents.forEach(item => {
-                    const optionList = [...document.querySelectorAll(item.selector)].map(input => input.value);
-                    trackYunnEvent(item.event, {
-                        step_number: String(step),
-                        [item.property]: optionList
-                    });
-                });
-                return;
-            }
-            if (config.optionView) {
-                trackYunnEvent(config.optionView, {
-                    step_number: String(step),
-                    option_list: getStepOptionList(step)
-                });
-            }
-        }
-
-        function markAnalyticsScreen(screen, step = '') {
-            yunnAnalyticsState.currentScreen = screen;
-            yunnAnalyticsState.currentStep = step ? String(step) : '';
-            yunnAnalyticsState.screenStartedAt = Date.now();
-            yunnAnalyticsState.frictionScreens.delete(getScreenKey(step));
-        }
-
-        function emitCurrentScreenTime(reason = 'screen_leave') {
-            const durationSec = Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000);
-            const screenKey = getScreenKey();
-            const step = yunnAnalyticsState.currentStep;
-            const config = STEP_ANALYTICS_CONFIG[String(step)];
-            const maxScrollDepth = yunnAnalyticsState.maxScrollByScreen[screenKey] || getScrollPercent();
-
-            if (config && config.timeSpent) {
-                trackYunnEvent(config.timeSpent, {
-                    stay_duration_sec: durationSec,
-                    duration_sec: durationSec,
-                    scroll_depth: maxScrollDepth,
-                    selected_status: getStepCompletionStatus(step),
-                    selected_values: getCurrentStepSelectedValues(step),
-                    reason
-                });
-            } else if (yunnAnalyticsState.currentScreen === 'intro') {
-                trackYunnEvent('landing_time_spent', {
-                    duration_seconds: durationSec,
-                    source: getTrafficSource(),
-                    reason
-                });
-            } else if (yunnAnalyticsState.currentScreen === 'result') {
-                trackYunnEvent('result_time_spent', {
-                    duration_sec: durationSec,
-                    reason
-                });
-            }
-        }
-
-        function emitPageAbandon(reason = 'page_exit') {
-            const step = yunnAnalyticsState.currentStep;
-            const config = STEP_ANALYTICS_CONFIG[String(step)];
-            const screenKey = getScreenKey();
-            const maxScrollDepth = yunnAnalyticsState.maxScrollByScreen[screenKey] || getScrollPercent();
-            if (config && config.abandon) {
-                trackYunnEvent(config.abandon, {
-                    completion_status: getStepCompletionStatus(step),
-                    selection_status: getStepCompletionStatus(step),
-                    selected_values: getCurrentStepSelectedValues(step),
-                    upload_started: Boolean(yunnAnalyticsState.uploadStartedAt),
-                    reason
-                });
-            } else if (yunnAnalyticsState.currentScreen === 'intro') {
-                trackYunnEvent('landing_exit', {
-                    max_scroll_depth: maxScrollDepth,
-                    duration: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000),
-                    source: getTrafficSource(),
-                    reason
-                });
-            } else if (yunnAnalyticsState.currentScreen === 'result') {
-                trackYunnEvent('result_exit', {
-                    exit_section: yunnAnalyticsState.lastVisibleResultSection || 'unknown',
-                    reason
-                });
-                if (maxScrollDepth < 35) {
-                    trackYunnEvent('exit_before_balance', { scroll_percent: maxScrollDepth });
-                }
-                if (!isFeedbackVerifiedLocally()) {
-                    trackYunnEvent('unlock_dropoff', {
-                        last_seen_section: yunnAnalyticsState.lastVisibleResultSection || 'unknown'
-                    });
-                    trackYunnEvent('exit_before_unlock', { scroll_percent: maxScrollDepth });
-                }
-            }
-        }
-
-        function emitFrictionIfNeeded() {
-            const step = yunnAnalyticsState.currentStep;
-            const config = STEP_ANALYTICS_CONFIG[String(step)];
-            if (!config || !config.friction) return;
-            const screenKey = getScreenKey(step);
-            if (yunnAnalyticsState.frictionScreens.has(screenKey)) return;
-            const durationSec = Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000);
-            if (durationSec >= YUNN_LONG_STAY_SECONDS) {
-                yunnAnalyticsState.frictionScreens.add(screenKey);
-                trackYunnEvent(config.friction, { duration_sec: durationSec });
-            }
-        }
-
-        function emitScrollDepth() {
-            const screenKey = getScreenKey();
-            const percent = getScrollPercent();
-            const previousMax = yunnAnalyticsState.maxScrollByScreen[screenKey] || 0;
-            yunnAnalyticsState.maxScrollByScreen[screenKey] = Math.max(previousMax, percent);
-            const emitted = yunnAnalyticsState.emittedScrollByScreen[screenKey] || new Set();
-            yunnAnalyticsState.emittedScrollByScreen[screenKey] = emitted;
-            YUNN_SCROLL_THRESHOLDS.forEach(threshold => {
-                if (percent >= threshold && !emitted.has(threshold)) {
-                    emitted.add(threshold);
-                    const step = yunnAnalyticsState.currentStep;
-                    const config = STEP_ANALYTICS_CONFIG[String(step)];
-                    const scrollEvent = config && config.scroll
-                        ? config.scroll
-                        : yunnAnalyticsState.currentScreen === 'result'
-                            ? 'scroll_depth_result'
-                            : 'landing_scroll_depth';
-                    trackYunnEvent(scrollEvent, {
-                        scroll_percent: threshold,
-                        time_spent: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
-                    });
-                }
-            });
-            emitFrictionIfNeeded();
-        }
-
-        function trackLandingView() {
-            markAnalyticsScreen('intro');
-            trackYunnEvent('landing_view', {
-                utm_source: new URLSearchParams(window.location.search).get('utm_source') || '',
-                utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || '',
-                device: getDeviceType()
-            });
-            window.addEventListener('load', () => {
-                if (yunnAnalyticsState.currentScreen !== 'intro') return;
-                const nav = performance.getEntriesByType('navigation')[0];
-                const loadMs = nav ? Math.round(nav.loadEventEnd || nav.domContentLoadedEventEnd) : Math.round(performance.now());
-                trackYunnEvent('landing_load_time', {
-                    load_ms: loadMs,
-                    device: getDeviceType(),
-                    network: getNetworkType()
-                });
-            }, { once: true });
-        }
-
-        function trackFirstInteraction(interactionType) {
-            if (yunnAnalyticsState.firstInteractionTracked) return;
-            if (yunnAnalyticsState.currentScreen !== 'intro') return;
-            yunnAnalyticsState.firstInteractionTracked = true;
-            trackYunnEvent('landing_first_interaction', {
-                interaction_type: interactionType,
-                seconds_after_view: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
-            });
-        }
-
-        function trackSurveyStepView(step) {
-            const stepKey = String(step);
-            const config = STEP_ANALYTICS_CONFIG[stepKey];
-            markAnalyticsScreen('survey', stepKey);
-            if (config && config.pageView) {
-                trackYunnEvent(config.pageView, {
-                    step_number: stepKey,
-                    selected_values: getCurrentStepSelectedValues(stepKey)
-                });
-            }
-            emitStepOptionView(stepKey);
-            if (stepKey === '1') {
-                trackYunnEvent('privacy_notice_view', { component_id: 'user_info_secure_notice' });
-                trackYunnEvent('progress_bar_view', { step_number: 1 });
-            }
-            if (stepKey === '10') {
-                trackYunnEvent('skin_photo_privacy_info_view', { component_id: 'photo_privacy_notice' });
-            }
-        }
-
-        function trackInputSelection(input, previousValue, nextValue, isSelected = true) {
-            const name = input.name;
-            const step = String(currentStep);
-            const inputConfig = INPUT_ANALYTICS_CONFIG[name] || STEP_ANALYTICS_CONFIG[step];
-
-            if (name === 'trigger') {
-                trackYunnEvent(isSelected ? 'skin_trigger_select' : 'skin_trigger_unselect', {
-                    [isSelected ? 'selected_trigger' : 'unselected_trigger']: nextValue
-                });
-                const selectedTriggerList = [...document.querySelectorAll('input[name="trigger"]:checked')].map(item => item.value);
-                trackYunnEvent('skin_trigger_combination', {
-                    selected_trigger_list: selectedTriggerList
-                });
-                return;
-            }
-
-            if (!inputConfig) return;
-            const selectedProperty = inputConfig.selectedProperty || 'selected_value';
-            const previousProperty = inputConfig.previousProperty || 'previous_value';
-            const newProperty = inputConfig.newProperty || 'new_value';
-
-            if (previousValue && previousValue !== nextValue && inputConfig.change) {
-                trackYunnEvent(inputConfig.change, {
-                    [previousProperty]: previousValue,
-                    [newProperty]: nextValue
-                });
-            }
-
-            if (inputConfig.select) {
-                trackYunnEvent(inputConfig.select, {
-                    [selectedProperty]: nextValue
-                });
-            }
-
-            if (name === 'skinType' && nextValue === 'NotSure') {
-                trackYunnEvent('not_sure_click', { current_step: step });
-                trackYunnEvent('not_sure_to_detailed_flow', { flow_id: 'detailed_skin_analysis' });
-            }
-        }
-
-        function trackStepNextClick(step = currentStep) {
-            const stepKey = String(step);
-            const config = STEP_ANALYTICS_CONFIG[stepKey];
-            const selectedValues = getCurrentStepSelectedValues(stepKey);
-            if (config && config.nextClick) {
-                trackYunnEvent(config.nextClick, {
-                    ...selectedValues,
-                    selected_values: selectedValues,
-                    selected_trigger_count: Array.isArray(selectedValues.trigger) ? selectedValues.trigger.length : selectedValues.trigger ? 1 : 0,
-                    selected_count: Object.keys(selectedValues).length,
-                    all_fields_completed: stepKey === '1' ? validateStepOne() : undefined,
-                    photo_uploaded: Boolean(uploadedSkinPhotoData)
-                });
-            }
-        }
-
-        function trackStepBackClick(step = currentStep) {
-            const stepKey = String(step);
-            const config = STEP_ANALYTICS_CONFIG[stepKey];
-            if (config && config.backClick) {
-                trackYunnEvent(config.backClick, {
-                    current_step: stepKey,
-                    previous_page: stepKey
-                });
-            }
-        }
-
-        function setupAnalyticsObservers() {
-            window.addEventListener('scroll', () => {
-                trackFirstInteraction('scroll');
-                emitScrollDepth();
-            }, { passive: true });
-            window.addEventListener('click', () => trackFirstInteraction('click'), { once: true, capture: true });
-            window.addEventListener('beforeunload', () => {
-                emitCurrentScreenTime('beforeunload');
-                emitPageAbandon('beforeunload');
-            });
-            setInterval(emitFrictionIfNeeded, 5000);
-        }
-
-        function setupFieldAnalytics() {
-            const fieldConfig = {
-                userName: { focus: 'name_input_focus', complete: 'name_input_complete', field: 'name' },
-                userEmail: { focus: 'email_input_focus', complete: 'email_input_complete', field: 'email' },
-                userWhatsApp: { focus: 'phone_input_focus', complete: 'phone_input_complete', field: 'phone' }
-            };
-            Object.entries(fieldConfig).forEach(([id, config]) => {
-                const input = document.getElementById(id);
-                if (!input) return;
-                input.addEventListener('focus', () => {
-                    trackYunnEvent(config.focus, {
-                        field_name: config.field,
-                        country_code: config.field === 'phone' ? '+91' : undefined
-                    });
-                });
-                input.addEventListener('blur', () => {
-                    const value = input.value.trim();
-                    if (!value) return;
-                    const properties = {};
-                    if (config.field === 'name') properties.name_length = value.length;
-                    if (config.field === 'email') properties.email_domain = value.split('@')[1] || '';
-                    if (config.field === 'phone') {
-                        properties.country_code = '+91';
-                        properties.phone_length = value.length;
-                    }
-                    trackYunnEvent(config.complete, properties);
-                });
-            });
-        }
-
-        trackLandingView();
-        setupAnalyticsObservers();
-        setupFieldAnalytics();
 
         // --- Navigation Logic ---
         let isLoggedIn = false; // Mock login state
@@ -5353,13 +4659,11 @@
         function goToStep(step) {
             const targetStep = String(step);
             if (!document.querySelector(`.survey-step[data-step="${targetStep}"]`)) return;
-            emitCurrentScreenTime('step_change');
             steps.forEach(s => s.classList.remove('active'));
             document.querySelector(`.survey-step[data-step="${targetStep}"]`).classList.add('active');
             currentStep = targetStep;
             updateProgress();
             updateStepActionState(targetStep);
-            trackSurveyStepView(targetStep);
             window.scrollTo(0, 0);
         }
 
@@ -5401,26 +4705,15 @@
         }
 
         function nextStep() {
-            trackStepNextClick(currentStep);
             // Very simple validation
             if (currentStep === '1') {
                 const stepOneReady = validateStepOne({ revealEmailError: true, revealPhoneError: true });
                 if(!stepOneReady) {
-                    trackYunnEvent('next_button_disabled_click', {
-                        missing_fields: ['name', 'email', 'phone'].filter(field => {
-                            if (field === 'name') return !document.getElementById('userName').value.trim();
-                            if (field === 'email') return !isValidIndianMvpEmail(document.getElementById('userEmail').value);
-                            return !/^[6-9]\d{9}$/.test(document.getElementById('userWhatsApp').value.trim());
-                        })
-                    });
                     alert("Please fill out all fields.");
                     return;
                 }
             }
             if (currentStep === '2' && !isStepTwoComplete()) {
-                trackYunnEvent('next_button_disabled_click', {
-                    missing_selection: ['gender', 'age'].filter(name => !document.querySelector(`input[name="${name}"]:checked`))
-                });
                 alert("Please select your gender and age.");
                 return;
             }
@@ -5428,7 +4721,6 @@
             if (currentStep === '3') {
                 const selectedSkinType = document.querySelector('input[name="skinType"]:checked')?.value;
                 if (!selectedSkinType) {
-                    trackYunnEvent('next_button_disabled_click', { missing_selection: ['skinType'] });
                     alert("Please select your skin type.");
                     return;
                 }
@@ -5439,48 +4731,37 @@
             }
 
             if (currentStep === '4' && !document.querySelector('input[name="concerns"]:checked')) {
-                trackYunnEvent('next_button_disabled_click', { missing_selection: ['concerns'] });
                 alert("Please select your biggest skin concern.");
                 return;
             }
 
             if (currentStep === '5' && !document.querySelector('input[name="trigger"]:checked')) {
-                trackYunnEvent('next_button_disabled_click', { missing_selection: ['trigger'] });
                 alert("Please select at least one trigger.");
                 return;
             }
 
             if (currentStep === '6' && !document.querySelector('input[name="sensitivity"]:checked')) {
-                trackYunnEvent('next_button_disabled_click', { missing_selection: ['sensitivity'] });
                 alert("Please choose one option.");
                 return;
             }
 
             if (currentStep === '7' && !isStepSevenComplete()) {
-                trackYunnEvent('next_button_disabled_click', {
-                    missing_selection: ['outdoor', 'sunscreen'].filter(name => !document.querySelector(`input[name="${name}"]:checked`))
-                });
                 alert("Please answer both sun habit questions.");
                 return;
             }
 
             if (currentStep === '8' && !isStepEightComplete()) {
-                trackYunnEvent('next_button_disabled_click', {
-                    missing_selection: ['sleep', 'stress'].filter(name => !document.querySelector(`input[name="${name}"]:checked`))
-                });
                 alert("Please answer both lifestyle questions.");
                 return;
             }
 
             if (currentStep === '9' && !document.querySelector('input[name="routineLevel"]:checked')) {
-                trackYunnEvent('next_button_disabled_click', { missing_selection: ['routineLevel'] });
                 alert("Please choose one option.");
                 return;
             }
 
             if (isSkinHelperStep()) {
                 if (!isCurrentSkinHelperStepComplete()) {
-                    trackYunnEvent('next_button_disabled_click', { missing_selection: [`skinHelper:${currentStep}`] });
                     alert("Please choose one option.");
                     return;
                 }
@@ -5504,7 +4785,6 @@
         }
 
         function goBack() {
-            trackStepBackClick(currentStep);
             if (isSkinHelperStep()) {
                 const helperIndex = skinHelperSteps.indexOf(currentStep);
                 goToStep(helperIndex === 0 ? '3' : skinHelperSteps[helperIndex - 1]);
@@ -5522,21 +4802,9 @@
         }
 
         function startSurvey() {
-            trackYunnEvent('landing_cta_click', {
-                button_name: 'Start My Skin Analysis',
-                scroll_position: getScrollPercent(),
-                time_before_click: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
-            });
-            emitCurrentScreenTime('survey_start');
-            trackYunnEvent('survey_start', {
-                start_source: 'landing_cta',
-                current_step: currentStep,
-                user_id: getYunnSessionId()
-            });
             document.getElementById('intro-screen').classList.remove('active');
             document.getElementById('survey-screen').classList.add('active');
             updateProgress();
-            trackSurveyStepView(currentStep);
             window.scrollTo(0, 0);
         }
 
@@ -5562,14 +4830,12 @@
 
                 if (this.classList.contains('checkbox-card')) {
                     const cb = this.querySelector('input[type="checkbox"]');
-                    const nextCheckedState = !cb.checked;
                     cb.checked = !cb.checked;
                     if (cb.checked) {
                         this.classList.add('selected');
                     } else {
                         this.classList.remove('selected');
                     }
-                    trackInputSelection(cb, '', cb.value, nextCheckedState);
                     updateStepActionState(currentStep);
                     return;
                 }
@@ -5577,13 +4843,11 @@
                 const radio = this.querySelector('input[type="radio"]');
                 if (radio) {
                     const step = this.closest('.survey-step');
-                    const previousValue = step.querySelector(`input[name="${radio.name}"]:checked`)?.value || '';
                     step.querySelectorAll(`input[name="${radio.name}"]`).forEach(input => {
                         input.closest('.option-card')?.classList.remove('selected');
                     });
                     this.classList.add('selected');
                     radio.checked = true;
-                    trackInputSelection(radio, previousValue, radio.value, true);
                     updateStepActionState(currentStep);
 
                     if (currentStep === '2') {
@@ -5740,10 +5004,6 @@
                 setFieldState(phoneInput, 'valid');
             } else if (revealPhoneError && phoneInput.value.trim()) {
                 setFieldState(phoneInput, 'invalid');
-                trackYunnEvent('validation_error', {
-                    field_name: 'phone',
-                    error_type: 'invalid_indian_phone_number'
-                });
             } else {
                 setFieldState(phoneInput, '');
             }
@@ -5752,10 +5012,6 @@
                 setFieldState(emailInput, 'valid');
             } else if (revealEmailError && emailInput.value.trim()) {
                 setFieldState(emailInput, 'invalid');
-                trackYunnEvent('validation_error', {
-                    field_name: 'email',
-                    error_type: 'invalid_email_format_or_domain'
-                });
             } else {
                 setFieldState(emailInput, '');
             }
@@ -5781,101 +5037,27 @@
             validateStepOne({ revealEmailError: false, revealPhoneError: true });
         });
 
-        const photoUploadContainer = document.querySelector('.photo-upload-container');
-        const photoUploadInput = document.getElementById('bareFacePhoto');
-        if (photoUploadContainer) {
-            photoUploadContainer.addEventListener('click', () => {
-                trackYunnEvent('skin_photo_upload_click', {
-                    upload_source: 'photo_upload_container'
-                });
-            });
-        }
-        if (photoUploadInput) {
-            photoUploadInput.addEventListener('click', () => {
-                trackYunnEvent('skin_photo_upload_click', {
-                    upload_source: 'file_input'
-                });
-            });
-        }
-        document.querySelectorAll('.step10-actions button').forEach(button => {
-            button.addEventListener('click', () => {
-                const label = button.innerText.trim().toLowerCase();
-                if (label.includes('skip')) {
-                    trackYunnEvent('skip_photo_click', { photo_uploaded: false });
-                } else if (label.includes('complete')) {
-                    trackYunnEvent('complete_analysis_click', {
-                        photo_uploaded: Boolean(uploadedSkinPhotoData)
-                    });
-                }
-            });
-        });
-
         validateStepOne();
 
         let uploadedSkinPhotoData = '';
 
         function previewPhoto(event) {
             const file = event.target.files[0];
-            yunnAnalyticsState.uploadStartedAt = Date.now();
-            yunnAnalyticsState.uploadAttemptCount += 1;
             if (file) {
-                trackYunnEvent('skin_photo_upload_start', {
-                    file_type: file.type || 'unknown',
-                    device_type: getDeviceType(),
-                    attempt_count: yunnAnalyticsState.uploadAttemptCount
-                });
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     uploadedSkinPhotoData = e.target.result;
                     const preview = document.getElementById('photo-preview');
                     preview.src = uploadedSkinPhotoData;
                     preview.style.display = 'block';
-                    trackYunnEvent('skin_photo_upload_success', {
-                        file_size: file.size,
-                        file_type: file.type || 'unknown',
-                        upload_duration_sec: Math.max(0, Math.round((Date.now() - yunnAnalyticsState.uploadStartedAt) / 1000))
-                    });
-                    trackYunnEvent('skin_photo_quality_check', {
-                        brightness_score: 'not_measured_mvp',
-                        face_detected: 'not_measured_mvp'
-                    });
-                    if (yunnAnalyticsState.uploadAttemptCount > 1) {
-                        trackYunnEvent('skin_photo_multiple_attempts', {
-                            attempt_count: yunnAnalyticsState.uploadAttemptCount
-                        });
-                    }
-                };
-                reader.onerror = function() {
-                    trackYunnEvent('skin_photo_upload_fail', {
-                        error_type: 'file_read_error'
-                    });
                 };
                 reader.readAsDataURL(file);
-            } else {
-                trackYunnEvent('skin_photo_upload_cancel', {
-                    cancel_stage: 'file_picker'
-                });
             }
         }
 
         function startAnalysis() {
-            trackYunnEvent('photo_upload_conversion', {
-                upload_completed: Boolean(uploadedSkinPhotoData)
-            });
-            trackYunnEvent('analysis_completion_success', {
-                all_answers_completed: true
-            });
-            trackYunnEvent('survey_complete', {
-                user_id: getYunnSessionId(),
-                final_step: currentStep,
-                skin_type: selectedValues.skinType || '',
-                skin_concern: selectedValues.concerns || '',
-                photo_uploaded: Boolean(uploadedSkinPhotoData)
-            });
-            emitCurrentScreenTime('analysis_start');
             document.getElementById('survey-screen').style.display = 'none';
             document.getElementById('analysis-screen').style.display = 'block';
-            markAnalyticsScreen('analysis');
 
             const statusMessages = ["Analysing skin concern patterns...", "Mapping daily environment...", "Calibrating routine intensity...", "Finalising your plan..."];
             let i = 0;
@@ -5911,7 +5093,7 @@
 
         function readPendingResultData() {
             try {
-                return JSON.parse(yunnStorage.getItem('yunn_pending_result_data') || '{}');
+                return JSON.parse(localStorage.getItem('yunn_pending_result_data') || '{}');
             } catch {
                 return {};
             }
@@ -5919,7 +5101,7 @@
 
         function savePendingResultData(data) {
             try {
-                yunnStorage.setItem('yunn_pending_result_data', JSON.stringify(data));
+                localStorage.setItem('yunn_pending_result_data', JSON.stringify(data));
             } catch {
                 // Result state persistence is best-effort for the Google Form handoff.
             }
@@ -6038,7 +5220,7 @@
         function renderBalance(data, config) {
             const balances = computeSkinBalance(data, config);
             document.getElementById('skin-balance-list').innerHTML = balances.map(metric => `
-                <div class="balance-row" data-metric-name="${escapeHTML(metric.label)}">
+                <div class="balance-row">
                     <div class="balance-label">${escapeHTML(metric.label)}</div>
                     <div class="balance-track"><div class="balance-fill" style="width:${metric.value}%"></div></div>
                     <div class="balance-score">${metric.value}%</div>
@@ -6049,87 +5231,10 @@
 
         let currentResultConfig = null;
         let activeRoutinePeriod = 'morning';
-        let resultAnalyticsObserver = null;
-        let resultAnalyticsSections = new Set();
-        let unlockConversionTracked = false;
-
-        function getBalanceAnalyticsPayload() {
-            if (!currentResultConfig) return {};
-            const data = getResultSurveyData();
-            return {
-                skin_type: currentResultConfig.skinTypeName,
-                balance_scores: computeSkinBalance(data, currentResultConfig).reduce((scores, metric) => {
-                    scores[metric.key] = metric.value;
-                    return scores;
-                }, {})
-            };
-        }
-
-        function setupResultAnalytics(data, config) {
-            if (resultAnalyticsObserver) {
-                resultAnalyticsObserver.disconnect();
-            }
-            resultAnalyticsSections = new Set();
-
-            const sectionMap = [
-                { selector: '.result-insight', name: 'skin_type', event: 'skin_type_section_view' },
-                { selector: '.balance-card', name: 'skin_balance', event: 'skin_balance_section_view' },
-                { selector: '.routine-tabs', name: 'routine_tabs', event: 'routine_preview_view' },
-                { selector: '.products-section', name: 'products', event: 'product_recommendation_section_view' },
-                { selector: '.unlock-preview-card', name: 'unlock_cta', event: 'unlock_cta_view' }
-            ];
-
-            resultAnalyticsObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    const sectionName = entry.target.getAttribute('data-analytics-section');
-                    const eventName = entry.target.getAttribute('data-analytics-event');
-                    if (!sectionName || !eventName || resultAnalyticsSections.has(sectionName)) return;
-
-                    resultAnalyticsSections.add(sectionName);
-                    yunnAnalyticsState.lastVisibleResultSection = sectionName;
-                    const payload = {
-                        section_name: sectionName,
-                        skin_type: config.skinTypeName
-                    };
-                    if (sectionName === 'skin_balance') {
-                        Object.assign(payload, getBalanceAnalyticsPayload());
-                    }
-                    if (sectionName === 'routine_tabs') {
-                        payload.routine_type = activeRoutinePeriod;
-                    }
-                    if (sectionName === 'unlock_cta') {
-                        payload.cta_id = 'unlock_full_routine';
-                        payload.cta_position = 'routine_unlock_preview';
-                    }
-                    trackYunnEvent(eventName, payload);
-                });
-            }, { threshold: 0.35 });
-
-            sectionMap.forEach(item => {
-                const element = document.querySelector(item.selector);
-                if (!element) return;
-                element.setAttribute('data-analytics-section', item.name);
-                element.setAttribute('data-analytics-event', item.event);
-                resultAnalyticsObserver.observe(element);
-            });
-
-            document.querySelectorAll('.balance-row').forEach(row => {
-                row.addEventListener('click', () => {
-                    trackYunnEvent('metric_detail_click', {
-                        metric_name: row.getAttribute('data-metric-name') || '',
-                        ...getBalanceAnalyticsPayload()
-                    });
-                }, { once: true });
-            });
-        }
 
         function renderRoutine(period = activeRoutinePeriod) {
             if (!currentResultConfig) return;
             activeRoutinePeriod = period;
-            trackYunnEvent('routine_preview_view', {
-                routine_type: period
-            });
             document.getElementById('morning-tab').classList.toggle('active', period === 'morning');
             document.getElementById('evening-tab').classList.toggle('active', period === 'evening');
 
@@ -6171,9 +5276,6 @@
         }
 
         function switchRoutineTab(period) {
-            trackYunnEvent('routine_preview_expand', {
-                section_name: `${period}_routine`
-            });
             renderRoutine(period);
         }
         window.switchRoutineTab = switchRoutineTab;
@@ -6207,7 +5309,7 @@
 
         function recordCartEvent(product, source = 'single') {
             try {
-                const events = JSON.parse(yunnStorage.getItem('yunn_cart_events') || '[]');
+                const events = JSON.parse(localStorage.getItem('yunn_cart_events') || '[]');
                 events.push({
                     productId: product.id,
                     productName: product.name,
@@ -6216,26 +5318,21 @@
                     concernType: getPrimaryConcernType(),
                     createdAt: new Date().toISOString()
                 });
-                yunnStorage.setItem('yunn_cart_events', JSON.stringify(events.slice(-100)));
+                localStorage.setItem('yunn_cart_events', JSON.stringify(events.slice(-100)));
             } catch {
                 // Preference tracking is best-effort and must never block the cart action.
             }
-            trackYunnEvent('product_cart_click', {
-                product_id: product.id,
-                product_name: product.name,
-                source
-            });
         }
 
         function recordBetaIntent(source, productId = '') {
             try {
-                const events = JSON.parse(yunnStorage.getItem('yunn_beta_events') || '[]');
+                const events = JSON.parse(localStorage.getItem('yunn_beta_events') || '[]');
                 events.push({
                     source,
                     productId,
                     createdAt: new Date().toISOString()
                 });
-                yunnStorage.setItem('yunn_beta_events', JSON.stringify(events.slice(-100)));
+                localStorage.setItem('yunn_beta_events', JSON.stringify(events.slice(-100)));
             } catch {
                 // Beta-intent tracking is best-effort and must never block the modal.
             }
@@ -6245,10 +5342,6 @@
 
         function openBetaServiceModal(source = 'single', productId = '') {
             recordBetaIntent(source, productId);
-            trackYunnEvent('beta_service_modal_view', {
-                source,
-                product_id: productId
-            });
             const modal = document.getElementById('beta-service-modal');
             if (!modal) return;
             if (betaModalCloseTimer) {
@@ -6263,9 +5356,6 @@
 
         function closeBetaServiceModal(event) {
             if (event) event.stopPropagation();
-            trackYunnEvent('beta_service_modal_close', {
-                close_source: event ? 'close_button' : 'backdrop_or_programmatic'
-            });
             const modal = document.getElementById('beta-service-modal');
             if (!modal) return;
             if (!modal.classList.contains('active')) return;
@@ -6287,7 +5377,7 @@
 
         function handleBetaFeedbackClick() {
             try {
-                yunnStorage.setItem('yunn_beta_feedback_intent', new Date().toISOString());
+                localStorage.setItem('yunn_beta_feedback_intent', new Date().toISOString());
             } catch {
                 // Feedback intent is optional.
             }
@@ -6295,9 +5385,6 @@
             if (cta) {
                 cta.innerHTML = '<span>Thank you — noted</span><i class="ph-bold ph-check"></i>';
             }
-            trackYunnEvent('beta_feedback_click', {
-                source: 'beta_service_modal'
-            });
         }
         window.handleBetaFeedbackClick = handleBetaFeedbackClick;
 
@@ -6311,17 +5398,11 @@
 
         function addAllRecommendedToCart() {
             RESULT_PRODUCTS.forEach(product => recordCartEvent(product, 'all'));
-            trackYunnEvent('add_all_to_cart_click', {
-                product_count: RESULT_PRODUCTS.length
-            });
             openBetaServiceModal('all', 'all-products');
         }
         window.addAllRecommendedToCart = addAllRecommendedToCart;
 
         function retakeQuiz() {
-            trackYunnEvent('retake_quiz_click', {
-                source: yunnAnalyticsState.currentScreen || 'unknown'
-            });
             const feedbackGate = document.getElementById('feedback-gate-modal');
             if (feedbackGate) {
                 feedbackGate.classList.remove('active');
@@ -6337,7 +5418,6 @@
             document.getElementById('survey-screen').classList.remove('active');
             document.getElementById('survey-screen').style.display = '';
             document.getElementById('intro-screen').classList.add('active');
-            markAnalyticsScreen('intro');
             window.scrollTo(0, 0);
         }
         window.retakeQuiz = retakeQuiz;
@@ -6352,9 +5432,6 @@
 
         function shareResult() {
             const text = `My YUNN Skin Insight: ${currentResultConfig ? currentResultConfig.skinTypeName : 'Skin Analysis'}`;
-            trackYunnEvent('share_result_click', {
-                share_channel: navigator.share ? 'native_share' : 'fallback_alert'
-            });
             if (navigator.share) {
                 navigator.share({ title: 'YUNN Skin Analysis', text }).catch(() => {});
             } else {
@@ -6364,25 +5441,25 @@
         window.shareResult = shareResult;
 
         function getYunnSessionId() {
-            let sessionId = yunnStorage.getItem('yunn_session_id');
+            let sessionId = localStorage.getItem('yunn_session_id');
             if (!sessionId) {
                 if (typeof crypto !== 'undefined' && crypto.randomUUID) {
                     sessionId = `yunn_${crypto.randomUUID()}`;
                 } else {
                     sessionId = `yunn_${Date.now()}_${Math.random().toString(16).slice(2)}`;
                 }
-                yunnStorage.setItem('yunn_session_id', sessionId);
+                localStorage.setItem('yunn_session_id', sessionId);
             }
             return sessionId;
         }
 
         function isFeedbackVerifiedLocally() {
-            return yunnStorage.getItem('yunn_feedback_verified_session') === getYunnSessionId();
+            return localStorage.getItem('yunn_feedback_verified_session') === getYunnSessionId();
         }
 
         function markFeedbackVerified() {
-            yunnStorage.setItem('yunn_feedback_verified_session', getYunnSessionId());
-            yunnStorage.setItem('yunn_feedback_verified_at', new Date().toISOString());
+            localStorage.setItem('yunn_feedback_verified_session', getYunnSessionId());
+            localStorage.setItem('yunn_feedback_verified_at', new Date().toISOString());
         }
 
         function buildFeedbackSurveyUrl() {
@@ -6407,14 +5484,6 @@
         }
 
         function openFeedbackGateModal(mode = 'ready') {
-            trackYunnEvent('unlock_cta_click', {
-                cta_id: 'unlock_full_routine',
-                mode,
-                delay_sec: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
-            });
-            trackYunnEvent('unlock_click_delay', {
-                delay_sec: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
-            });
             const modal = document.getElementById('feedback-gate-modal');
             if (!modal) return;
             modal.classList.add('active');
@@ -6432,9 +5501,6 @@
 
         function closeFeedbackGateModal(event) {
             if (event) event.stopPropagation();
-            trackYunnEvent('feedback_gate_modal_close', {
-                close_source: event ? 'close_button' : 'programmatic'
-            });
             const modal = document.getElementById('feedback-gate-modal');
             if (!modal) return;
             modal.classList.remove('active');
@@ -6454,22 +5520,12 @@
             if (!lockedContent) return;
             lockedContent.classList.toggle('locked', !isUnlocked);
             lockedContent.setAttribute('data-unlocked', isUnlocked ? 'true' : 'false');
-            if (isUnlocked && !unlockConversionTracked) {
-                unlockConversionTracked = true;
-                trackYunnEvent('unlock_conversion', {
-                    plan_type: 'full_routine'
-                });
-            }
         }
 
         function openFeedbackSurvey() {
             savePendingResultData(getResultSurveyData());
-            yunnStorage.setItem('yunn_feedback_gate_started_at', new Date().toISOString());
-            yunnStorage.setItem('yunn_feedback_gate_session', getYunnSessionId());
-            trackYunnEvent('feedback_survey_open', {
-                session_id: getYunnSessionId(),
-                destination: 'google_form'
-            });
+            localStorage.setItem('yunn_feedback_gate_started_at', new Date().toISOString());
+            localStorage.setItem('yunn_feedback_gate_session', getYunnSessionId());
             window.location.href = buildFeedbackSurveyUrl();
         }
         window.openFeedbackSurvey = openFeedbackSurvey;
@@ -6534,20 +5590,6 @@
 
         function renderResultScreen(data, config) {
             currentResultConfig = config;
-            emitCurrentScreenTime('result_render');
-            markAnalyticsScreen('result');
-            trackYunnEvent('result_page_view', {
-                user_id: getYunnSessionId(),
-                skin_type: config.skinTypeName,
-                skin_concern: data.concernType,
-                result_keywords: config.keywords
-            });
-            trackYunnEvent('result_view', {
-                user_id: getYunnSessionId(),
-                skin_type: config.skinTypeName,
-                skin_concern: data.concernType,
-                result_keywords: config.keywords
-            });
 
             document.getElementById('intro-screen').classList.remove('active');
             document.getElementById('survey-screen').classList.remove('active');
@@ -6561,7 +5603,6 @@
             renderRoutine('morning');
             renderProducts();
             setRoutineUnlockState(isFeedbackVerifiedLocally());
-            setupResultAnalytics(data, config);
             window.scrollTo(0, 0);
         }
 

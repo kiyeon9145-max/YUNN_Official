@@ -229,22 +229,3 @@ Backups:
 
 Purpose:
 GTM/GA4 연결 scaffold를 추가하기 전 전 페이지 HTML 및 관련 로그 문서의 복구 지점을 남겼다.
-
-### 2026-06-01 - Real GTM Container ID
-
-Backups:
-- `docs/code-backups/2026-06-01/index.before-real-gtm-id.html`
-- `docs/code-backups/2026-06-01/survey.before-real-gtm-id.html`
-- `docs/code-backups/2026-06-01/landing.before-real-gtm-id.html`
-- `docs/code-backups/2026-06-01/login.before-real-gtm-id.html`
-- `docs/code-backups/2026-06-01/GTM-GA4-SETUP.before-real-gtm-id.md`
-- `docs/code-backups/2026-06-01/IMPLEMENTATION-LOG.before-real-gtm-id.md`
-- `docs/code-backups/2026-06-01/BACKUP-POLICY.before-real-gtm-id.md`
-- `docs/code-backups/2026-06-01/index.real-gtm-id.html`
-- `docs/code-backups/2026-06-01/survey.real-gtm-id.html`
-- `docs/code-backups/2026-06-01/landing.real-gtm-id.html`
-- `docs/code-backups/2026-06-01/login.real-gtm-id.html`
-- `docs/code-backups/2026-06-01/GTM-GA4-SETUP.real-gtm-id.md`
-
-Purpose:
-실제 GTM 컨테이너 ID `GTM-P2NX3N5K`와 noscript fallback을 적용하기 전 복구 지점을 남겼다.

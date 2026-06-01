@@ -5528,11 +5528,6 @@
                 time_before_click: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
             });
             emitCurrentScreenTime('survey_start');
-            trackYunnEvent('survey_start', {
-                start_source: 'landing_cta',
-                current_step: currentStep,
-                user_id: getYunnSessionId()
-            });
             document.getElementById('intro-screen').classList.remove('active');
             document.getElementById('survey-screen').classList.add('active');
             updateProgress();
@@ -5864,13 +5859,6 @@
             });
             trackYunnEvent('analysis_completion_success', {
                 all_answers_completed: true
-            });
-            trackYunnEvent('survey_complete', {
-                user_id: getYunnSessionId(),
-                final_step: currentStep,
-                skin_type: selectedValues.skinType || '',
-                skin_concern: selectedValues.concerns || '',
-                photo_uploaded: Boolean(uploadedSkinPhotoData)
             });
             emitCurrentScreenTime('analysis_start');
             document.getElementById('survey-screen').style.display = 'none';
@@ -6537,12 +6525,6 @@
             emitCurrentScreenTime('result_render');
             markAnalyticsScreen('result');
             trackYunnEvent('result_page_view', {
-                user_id: getYunnSessionId(),
-                skin_type: config.skinTypeName,
-                skin_concern: data.concernType,
-                result_keywords: config.keywords
-            });
-            trackYunnEvent('result_view', {
                 user_id: getYunnSessionId(),
                 skin_type: config.skinTypeName,
                 skin_concern: data.concernType,

@@ -4,26 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YUNN | Skin Analysis</title>
-    <script>
-        window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'yunn_app_bootstrap', page_path: window.location.pathname });
-        (function(w, d, s, l, i) {
-            if (!i || !/^GTM-[A-Z0-9]+$/.test(i)) {
-                w.yunnGtmStatus = 'missing_container_id';
-                return;
-            }
-            w.yunnGtmStatus = 'loading';
-            w[l] = w[l] || [];
-            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-            const firstScript = d.getElementsByTagName(s)[0];
-            const gtmScript = d.createElement(s);
-            const dataLayerParam = l !== 'dataLayer' ? '&l=' + l : '';
-            gtmScript.async = true;
-            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dataLayerParam;
-            firstScript.parentNode.insertBefore(gtmScript, firstScript);
-        })(window, document, 'script', 'dataLayer', window.YUNN_GTM_ID);
-    </script>
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -3074,9 +3054,6 @@
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2NX3N5K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
     <!-- Modals & Overlays -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -4306,7 +4283,6 @@
 
         function trackYunnEvent(eventName, properties = {}) {
             const eventPayload = {
-                event: eventName,
                 event_name: eventName,
                 session_id: getYunnSessionId(),
                 timestamp: new Date().toISOString(),
@@ -5528,11 +5504,6 @@
                 time_before_click: Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000)
             });
             emitCurrentScreenTime('survey_start');
-            trackYunnEvent('survey_start', {
-                start_source: 'landing_cta',
-                current_step: currentStep,
-                user_id: getYunnSessionId()
-            });
             document.getElementById('intro-screen').classList.remove('active');
             document.getElementById('survey-screen').classList.add('active');
             updateProgress();
@@ -5864,13 +5835,6 @@
             });
             trackYunnEvent('analysis_completion_success', {
                 all_answers_completed: true
-            });
-            trackYunnEvent('survey_complete', {
-                user_id: getYunnSessionId(),
-                final_step: currentStep,
-                skin_type: selectedValues.skinType || '',
-                skin_concern: selectedValues.concerns || '',
-                photo_uploaded: Boolean(uploadedSkinPhotoData)
             });
             emitCurrentScreenTime('analysis_start');
             document.getElementById('survey-screen').style.display = 'none';
@@ -6537,12 +6501,6 @@
             emitCurrentScreenTime('result_render');
             markAnalyticsScreen('result');
             trackYunnEvent('result_page_view', {
-                user_id: getYunnSessionId(),
-                skin_type: config.skinTypeName,
-                skin_concern: data.concernType,
-                result_keywords: config.keywords
-            });
-            trackYunnEvent('result_view', {
                 user_id: getYunnSessionId(),
                 skin_type: config.skinTypeName,
                 skin_concern: data.concernType,
