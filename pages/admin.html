@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YUNN Admin</title>
+  <link rel="icon" type="image/png" href="../assets/image/yuun_logo png.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+  <style>
+    /* ── Design System (DESIGN-SYSTEM.md) ── */
+    :root {
+      --primary:      #5CC1A6;
+      --primary-dark: #3AAE92;
+      --primary-light:#DFF5EE;
+      --accent:       #E5484D;
+      --text-main:    #1A1A1A;
+      --text-light:   #666666;
+      --neutral-bg:   #FAFAFA;
+      --category-bg:  #F2F2F2;
+      --border:       #EBEBEB;
+      --white:        #FFFFFF;
+      --sidebar-w:    240px;
+      --header-h:     56px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background: var(--neutral-bg);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      height: 100vh;
+    }
+    .sidebar-logo {
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border);
+      gap: 10px;
+    }
+    .sidebar-logo img { height: 28px; }
+    .sidebar-logo span { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: .02em; }
+    .sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      border-radius: 8px;
+      margin: 2px 8px;
+      transition: background .15s, color .15s;
+    }
+    .nav-item:hover { background: var(--primary-light); color: var(--primary-dark); }
+    .nav-item.active { background: var(--primary-light); color: var(--primary-dark); font-weight: 600; }
+    .nav-item .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .conn-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 6px;
+    }
+    .conn-badge.ok  { background: var(--primary-light); color: var(--primary-dark); }
+    .conn-badge.err { background: #FFF0F0; color: var(--accent); }
+    .conn-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .topbar {
+      height: var(--header-h);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .topbar h1 { font-size: 16px; font-weight: 700; flex: 1; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background .15s;
+    }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-outline { background: var(--white); color: var(--text-main); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary-dark); }
+    .btn-danger  { background: var(--accent); color: var(--white); }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    /* ── Sections (SPA) ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Routine List ── */
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .type-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .type-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(92,193,166,.15); }
+    .type-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .type-chip {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: .04em;
+    }
+    .chip-published { background: var(--primary-light); color: var(--primary-dark); }
+    .chip-draft     { background: #FFF8E1; color: #B8860B; }
+    .type-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .type-keywords { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+
+    /* ── Editor ── */
+    .editor-back { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-light); cursor: pointer; margin-bottom: 20px; }
+    .editor-back:hover { color: var(--primary-dark); }
+    .editor-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .editor-title  { font-size: 20px; font-weight: 700; }
+
+    .tab-row { display: flex; gap: 4px; margin-bottom: 20px; }
+    .tab-btn {
+      padding: 7px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--text-light);
+      transition: .15s;
+    }
+    .tab-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+    .steps-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .steps-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; color: var(--text-light); }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-item:last-child { border-bottom: none; }
+    .drag-handle { color: var(--border); cursor: grab; font-size: 18px; line-height: 1; padding-top: 4px; user-select: none; }
+    .drag-handle:active { cursor: grabbing; }
+    .step-order-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .step-fields { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .inline-input {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 13px;
+      font-family: inherit;
+      background: transparent;
+      color: var(--text-main);
+      transition: border-color .15s, background .15s;
+    }
+    .inline-input:hover { border-color: var(--border); background: var(--neutral-bg); }
+    .inline-input:focus { outline: none; border-color: var(--primary); background: var(--white); }
+    .inline-input.product { font-weight: 600; font-size: 14px; }
+    .step-delete {
+      background: none;
+      border: none;
+      color: var(--border);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color .15s;
+      margin-top: 2px;
+    }
+    .step-delete:hover { color: var(--accent); }
+    .add-step-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary-dark);
+      cursor: pointer;
+      border: 1.5px dashed var(--primary);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-top: 12px;
+      background: none;
+      width: 100%;
+      transition: background .15s;
+    }
+    .add-step-btn:hover { background: var(--primary-light); }
+
+    /* 카피 패널 */
+    .copy-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .copy-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text-light); }
+    .copy-field { margin-bottom: 18px; }
+    .copy-label { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+    .copy-textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-main);
+      resize: vertical;
+      min-height: 60px;
+      transition: border-color .15s;
+    }
+    .copy-textarea:focus { outline: none; border-color: var(--primary); }
+    .copy-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* ── Notifications ── */
+    .noti-list { display: flex; flex-direction: column; gap: 12px; }
+    .noti-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .noti-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .noti-type { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary-dark); }
+    .toggle-active {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-light);
+      cursor: pointer;
+    }
+    .toggle-active input[type="checkbox"] { accent-color: var(--primary); width: 15px; height: 15px; }
+
+    /* ── Sheet Status ── */
+    .status-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      max-width: 560px;
+    }
+    .status-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 18px; }
+    .status-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .status-row:last-child { border-bottom: none; }
+    .status-label { font-size: 13px; color: var(--text-light); }
+    .status-value { font-size: 13px; font-weight: 500; max-width: 300px; word-break: break-all; text-align: right; }
+    .token-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      margin-top: 16px;
+    }
+    .token-input:focus { outline: none; border-color: var(--primary); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--text-main);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      z-index: 9999;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.err  { background: var(--accent); }
+
+    /* ── Overlay ── */
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    #overlay.show { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      width: 400px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    .modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .modal p  { font-size: 13px; color: var(--text-light); margin-bottom: 20px; line-height: 1.6; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    /* ── Loading spinner ── */
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2.5px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 0;
+      color: var(--text-light);
+      font-size: 14px;
+    }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../assets/image/yuun_logo png.png" alt="YUNN">
+    <span>Admin</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-section="routine" onclick="switchSection('routine', this)">
+      <span class="nav-icon">📋</span> 루틴 관리
+    </div>
+    <div class="nav-item" data-section="notifications" onclick="switchSection('notifications', this)">
+      <span class="nav-icon">🔔</span> 알림 문구
+    </div>
+    <div class="nav-item" data-section="status" onclick="switchSection('status', this)">
+      <span class="nav-icon">🔗</span> 구글 시트 연동
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div style="margin-bottom:4px">연동 상태</div>
+    <div class="conn-badge err" id="conn-badge">
+      <span class="dot"></span> 미연결
+    </div>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<div class="main">
+  <div class="topbar">
+    <h1 id="topbar-title">루틴 관리</h1>
+    <button class="btn btn-outline btn-sm" onclick="syncFromSheet()">
+      ↻ 시트에서 불러오기
+    </button>
+    <button class="btn btn-primary btn-sm" onclick="handleSave()" id="save-btn" style="display:none">
+      💾 저장
+    </button>
+  </div>
+
+  <div class="content">
+
+    <!-- ── Section: Routine List ── -->
+    <div class="section active" id="section-routine">
+      <div id="routine-loading" class="empty-state">
+        <div class="spinner" style="margin:auto"></div>
+        <p style="margin-top:12px">불러오는 중...</p>
+      </div>
+      <div class="type-grid" id="type-grid" style="display:none"></div>
+    </div>
+
+    <!-- ── Section: Editor (hidden by default) ── -->
+    <div class="section" id="section-editor">
+      <div class="editor-back" onclick="backToList()">← 목록으로</div>
+      <div class="editor-header">
+        <div>
+          <div class="editor-title" id="editor-type-name"></div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:2px" id="editor-type-keywords"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="published-toggle" style="accent-color:var(--primary);width:15px;height:15px">
+            게시됨
+          </label>
+          <button class="btn btn-primary btn-sm" onclick="saveEditor()">💾 저장</button>
+        </div>
+      </div>
+
+      <!-- AM / PM 탭 -->
+      <div class="tab-row">
+        <button class="tab-btn active" id="tab-am" onclick="switchTab('am')">☀️ AM 루틴</button>
+        <button class="tab-btn"        id="tab-pm" onclick="switchTab('pm')">🌙 PM 루틴</button>
+        <button class="tab-btn"        id="tab-copy" onclick="switchTab('copy')">✏️ 설명 문구</button>
+      </div>
+
+      <!-- AM Steps -->
+      <div id="panel-am">
+        <div class="steps-panel">
+          <h3>AM 루틴 단계 (드래그로 순서 변경)</h3>
+          <div id="steps-am" class="steps-list"></div>
+          <button class="add-step-btn" onclick="addStep('am')">+ 단계 추가</button>
+        </div>
+      </div>
+
+      <!-- PM Steps -->
+      <div id="panel-pm" style="display:none">
+        <div class="steps-panel">
+          <h3>PM 루틴 단계 (드래그로 순서 변경)</h3>
+          <div id="steps-pm" class="steps-list"></div>
+          <button class="add-step-btn" onclick="addStep('pm')">+ 단계 추가</button>
+        </div>
+      </div>
+
+      <!-- Copy Texts -->
+      <div id="panel-copy" style="display:none">
+        <div class="copy-panel">
+          <h3>설명 문구 (4개 필드)</h3>
+          <div id="copy-fields"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section: Notifications ── -->
+    <div class="section" id="section-notifications">
+      <div class="noti-list" id="noti-list">
+        <div class="empty-state">
+          <div class="icon">🔔</div>
+          <p>시트에서 불러오기를 눌러주세요.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section: Sheet Status ── -->
+    <div class="section" id="section-status">
+      <div class="status-card">
+        <h2>구글 시트 연동 설정</h2>
+        <div class="status-row">
+          <span class="status-label">Spreadsheet ID</span>
+          <span class="status-value" id="st-sheet-id">—</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">연동 방식</span>
+          <span class="status-value" id="st-mode">—</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">연결 상태</span>
+          <span class="status-value" id="st-status">—</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">creds 파일</span>
+          <span class="status-value" id="st-creds">yunn-google-creds.json</span>
+        </div>
+        <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:8px">
+          OAuth Access Token (Service Account 또는 OAuth 사용 시)
+        </div>
+        <input type="text" class="token-input" id="token-input" placeholder="ya29.A0ARrdaM...  (선택 사항)">
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="applyToken()">토큰 적용</button>
+          <button class="btn btn-outline btn-sm" onclick="testConnection()">연결 테스트</button>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:var(--neutral-bg);border-radius:10px;font-size:12px;color:var(--text-light);line-height:1.7">
+          <b>yunn-google-creds.json 형식 A (API Key):</b><br>
+          <code>{"spreadsheetId":"...","apiKey":"AIza..."}</code><br><br>
+          <b>형식 B (spreadsheetId만 + 토큰 입력):</b><br>
+          <code>{"spreadsheetId":"..."}</code>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- .content -->
+</div><!-- .main -->
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Overlay / Modal -->
+<div id="overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2 id="modal-title"></h2>
+    <p  id="modal-body"></p>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script src="../scripts/admin.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════════════
+//  YUNN Admin — UI 컨트롤러
+// ══════════════════════════════════════════════════════════════════════
+
+// ── 상태 ──────────────────────────────────────────────────────────────
+let currentSection = 'routine';
+let currentTypeId  = null;
+let currentTab     = 'am';
+let sortableAm     = null;
+let sortablePm     = null;
+let stepsData      = { am: [], pm: [] };   // {product_name, instruction}[]
+let copyData       = {};                    // {상황공감:{ko,en}, ...}
+let notiData       = [];
+let typeMap        = {};  // typeId → sheetRow
+
+const COPY_KEYS = ['상황공감', '원인설명', '루틴방향', '기대효과'];
+
+// ── 초기화 ────────────────────────────────────────────────────────────
+(async () => {
+  const result = await ADMIN.loadConfig();
+  updateStatusUI(result);
+  if (result.ok) {
+    await syncFromSheet();
+  }
+})();
+
+function updateStatusUI(result) {
+  const badge = document.getElementById('conn-badge');
+  const stStatus = document.getElementById('st-status');
+  const stMode   = document.getElementById('st-mode');
+  const stId     = document.getElementById('st-sheet-id');
+  const cfg      = ADMIN.getConfig();
+
+  if (cfg?.spreadsheetId) stId.textContent = cfg.spreadsheetId;
+
+  if (result.ok) {
+    badge.className = 'conn-badge ok';
+    badge.innerHTML = '<span class="dot"></span> 연결됨';
+    stStatus.textContent = '✅ 연결됨';
+    stMode.textContent   = result.mode === 'apiKey' ? 'API Key' : 'OAuth / Access Token';
+  } else {
+    badge.className = 'conn-badge err';
+    badge.innerHTML = '<span class="dot"></span> 미연결';
+    stStatus.textContent = `❌ ${result.error || '미연결'}`;
+    stMode.textContent   = '—';
+  }
+}
+
+// ── 섹션 전환 ────────────────────────────────────────────────────────
+function switchSection(name, el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name)?.classList.add('active');
+
+  const titles = { routine: '루틴 관리', notifications: '알림 문구', status: '구글 시트 연동' };
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+  document.getElementById('save-btn').style.display = 'none';
+  currentSection = name;
+}
+
+// ── 시트에서 불러오기 ─────────────────────────────────────────────────
+async function syncFromSheet() {
+  showLoading(true);
+  try {
+    await ADMIN.ensureSheets();
+    const sheetTypes = await ADMIN.fetchRoutineTypes();
+    typeMap = {};
+    sheetTypes.forEach(t => { typeMap[t.type_id] = t; });
+    renderTypeGrid();
+
+    notiData = await ADMIN.fetchNotifications();
+    renderNotiList();
+
+    toast('✅ 시트에서 불러왔습니다.');
+  } catch (e) {
+    toast('❌ ' + e.message, true);
+  } finally {
+    showLoading(false);
+  }
+}
+
+function showLoading(on) {
+  document.getElementById('routine-loading').style.display = on ? 'block' : 'none';
+  document.getElementById('type-grid').style.display = on ? 'none' : 'grid';
+}
+
+// ── 루틴 타입 목록 렌더 ──────────────────────────────────────────────
+function renderTypeGrid() {
+  const grid = document.getElementById('type-grid');
+  grid.innerHTML = '';
+  ADMIN.SKIN_TYPES.forEach(t => {
+    const row = typeMap[t.id] || {};
+    const published = row.is_published === true;
+    const card = document.createElement('div');
+    card.className = 'type-card';
+    card.innerHTML = `
+      <div class="type-card-top">
+        <div class="type-chip ${published ? 'chip-published' : 'chip-draft'}">
+          ${published ? '게시됨' : '수정 중'}
+        </div>
+      </div>
+      <div class="type-name">${t.name} <span style="font-weight:400;font-size:13px;color:var(--text-light)">type</span></div>
+      <div class="type-keywords">${t.keywords}</div>
+    `;
+    card.onclick = () => openEditor(t.id, t.name, t.keywords, published);
+    grid.appendChild(card);
+  });
+}
+
+// ── 편집기 열기 ───────────────────────────────────────────────────────
+async function openEditor(typeId, name, keywords, published) {
+  currentTypeId = typeId;
+  currentTab    = 'am';
+
+  document.getElementById('editor-type-name').textContent    = `${name} type`;
+  document.getElementById('editor-type-keywords').textContent = keywords;
+  document.getElementById('published-toggle').checked         = published;
+
+  switchSection('editor', null);
+  document.getElementById('section-editor').classList.add('active');
+  document.getElementById('save-btn').style.display = 'inline-flex';
+  document.getElementById('topbar-title').textContent = `편집: ${name} type`;
+
+  // 탭 초기화
+  switchTab('am');
+
+  // 데이터 로드
+  try {
+    const steps = await ADMIN.fetchRoutineSteps(typeId);
+    stepsData.am = steps.filter(s => s.time === 'am');
+    stepsData.pm = steps.filter(s => s.time === 'pm');
+    copyData     = await ADMIN.fetchCopyTexts(typeId);
+  } catch (e) {
+    toast('스텝 로드 실패: ' + e.message, true);
+    stepsData = { am: [], pm: [] };
+    copyData  = {};
+  }
+
+  renderSteps('am');
+  renderSteps('pm');
+  renderCopyFields();
+}
+
+function backToList() {
+  document.getElementById('section-editor').classList.remove('active');
+  switchSection('routine', document.querySelector('[data-section="routine"]'));
+  document.getElementById('section-routine').classList.add('active');
+  document.getElementById('save-btn').style.display = 'none';
+}
+
+// ── 탭 전환 ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ['am','pm','copy'].forEach(t => {
+    document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tab);
+    const panel = document.getElementById(`panel-${t}`);
+    if (panel) panel.style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+// ── 스텝 렌더 & 드래그 ────────────────────────────────────────────────
+function renderSteps(time) {
+  const container = document.getElementById(`steps-${time}`);
+  container.innerHTML = '';
+  const list = stepsData[time];
+
+  list.forEach((step, i) => {
+    const div = document.createElement('div');
+    div.className = 'step-item';
+    div.dataset.index = i;
+    div.innerHTML = `
+      <span class="drag-handle" title="드래그로 순서 변경">⠿</span>
+      <div class="step-order-badge">${i + 1}</div>
+      <div class="step-fields">
+        <input class="inline-input product" value="${esc(step.product_name)}"
+               placeholder="제품명 (예: Cleanser)"
+               onchange="updateStep('${time}', ${i}, 'product_name', this.value)">
+        <input class="inline-input" value="${esc(step.instruction)}"
+               placeholder="사용 방법 또는 설명"
+               onchange="updateStep('${time}', ${i}, 'instruction', this.value)">
+      </div>
+      <button class="step-delete" title="삭제" onclick="deleteStep('${time}', ${i})">✕</button>
+    `;
+    container.appendChild(div);
+  });
+
+  // SortableJS
+  const sortableKey = time === 'am' ? 'sortableAm' : 'sortablePm';
+  if (window[sortableKey]) window[sortableKey].destroy();
+  window[sortableKey] = Sortable.create(container, {
+    handle: '.drag-handle',
+    animation: 150,
+    onEnd(evt) { reorderSteps(time, evt.oldIndex, evt.newIndex); }
+  });
+}
+
+function updateStep(time, idx, field, value) {
+  stepsData[time][idx][field] = value;
+}
+
+function addStep(time) {
+  stepsData[time].push({ product_name: '', instruction: '' });
+  renderSteps(time);
+}
+
+function deleteStep(time, idx) {
+  stepsData[time].splice(idx, 1);
+  renderSteps(time);
+}
+
+function reorderSteps(time, from, to) {
+  const arr  = stepsData[time];
+  const item = arr.splice(from, 1)[0];
+  arr.splice(to, 0, item);
+  // 순번 뱃지만 재렌더 (drag 이후 배열 동기화)
+  const container = document.getElementById(`steps-${time}`);
+  container.querySelectorAll('.step-order-badge').forEach((el, i) => {
+    el.textContent = i + 1;
+  });
+}
+
+// ── 카피 텍스트 렌더 ──────────────────────────────────────────────────
+function renderCopyFields() {
+  const container = document.getElementById('copy-fields');
+  container.innerHTML = '';
+  COPY_KEYS.forEach(key => {
+    const val = copyData[key] || { ko: '', en: '' };
+    const div = document.createElement('div');
+    div.className = 'copy-field';
+    div.innerHTML = `
+      <div class="copy-label">${key}</div>
+      <div class="copy-row">
+        <textarea class="copy-textarea" placeholder="한국어"
+          onchange="updateCopy('${key}', 'ko', this.value)">${esc(val.ko)}</textarea>
+        <textarea class="copy-textarea" placeholder="English"
+          onchange="updateCopy('${key}', 'en', this.value)">${esc(val.en)}</textarea>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function updateCopy(key, lang, value) {
+  if (!copyData[key]) copyData[key] = { ko: '', en: '' };
+  copyData[key][lang] = value;
+}
+
+// ── 저장 ─────────────────────────────────────────────────────────────
+async function saveEditor() {
+  if (!currentTypeId) return;
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  try {
+    const typeInfo = ADMIN.SKIN_TYPES.find(t => t.id === currentTypeId);
+    const published = document.getElementById('published-toggle').checked;
+
+    await ADMIN.upsertRoutineType({
+      type_id:      currentTypeId,
+      name:         typeInfo?.name || currentTypeId,
+      description:  '',
+      color_hex:    typeInfo?.color || '#5CC1A6',
+      is_published: published,
+    });
+
+    const allSteps = [
+      ...stepsData.am.map((s, i) => ({ ...s, time: 'am', step_order: i + 1 })),
+      ...stepsData.pm.map((s, i) => ({ ...s, time: 'pm', step_order: i + 1 })),
+    ].filter(s => s.product_name);
+
+    await ADMIN.saveRoutineSteps(currentTypeId, allSteps);
+    await ADMIN.saveCopyTexts(currentTypeId, copyData);
+
+    typeMap[currentTypeId] = { ...typeMap[currentTypeId], is_published: published };
+    toast('✅ 저장 완료!');
+  } catch (e) {
+    toast('❌ 저장 실패: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '💾 저장';
+  }
+}
+
+async function handleSave() {
+  if (currentSection === 'editor') { await saveEditor(); return; }
+  if (currentSection === 'notifications') { await saveAllNotifications(); return; }
+}
+
+// ── 알림 문구 ─────────────────────────────────────────────────────────
+const NOTI_TYPES = ['morning', 'evening', 'reapply'];
+
+function renderNotiList() {
+  const container = document.getElementById('noti-list');
+  container.innerHTML = '';
+
+  NOTI_TYPES.forEach(type => {
+    const existing = notiData.find(n => n.noti_type === type) || { message: '', is_active: true };
+    const div = document.createElement('div');
+    div.className = 'noti-item';
+    div.innerHTML = `
+      <div class="noti-header">
+        <span class="noti-type">${type}</span>
+        <label class="toggle-active">
+          <input type="checkbox" data-type="${type}" ${existing.is_active ? 'checked' : ''}>
+          활성
+        </label>
+      </div>
+      <input class="inline-input" style="border:1px solid var(--border);border-radius:8px;width:100%"
+             data-noti="${type}" value="${esc(existing.message)}"
+             placeholder="알림 메시지를 입력하세요 (예: Good morning! Time for your AM routine ☀️)">
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById('save-btn').style.display = currentSection === 'notifications' ? 'inline-flex' : 'none';
+}
+
+async function saveAllNotifications() {
+  try {
+    for (const type of NOTI_TYPES) {
+      const msgEl    = document.querySelector(`[data-noti="${type}"]`);
+      const activeEl = document.querySelector(`[data-type="${type}"]`);
+      if (!msgEl) continue;
+      await ADMIN.saveNotification(type, msgEl.value, activeEl?.checked ?? true);
+    }
+    toast('✅ 알림 문구 저장 완료!');
+  } catch (e) {
+    toast('❌ ' + e.message, true);
+  }
+}
+
+// ── 시트 연동 ─────────────────────────────────────────────────────────
+function applyToken() {
+  const token = document.getElementById('token-input').value.trim();
+  if (!token) { toast('토큰을 입력해주세요.', true); return; }
+  ADMIN.setAccessToken(token);
+  updateStatusUI({ ok: true, mode: 'token' });
+  toast('✅ 토큰이 적용되었습니다.');
+}
+
+async function testConnection() {
+  try {
+    await ADMIN.ensureSheets();
+    toast('✅ 구글 시트 연결 성공!');
+    updateStatusUI({ ok: true });
+  } catch (e) {
+    toast('❌ 연결 실패: ' + e.message, true);
+    updateStatusUI({ ok: false, error: e.message });
+  }
+}
+
+// ── Toast & Modal ─────────────────────────────────────────────────────
+let _toastTimer = null;
+function toast(msg, isErr = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'show' + (isErr ? ' err' : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+function openModal(title, body) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').textContent  = body;
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ── 유틸 ──────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// 알림 섹션 진입 시 저장 버튼 표시
+document.querySelector('[data-section="notifications"]').addEventListener('click', () => {
+  document.getElementById('save-btn').style.display = 'inline-flex';
+  renderNotiList();
+});
+</script>
+</body>
+</html>
