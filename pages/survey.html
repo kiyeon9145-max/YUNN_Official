@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YUNN | Skin Analysis</title>
+    <link rel="icon" type="image/png" href="../assets/image/yuun_logo png.png">
     <script>
         window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
         window.dataLayer = window.dataLayer || [];
@@ -158,6 +159,7 @@
         .sidebar-menu.active { transform: translateX(0); }
         .sidebar-menu ul { list-style: none; margin-top: 40px; }
         .sidebar-menu li { margin-bottom: 24px; font-size: 18px; font-weight: 500; color: var(--text-main); cursor:pointer;}
+        .sidebar-menu a { color: inherit; text-decoration: none; }
         
         /* --- Step 0: Intro Screen (Figma Diagnosis Start) --- */
         #intro-screen {
@@ -3083,11 +3085,11 @@
     <div class="sidebar-menu" id="sidebar-menu">
         <i class="ph ph-x" style="font-size:24px; cursor:pointer;" onclick="toggleSidebar()"></i>
         <ul>
-            <li>Home</li>
-            <li>Skin</li>
-            <li>Routine Program</li>
-            <li>Treatment Finder</li>
-            <li>About Us</li>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#categories">Skin</a></li>
+            <li><a href="survey.html?survey=1">Routine Program</a></li>
+            <li><a href="survey.html?survey=1">Treatment Finder</a></li>
+            <li><a href="landing.html">About Us</a></li>
         </ul>
     </div>
     
@@ -4669,29 +4671,39 @@
         setupFieldAnalytics();
 
         // --- Navigation Logic ---
-        let isLoggedIn = false; // Mock login state
+        function getSurveyUser() {
+            try {
+                const savedUser = JSON.parse(yunnStorage.getItem('yunnUser') || 'null');
+                if (savedUser && savedUser.nickname) return savedUser;
+            } catch {
+                yunnStorage.removeItem('yunnUser');
+            }
+
+            const nickname = yunnStorage.getItem('yunnUserNickname');
+            return nickname ? { nickname } : null;
+        }
+
+        let isLoggedIn = Boolean(getSurveyUser());
         
         function toggleSidebar() {
             document.getElementById('sidebar-menu').classList.toggle('active');
             document.getElementById('sidebar-overlay').classList.toggle('active');
         }
         function goHome() {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         }
         function handleUserClick() {
             if (!isLoggedIn) {
-                alert("Login required. Redirecting to login page...");
-                // window.location.href = 'login.html';
+                window.location.href = 'login.html';
             } else {
-                alert("Redirecting to My Page...");
+                window.location.href = '../index.html';
             }
         }
         function handleCartClick() {
             if (!isLoggedIn) {
-                alert("로그인 후 이용하시기 바랍니다.");
-                // window.location.href = 'login.html';
+                window.location.href = 'login.html';
             } else {
-                alert("Redirecting to Cart Page...");
+                openBetaServiceModal('header_cart', 'header-cart');
             }
         }
 
