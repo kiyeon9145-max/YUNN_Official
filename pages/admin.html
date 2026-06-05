@@ -394,9 +394,123 @@
       font-size: 14px;
     }
     .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+
+    /* ── Password Gate ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--neutral-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9000;
+    }
+    #gate.hidden { display: none; }
+    .gate-card {
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+      padding: 40px 36px 36px;
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .gate-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .gate-logo img { height: 32px; }
+    .gate-logo span {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: .04em;
+    }
+    .gate-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .gate-sub {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .gate-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color .15s;
+      margin-bottom: 12px;
+      letter-spacing: .08em;
+    }
+    .gate-input:focus { border-color: var(--primary); }
+    .gate-input.error { border-color: var(--accent); }
+    .gate-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .gate-btn:hover:not(:disabled) { background: var(--primary-dark); }
+    .gate-btn:disabled { background: var(--border); color: var(--text-light); cursor: not-allowed; }
+    .gate-error {
+      font-size: 13px;
+      color: var(--accent);
+      margin-top: 10px;
+      min-height: 18px;
+      text-align: center;
+    }
+    .gate-lock {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 10px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+
+<!-- ── Password Gate ── -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">
+      <img src="../assets/image/yuun_logo png.png" alt="YUNN">
+      <span>Admin</span>
+    </div>
+    <div class="gate-title">관리자 페이지</div>
+    <div class="gate-sub">계속하려면 비밀번호를 입력해주세요.</div>
+    <input
+      id="gate-input"
+      class="gate-input"
+      type="password"
+      placeholder="비밀번호"
+      autocomplete="current-password"
+      onkeydown="if(event.key==='Enter') submitGate()"
+    >
+    <button class="gate-btn" id="gate-btn" onclick="submitGate()">확인</button>
+    <div class="gate-error" id="gate-error"></div>
+    <div class="gate-lock" id="gate-lock"></div>
+  </div>
+</div>
 
 <!-- ── Sidebar ── -->
 <aside class="sidebar">
@@ -564,6 +678,82 @@
 
 <script src="../scripts/admin.js"></script>
 <script>
+// ══════════════════════════════════════════════════════════════════════
+//  YUNN Admin — 비밀번호 게이트
+// ══════════════════════════════════════════════════════════════════════
+(function initGate() {
+  const gate    = document.getElementById('gate');
+  const input   = document.getElementById('gate-input');
+  const btn     = document.getElementById('gate-btn');
+  const errEl   = document.getElementById('gate-error');
+  const lockEl  = document.getElementById('gate-lock');
+
+  let failCount   = 0;
+  const MAX_FAIL  = 3;
+  const LOCK_SEC  = 10;
+  let lockTimer   = null;
+
+  // 이미 인증된 세션이면 게이트 바로 숨김
+  if (sessionStorage.getItem(ADMIN_SESSION_KEY) === '1') {
+    gate.classList.add('hidden');
+    return;
+  }
+
+  // 게이트 표시 상태로 시작 — body의 어드민 콘텐츠를 가림
+  input.focus();
+
+  window.submitGate = function () {
+    if (btn.disabled) return;
+    const val = input.value;
+
+    if (val === ADMIN_PASSWORD) {
+      // 인증 성공
+      sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
+      gate.classList.add('hidden');
+      errEl.textContent = '';
+      failCount = 0;
+    } else {
+      // 인증 실패
+      failCount++;
+      input.value = '';
+      input.classList.add('error');
+      setTimeout(() => input.classList.remove('error'), 600);
+
+      if (failCount >= MAX_FAIL) {
+        // 잠금
+        startLock();
+      } else {
+        const remain = MAX_FAIL - failCount;
+        errEl.textContent = `비밀번호가 올바르지 않습니다. (${remain}회 남음)`;
+        input.focus();
+      }
+    }
+  };
+
+  function startLock() {
+    btn.disabled = true;
+    input.disabled = true;
+    errEl.textContent = '비밀번호가 올바르지 않습니다.';
+    let sec = LOCK_SEC;
+    lockEl.textContent = `${sec}초 후 다시 시도할 수 있습니다.`;
+
+    lockTimer = setInterval(() => {
+      sec--;
+      if (sec <= 0) {
+        clearInterval(lockTimer);
+        btn.disabled = false;
+        input.disabled = false;
+        input.focus();
+        lockEl.textContent = '';
+        errEl.textContent = '';
+        failCount = 0;
+      } else {
+        lockEl.textContent = `${sec}초 후 다시 시도할 수 있습니다.`;
+      }
+    }, 1000);
+  }
+})();
+
 // ══════════════════════════════════════════════════════════════════════
 //  YUNN Admin — UI 컨트롤러
 // ══════════════════════════════════════════════════════════════════════

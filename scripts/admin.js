@@ -1,6 +1,11 @@
 // YUNN Admin — Google Sheets API v4 연동 + CRUD 로직
 // 로컬 실행 전용. yunn-google-creds.json 에서 API 키를 읽어온다.
 
+// ── 비밀번호 게이트 설정 ────────────────────────────────────────────────────
+// 배포 시 반드시 변경할 것. sessionStorage 키: yunn_admin_auth
+const ADMIN_PASSWORD = "yunn2024";
+const ADMIN_SESSION_KEY = "yunn_admin_auth";
+
 const ADMIN = (() => {
   // ── 설정 ────────────────────────────────────────────────────────────────
   const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
