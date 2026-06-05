@@ -3919,6 +3919,48 @@
         const YUNN_FEEDBACK_SESSION_ENTRY_ID = '';
         const YUNN_FEEDBACK_VERIFY_URL = '';
         const YUNN_FEEDBACK_RETURN_PARAM = 'returnFromSurvey';
+
+        // ── Google Sheets 수집 엔드포인트 ────────────────────────────────
+        const YUNN_SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzUONmpSMQTYKqnl-5A-zHK3S8JIZCTHyP3jUiseqV8yp2IRdBdSP4x1kc-otnzTggPRA/exec';
+
+        function collectSurveyPayload() {
+            return {
+                name:          document.getElementById('userName')?.value.trim()                          || '',
+                email:         document.getElementById('userEmail')?.value.trim()                         || '',
+                phone:         document.getElementById('userWhatsApp')?.value.trim()                      || '',
+                gender:        document.querySelector('input[name="gender"]:checked')?.value              || '',
+                age:           document.querySelector('input[name="age"]:checked')?.value                 || '',
+                skinType:      document.querySelector('input[name="skinType"]:checked')?.value            || '',
+                concerns:      [...document.querySelectorAll('input[name="concerns"]:checked')].map(i => i.value).join(', ') || '',
+                triggers:      [...document.querySelectorAll('input[name="trigger"]:checked')].map(i => i.value).join(', ')  || '',
+                sensitivity:   document.querySelector('input[name="sensitivity"]:checked')?.value         || '',
+                outdoor:       document.querySelector('input[name="outdoor"]:checked')?.value             || '',
+                sunscreen:     document.querySelector('input[name="sunscreen"]:checked')?.value           || '',
+                sleep:         document.querySelector('input[name="sleep"]:checked')?.value               || '',
+                stress:        document.querySelector('input[name="stress"]:checked')?.value              || '',
+                routineLevel:  document.querySelector('input[name="routineLevel"]:checked')?.value        || '',
+                photo_uploaded: Boolean(typeof uploadedSkinPhotoData !== 'undefined' && uploadedSkinPhotoData),
+                session_id:    getYunnSessionId()
+            };
+        }
+
+        function sendToSheet(payload) {
+            try {
+                const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon(YUNN_SHEET_ENDPOINT, blob);
+                } else {
+                    fetch(YUNN_SHEET_ENDPOINT, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                        headers: { 'Content-Type': 'application/json' },
+                        keepalive: true
+                    }).catch(() => {});
+                }
+            } catch(e) {
+                // 전송 실패 시 설문 흐름에 영향 없도록 silent fail
+            }
+        }
         const yunnMemoryStorage = {};
         const yunnStorage = (() => {
             try {
@@ -5871,6 +5913,9 @@
         }
 
         function startAnalysis() {
+            // ── 구글 시트로 설문 데이터 전송 ──────────────────────────────
+            sendToSheet(collectSurveyPayload());
+
             const surveyValues = getCurrentStepSelectedValues('10');
             trackYunnEvent('photo_upload_conversion', {
                 upload_completed: Boolean(uploadedSkinPhotoData)
