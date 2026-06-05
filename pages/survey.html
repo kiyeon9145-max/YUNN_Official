@@ -5871,6 +5871,7 @@
         }
 
         function startAnalysis() {
+            const surveyValues = getCurrentStepSelectedValues('10');
             trackYunnEvent('photo_upload_conversion', {
                 upload_completed: Boolean(uploadedSkinPhotoData)
             });
@@ -5880,8 +5881,8 @@
             trackYunnEvent('survey_complete', {
                 user_id: getYunnSessionId(),
                 final_step: currentStep,
-                skin_type: selectedValues.skinType || '',
-                skin_concern: selectedValues.concerns || '',
+                skin_type: surveyValues.skinType || '',
+                skin_concern: surveyValues.concerns || '',
                 photo_uploaded: Boolean(uploadedSkinPhotoData)
             });
             emitCurrentScreenTime('analysis_start');
