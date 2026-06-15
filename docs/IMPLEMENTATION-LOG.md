@@ -253,6 +253,65 @@ Verification:
 - 오른쪽 제품 이미지가 커졌지만 텍스트와 겹치지 않는 것 확인
 - 브라우저 콘솔 에러 없음 확인
 
+---
+
+## 2026-06-12
+
+### Phase 1 코드 역할 분리 리팩토링 (JS 모듈화 + 템플릿 분리)
+
+Purpose:
+`pages/survey.html` 단일 파일(6,645줄)에 HTML·CSS·JS가 혼재하던 구조를 역할별로 완전 분리.
+`docs/files/REFACTOR_SPEC.md` 명세를 기준으로 진행.
+
+Changed files:
+- `pages/survey.html` — onclick= 57개 제거, data-action 속성 추가, `<template>` 태그 3개 추가, CSS 외부 파일 link 교체, ES module script 태그 교체
+- `js/domain/AppConfig.js` (신규)
+- `js/domain/SkinType.js` (신규)
+- `js/domain/SurveyAnswer.js` (신규)
+- `js/domain/RoutineConfig.js` (신규 → 정리) — ROUTINE_DATABASE 분리 후 결과 화면 데이터만 유지
+- `js/domain/RoutineDatabase.js` (신규) — 성별·고민·피부타입 16개 조합 루틴 스텝
+- `js/repository/SessionRepository.js` (신규)
+- `js/repository/SurveyRepository.js` (신규)
+- `js/repository/SheetRepository.js` (신규)
+- `js/service/SurveyService.js` (신규)
+- `js/service/ResultService.js` (신규)
+- `js/service/AnalyticsService.js` (신규)
+- `js/service/FeedbackService.js` (신규)
+- `js/ui/IntroScreen.js` (신규)
+- `js/ui/SurveyScreen.js` (신규)
+- `js/ui/ResultScreen.js` (신규)
+- `js/ui/ModalManager.js` (신규)
+- `js/ui/templates/BalanceRowTemplate.js` (신규) — `<template>` cloneNode 방식
+- `js/ui/templates/RoutineCardTemplate.js` (신규) — `<template>` cloneNode 방식
+- `js/ui/templates/ProductCardTemplate.js` (신규) — `<template>` cloneNode 방식
+- `styles/base.css` (신규)
+- `styles/components.css` (신규)
+- `styles/survey.css` (신규)
+- `styles/result.css` (신규)
+- `index.html` — _nobg 이미지 참조 4곳 오타 수정
+- `assets/image/` — 파일명 오타 8개 rename
+- `docs/PROJECT_STRUCTURE.md` (신규)
+
+Main implementation:
+- `domain → repository → service → ui` 단방향 의존성 구조 확립. 역방향 import 없음.
+- HTML의 모든 `onclick=` 제거 → `addEventListener` + `data-action` 이벤트 위임으로 교체.
+- JS 내 HTML 문자열 완전 제거 → `<template>` 태그 + `cloneNode(true)` + `textContent` 주입 방식.
+- `innerHTML` 최소화 — 서식 텍스트(`formatResultSummary`) 1곳만 유지, 나머지 `replaceChildren` + `createElement`.
+- `RoutineDatabase.js` 분리 — `ROUTINE_DATABASE` 16개 조합을 `RoutineConfig.js`에서 독립 파일로 분리.
+- `RESULT_ASSETS` 이미지 파일명 오타 수정 및 실제 asset 파일 rename 동기화.
+- `window.*` 노출 유지 — 각 UI 파일 하단에 하위 호환용 window 바인딩 명시.
+
+Backups:
+- `docs/code-backups/2026-06-12/survey.refactor-phase1.html`
+- `docs/code-backups/2026-06-12/index.fix-nobg-refs.html`
+
+Verification:
+- `onclick=` 0개 잔존 확인 (grep)
+- `data-action="next"` 15개, `data-action="back"` 14개 존재 확인
+- `bindModalEvents` 9개 ID, `bindResultEvents` 6개 ID, `bindIntroEvents` 11개 ID HTML 존재 확인
+- 모든 JS import 경로 유효성 확인
+- 순환 의존성 없음 확인 (ResultScreen ↔ ModalManager)
+
 ### 레퍼런스 기반 홈 이미지/배지/하트 폴리시
 
 Purpose:

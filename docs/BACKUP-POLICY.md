@@ -248,3 +248,7 @@ Backups:
 
 Purpose:
 실제 GTM 컨테이너 ID `GTM-P2NX3N5K`와 noscript fallback을 적용하기 전 복구 지점을 남겼다.
+
+Created on 2026-06-12:
+- `docs/code-backups/2026-06-12/survey.refactor-phase1.html`
+- `docs/code-backups/2026-06-12/index.fix-nobg-refs.html`
