@@ -643,12 +643,21 @@
         </div>
         <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
         <div style="font-size:13px;color:var(--text-light);margin-bottom:8px">
+          직접 입력 <span style="font-size:11px;opacity:.7">(파일 읽기 실패 시 여기에 입력 — 브라우저에 저장됨)</span>
+        </div>
+        <input type="text" class="token-input" id="inp-sheet-id" placeholder="Spreadsheet ID">
+        <input type="text" class="token-input" id="inp-api-key" style="margin-top:8px" placeholder="API Key (AIzaSy...)">
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="manualConnect()">저장 &amp; 연결</button>
+          <button class="btn btn-outline btn-sm" onclick="testConnection()">연결 테스트</button>
+        </div>
+        <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:8px">
           OAuth Access Token (Service Account 또는 OAuth 사용 시)
         </div>
         <input type="text" class="token-input" id="token-input" placeholder="ya29.A0ARrdaM...  (선택 사항)">
         <div style="margin-top:12px;display:flex;gap:8px">
-          <button class="btn btn-primary btn-sm" onclick="applyToken()">토큰 적용</button>
-          <button class="btn btn-outline btn-sm" onclick="testConnection()">연결 테스트</button>
+          <button class="btn btn-outline btn-sm" onclick="applyToken()">토큰 적용</button>
         </div>
         <div style="margin-top:20px;padding:14px;background:var(--neutral-bg);border-radius:10px;font-size:12px;color:var(--text-light);line-height:1.7">
           <b>yunn-google-creds.json 형식 A (API Key):</b><br>
@@ -787,7 +796,11 @@ function updateStatusUI(result) {
   const stId     = document.getElementById('st-sheet-id');
   const cfg      = ADMIN.getConfig();
 
-  if (cfg?.spreadsheetId) stId.textContent = cfg.spreadsheetId;
+  if (cfg?.spreadsheetId) {
+    stId.textContent = cfg.spreadsheetId;
+    document.getElementById('inp-sheet-id').value = cfg.spreadsheetId;
+    document.getElementById('inp-api-key').value  = cfg.apiKey || '';
+  }
 
   if (result.ok) {
     badge.className = 'conn-badge ok';
@@ -1105,6 +1118,18 @@ async function testConnection() {
     toast('❌ 연결 실패: ' + e.message, true);
     updateStatusUI({ ok: false, error: e.message });
   }
+}
+
+async function manualConnect() {
+  const id  = document.getElementById('inp-sheet-id').value.trim();
+  const key = document.getElementById('inp-api-key').value.trim();
+  if (!id || !key) {
+    toast('❌ Spreadsheet ID와 API Key를 모두 입력해 주세요.', true);
+    return;
+  }
+  const result = ADMIN.saveManualConfig(id, key);
+  updateStatusUI(result);
+  await syncFromSheet();
 }
 
 // ── Toast & Modal ─────────────────────────────────────────────────────
