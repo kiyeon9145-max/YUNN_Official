@@ -167,7 +167,7 @@ Object.keys(RESULT_SKIN_VARIANTS).forEach((skinType) => {
     });
 });
 
-const RESULT_TYPE_PROFILES = {
+export const RESULT_TYPE_PROFILES = {
     'Oily|Acne': {
         skinTypeName: 'Oil Clear',
         keywords: ['Oily', 'Acne-prone', 'Sebum Control'],
