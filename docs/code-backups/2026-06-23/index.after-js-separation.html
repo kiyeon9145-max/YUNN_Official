@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YUNN - Premium K-Beauty</title>
+    <link rel="icon" type="image/png" href="assets/image/yunn_logo.png">
+    <script>
+        window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'yunn_app_bootstrap', page_path: window.location.pathname });
+        (function(w, d, s, l, i) {
+            if (!i || !/^GTM-[A-Z0-9]+$/.test(i)) {
+                w.yunnGtmStatus = 'missing_container_id';
+                return;
+            }
+            w.yunnGtmStatus = 'loading';
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            const firstScript = d.getElementsByTagName(s)[0];
+            const gtmScript = d.createElement(s);
+            const dataLayerParam = l !== 'dataLayer' ? '&l=' + l : '';
+            gtmScript.async = true;
+            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dataLayerParam;
+            firstScript.parentNode.insertBefore(gtmScript, firstScript);
+        })(window, document, 'script', 'dataLayer', window.YUNN_GTM_ID);
+    </script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles/home.css">
+
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2NX3N5K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="app-shell">
+        <div class="status-bar" aria-hidden="true">
+            <span id="device-time">10:07</span>
+            <div class="status-icons">
+                <span class="signal-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span class="network-slot" id="network-slot"><span class="wifi-mark" aria-hidden="true"><span class="wifi-dot"></span></span></span>
+                <span class="battery-shell" aria-hidden="true"><span class="battery-level" id="battery-level"></span></span>
+            </div>
+        </div>
+
+        <header class="top-header">
+            <button class="header-icon" id="btn-menu" type="button" aria-label="Open menu">
+                <i class="ph ph-list"></i>
+            </button>
+            <img class="logo" src="assets/image/yunn_logo.png" alt="YUNN">
+            <div class="header-actions">
+                <button class="header-icon" type="button" aria-label="Search">
+                    <i class="ph ph-magnifying-glass"></i>
+                </button>
+                <button class="header-icon" type="button" aria-label="Notifications">
+                    <i class="ph ph-bell"></i>
+                </button>
+                <button class="header-icon cart-trigger" type="button" aria-label="Open cart">
+                    <i class="ph ph-shopping-bag"></i>
+                    <span class="cart-count" id="cart-count">1</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero-card" id="personal-hero">
+                <div class="hero-copy">
+                    <h1 id="hero-title">Hi, <span id="user-nickname"></span></h1>
+                    <p id="hero-message">Your skin journey is <strong>on track</strong></p>
+                    <a class="profile-btn" id="hero-cta" href="pages/survey.html">
+                        My skin Profile <i class="ph ph-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="routine-ring">
+                    <span>Routine</span>
+                    <strong>3/5</strong>
+                    <span>steps done</span>
+                </div>
+                <img class="hero-product" src="assets/image/YUNN_Web_image_1_nobg.png" alt="YUNN routine products">
+            </section>
+
+            <section aria-labelledby="category-title">
+                <div class="section-head">
+                    <h2 id="category-title">Shop by Category</h2>
+                    <a class="view-all" href="#categories">View all <i class="ph ph-caret-right"></i></a>
+                </div>
+                <div class="category-grid" id="categories">
+                    <div class="category-item">
+                        <div class="category-image"><img src="assets/image/Facewash_YUNN_nobg.png" alt=""></div>
+                        <span>Facewash</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="assets/image/Serum_top_selling_nobg.png" alt=""></div>
+                        <span>Serum</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><span class="tag-new">NEW</span><img src="assets/image/Moisturiser_top_selling_nobg.png" alt=""></div>
+                        <span>Moisturiser</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><span class="tag-new">NEW</span><img src="assets/image/Sunscreen_YUNN_nobg.png" alt=""></div>
+                        <span>Sunscreen</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="assets/image/Toner_YUNN_nobg.png" alt=""></div>
+                        <span>Toner</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="assets/image/Mask_YUNN_nobg.png" alt=""></div>
+                        <span>Mask</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="assets/image/Woman_model_YUNN_nobg.png" alt=""></div>
+                        <span>Women</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image"><img src="assets/image/Man_model_YUNN_nobg.png" alt=""></div>
+                        <span>Men</span>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="selling-title">
+                <div class="section-head">
+                    <h2 id="selling-title">Top Selling</h2>
+                    <a class="view-all" href="#top-selling">View all <i class="ph ph-caret-right"></i></a>
+                </div>
+                <div class="product-row" id="top-selling">
+                    <article class="product-card">
+                        <div class="product-media">
+                            <img src="assets/image/Serum_top_selling.png" alt="YUNN Glow Serum">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist">
+                                <i class="ph ph-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="product-title">YUNN Glow Serum</h3>
+                        <div class="product-price">₹ 1,499</div>
+                        <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
+                        <button class="add-cart" type="button" data-name="YUNN Glow Serum" data-img="assets/image/Serum_topselling.png">
+                            <i class="ph ph-shopping-bag"></i> Add to Cart
+                        </button>
+                    </article>
+                    <article class="product-card">
+                        <div class="product-media">
+                            <img src="assets/image/Facewash_top_selling.png" alt="YUNN Mattee Sunscreen">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist">
+                                <i class="ph ph-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="product-title">YUNN Mattee Sunscreen</h3>
+                        <div class="product-price">₹ 899</div>
+                        <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
+                        <button class="add-cart" type="button" data-name="YUNN Mattee Sunscreen" data-img="assets/image/Facewash_top_selling.png">
+                            <i class="ph ph-shopping-bag"></i> Add to Cart
+                        </button>
+                    </article>
+                    <article class="product-card">
+                        <div class="product-media">
+                            <img src="assets/image/Moisturiser_top_selling.png" alt="YUNN Hydrating Moisturiser">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist">
+                                <i class="ph ph-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="product-title">YUNN Hydrating Moisturiser</h3>
+                        <div class="product-price">₹ 1,299</div>
+                        <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
+                        <button class="add-cart" type="button" data-name="YUNN Hydrating Moisturiser" data-img="assets/image/Moisturiser_top_selling.png">
+                            <i class="ph ph-shopping-bag"></i> Add to Cart
+                        </button>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottom-nav" aria-label="Primary">
+            <a href="index.html" class="nav-item active"><i class="ph-fill ph-house"></i><span>Home</span></a>
+            <a href="#top-selling" class="nav-item"><i class="ph ph-shopping-cart-simple"></i><span>shop</span></a>
+            <a href="pages/survey.html" class="nav-item"><i class="ph ph-plus-circle"></i><span>Quiz</span></a>
+            <a href="#offers" class="nav-item"><i class="ph ph-ticket"></i><span>Offers</span></a>
+            <a href="pages/login.html" class="nav-item"><i class="ph ph-user"></i><span>Account</span></a>
+        </nav>
+
+        <div class="modal-scrim" id="modal-scrim"></div>
+        <aside class="cart-sheet" id="cart-sheet" aria-label="Cart preview">
+            <div class="sheet-grip"></div>
+            <button class="sheet-close" type="button" aria-label="Close cart"><i class="ph ph-x"></i></button>
+            <div class="cart-product">
+                <img id="cart-product-image" src="assets/image/Facewash_top_selling.png" alt="">
+                <div>
+                    <div class="cart-confirm"><i class="ph-fill ph-check-circle"></i><span>Added to your cart!</span></div>
+                    <div class="cart-name" id="cart-product-name">Anua Heartleaf Pore Deep Cleansing Foam</div>
+                    <div class="cart-meta">
+                        <span>Qty 1</span>
+                        <span>₹ 1,700</span>
+                        <span class="cart-sale">15%</span>
+                        <span class="cart-original">₹ 2,000</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sheet-summary">
+                <div class="summary-row">
+                    <span>Cart <span id="cart-items">(01 items)</span></span>
+                    <strong>₹ 1,700 <i class="ph ph-caret-right"></i></strong>
+                </div>
+                <div class="sheet-actions">
+                    <button type="button" id="btn-view-cart">View Cart</button>
+                    <button type="button" id="btn-continue-shopping">Continue Shopping</button>
+                </div>
+            </div>
+        </aside>
+
+        <aside class="sidebar" id="sidebar" aria-label="Menu">
+            <div class="sidebar-panel">
+                <button type="button" class="btn-close" aria-label="Close menu"><i class="ph ph-x"></i></button>
+                <a href="index.html">Home</a>
+                <a href="#categories">Skin</a>
+                <a href="pages/survey.html">Routine Program</a>
+                <a href="pages/survey.html">Treatment Finder</a>
+                <a href="pages/landing.html">About YUNN</a>
+            </div>
+        </aside>
+    </div>
+
+    <script src="scripts/home.js" defer></script>
+</body>
+</html>
