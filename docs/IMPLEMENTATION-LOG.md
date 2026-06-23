@@ -9,6 +9,56 @@
 - Figma 디자인을 기준으로 구현할 때는 Figma 프레임 이름과 웹 파일의 대응 관계를 함께 적는다.
 - 임시 생성 스크립트보다 실제 서비스 진입 파일을 우선 기록한다.
 
+## 2026-06-23
+
+### index.html JS 분리 + 이미지 경로 수정 + survey.html ES Module 번들화
+
+Purpose:
+1. `index.html`에 인라인으로 섞여 있던 JS 코드를 `scripts/home.js`로 분리하여 HTML/JS 역할을 명확히 구분했다.
+2. `index.html`에서 파일명 오타 및 공백으로 깨진 이미지 경로 4개를 수정했다.
+3. `survey.html`이 `<script type="module">`을 사용해 `file://` 프로토콜 및 일부 정적 배포 환경에서 CORS 정책으로 JS 전체가 로드되지 않는 문제를 해결했다. 21개 ES Module 파일을 단일 번들 `scripts/survey.js`로 통합했다.
+
+Changed files:
+- `index.html` — 인라인 JS 161줄 제거, `onclick` 인라인 핸들러 10곳 제거, 이미지 경로 4개 수정, `<script src="scripts/home.js" defer>` 추가
+- `scripts/home.js` (신규) — index.html에서 분리된 홈 화면 JS 전체
+- `scripts/survey.js` (신규) — js/ 하위 21개 모듈 파일을 의존성 순서대로 번들한 단일 파일 (약 110KB)
+- `pages/survey.html` — `<script type="module" src="../js/app.js">` → `<script src="../scripts/survey.js" defer>` 교체
+- `docs/code-backups/2026-06-23/` — 수정 후 상태 백업 3개
+
+Main implementation:
+
+**[1] index.html JS 분리**
+- `<body>` 끝의 인라인 `<script>` 블록(약 161줄)을 `scripts/home.js`로 이동
+- 인라인 `onclick="..."` 속성 10곳 모두 제거
+  - 버튼에 `id` 또는 `class` 추가 (`btn-menu`, `btn-view-cart`, `btn-continue-shopping`, `btn-close`)
+  - 상품 카드 버튼에 `data-name` / `data-img` 속성 추가
+- `home.js` 내 `DOMContentLoaded` 이벤트 안에서 모든 이벤트 바인딩 처리
+- GTM 인라인 스크립트는 `<head>` 위치 유지 (GTM 공식 권장)
+
+**[2] 이미지 경로 수정 (index.html)**
+
+| 위치 | 잘못된 경로 | 수정된 경로 |
+|---|---|---|
+| 로고/파비콘 | `yuun_logo png.png` | `yunn_logo.png` |
+| 베스트셀러 세럼 | `Serum_topselling.png` | `Serum_top_selling.png` |
+| 베스트셀러 페이스워시 | `Facewash_top selling.png` | `Facewash_top_selling.png` |
+| 베스트셀러 모이스처라이저 | `Moisturies_top selling.png` | `Moisturiser_top_selling.png` |
+
+**[3] survey.html ES Module 번들화**
+- 원인: `<script type="module">`은 HTTP 프로토콜 환경에서만 `import` 체인 동작. `file://` 직접 접근 또는 일부 정적 배포 환경(CDN 없는 순수 파일 서빙)에서 CORS로 차단되어 JS 전체 로드 실패 → 버튼 이벤트 등록 안 됨.
+- 번들 생성 방식: Node.js 스크립트로 의존성 순서대로 21개 파일 자동 연결, `import`/`export` 키워드 제거.
+- 번들 파일 의존성 순서: AppConfig → SurveyAnswer → SkinType → RoutineConfig → SessionRepository → SheetRepository → SurveyRepository → AnalyticsService → SurveyService → ResultService → FeedbackService → Templates → ModalManager → IntroScreen → SurveyScreen → ResultScreen → app.js
+
+Verification:
+- `scripts/home.js` 문법 검사 통과 (`node --check`)
+- `scripts/survey.js` 문법 검사 통과 (`node --check`)
+- `index.html` 이미지 경로 13개 전부 실제 파일 존재 확인 (Node.js fs.existsSync)
+- `scripts/survey.js` 내 `import`/`export` 키워드 잔존 0개 확인
+- 핵심 심볼 (`class IntroScreen`, `class SurveyScreen`, `class ResultScreen`, `class ModalManager`, `function trackYunnEvent`, `function validateStepOne` 등) 번들 내 정상 위치 확인
+- `file:///Users/apple/Desktop/YUNN_Mobile/pages/survey.html` 브라우저 직접 오픈 테스트
+
+---
+
 ## 2026-05-28
 
 ### 결과 피부 타입명 PDF v2 반영 및 결과 헤더 가독성 개선
