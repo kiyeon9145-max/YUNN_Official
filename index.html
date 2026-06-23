@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YUNN - Premium K-Beauty</title>
-    <link rel="icon" type="image/png" href="assets/image/yuun_logo png.png">
+    <link rel="icon" type="image/png" href="assets/image/yunn_logo.png">
     <script>
         window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
         window.dataLayer = window.dataLayer || [];
@@ -45,10 +45,10 @@
         </div>
 
         <header class="top-header">
-            <button class="header-icon" type="button" aria-label="Open menu" onclick="toggleSidebar()">
+            <button class="header-icon" id="btn-menu" type="button" aria-label="Open menu">
                 <i class="ph ph-list"></i>
             </button>
-            <img class="logo" src="assets/image/yuun_logo png.png" alt="YUNN">
+            <img class="logo" src="assets/image/yunn_logo.png" alt="YUNN">
             <div class="header-actions">
                 <button class="header-icon" type="button" aria-label="Search">
                     <i class="ph ph-magnifying-glass"></i>
@@ -56,7 +56,7 @@
                 <button class="header-icon" type="button" aria-label="Notifications">
                     <i class="ph ph-bell"></i>
                 </button>
-                <button class="header-icon cart-trigger" type="button" aria-label="Open cart" onclick="openCartSheet()">
+                <button class="header-icon cart-trigger" type="button" aria-label="Open cart">
                     <i class="ph ph-shopping-bag"></i>
                     <span class="cart-count" id="cart-count">1</span>
                 </button>
@@ -129,43 +129,43 @@
                 <div class="product-row" id="top-selling">
                     <article class="product-card">
                         <div class="product-media">
-                            <img src="assets/image/Serum_topselling.png" alt="YUNN Glow Serum">
-                            <button class="heart-btn" type="button" aria-label="Add to wishlist" onclick="toggleWishlist(this)">
+                            <img src="assets/image/Serum_top_selling.png" alt="YUNN Glow Serum">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist">
                                 <i class="ph ph-heart"></i>
                             </button>
                         </div>
                         <h3 class="product-title">YUNN Glow Serum</h3>
                         <div class="product-price">₹ 1,499</div>
                         <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
-                        <button class="add-cart" type="button" onclick="addToCart('YUNN Glow Serum', 'assets/image/Serum_topselling.png')">
+                        <button class="add-cart" type="button" data-name="YUNN Glow Serum" data-img="assets/image/Serum_topselling.png">
                             <i class="ph ph-shopping-bag"></i> Add to Cart
                         </button>
                     </article>
                     <article class="product-card">
                         <div class="product-media">
-                            <img src="assets/image/Facewash_top selling.png" alt="YUNN Mattee Sunscreen">
-                            <button class="heart-btn" type="button" aria-label="Add to wishlist" onclick="toggleWishlist(this)">
+                            <img src="assets/image/Facewash_top_selling.png" alt="YUNN Mattee Sunscreen">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist">
                                 <i class="ph ph-heart"></i>
                             </button>
                         </div>
                         <h3 class="product-title">YUNN Mattee Sunscreen</h3>
                         <div class="product-price">₹ 899</div>
                         <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
-                        <button class="add-cart" type="button" onclick="addToCart('YUNN Mattee Sunscreen', 'assets/image/Facewash_top selling.png')">
+                        <button class="add-cart" type="button" data-name="YUNN Mattee Sunscreen" data-img="assets/image/Facewash_top_selling.png">
                             <i class="ph ph-shopping-bag"></i> Add to Cart
                         </button>
                     </article>
                     <article class="product-card">
                         <div class="product-media">
-                            <img src="assets/image/Moisturies_top selling.png" alt="YUNN Hydrating Moisturiser">
-                            <button class="heart-btn" type="button" aria-label="Add to wishlist" onclick="toggleWishlist(this)">
+                            <img src="assets/image/Moisturiser_top_selling.png" alt="YUNN Hydrating Moisturiser">
+                            <button class="heart-btn" type="button" aria-label="Add to wishlist">
                                 <i class="ph ph-heart"></i>
                             </button>
                         </div>
                         <h3 class="product-title">YUNN Hydrating Moisturiser</h3>
                         <div class="product-price">₹ 1,299</div>
                         <div class="rating"><span class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span><span>5</span></div>
-                        <button class="add-cart" type="button" onclick="addToCart('YUNN Hydrating Moisturiser', 'assets/image/Moisturies_top selling.png')">
+                        <button class="add-cart" type="button" data-name="YUNN Hydrating Moisturiser" data-img="assets/image/Moisturiser_top_selling.png">
                             <i class="ph ph-shopping-bag"></i> Add to Cart
                         </button>
                     </article>
@@ -181,12 +181,12 @@
             <a href="pages/login.html" class="nav-item"><i class="ph ph-user"></i><span>Account</span></a>
         </nav>
 
-        <div class="modal-scrim" id="modal-scrim" onclick="closeAllOverlays()"></div>
+        <div class="modal-scrim" id="modal-scrim"></div>
         <aside class="cart-sheet" id="cart-sheet" aria-label="Cart preview">
             <div class="sheet-grip"></div>
-            <button class="sheet-close" type="button" aria-label="Close cart" onclick="closeAllOverlays()"><i class="ph ph-x"></i></button>
+            <button class="sheet-close" type="button" aria-label="Close cart"><i class="ph ph-x"></i></button>
             <div class="cart-product">
-                <img id="cart-product-image" src="assets/image/Facewash_top selling.png" alt="">
+                <img id="cart-product-image" src="assets/image/Facewash_top_selling.png" alt="">
                 <div>
                     <div class="cart-confirm"><i class="ph-fill ph-check-circle"></i><span>Added to your cart!</span></div>
                     <div class="cart-name" id="cart-product-name">Anua Heartleaf Pore Deep Cleansing Foam</div>
@@ -204,15 +204,15 @@
                     <strong>₹ 1,700 <i class="ph ph-caret-right"></i></strong>
                 </div>
                 <div class="sheet-actions">
-                    <button type="button" onclick="showCheckoutNotice()">View Cart</button>
-                    <button type="button" onclick="closeAllOverlays()">Continue Shopping</button>
+                    <button type="button" id="btn-view-cart">View Cart</button>
+                    <button type="button" id="btn-continue-shopping">Continue Shopping</button>
                 </div>
             </div>
         </aside>
 
         <aside class="sidebar" id="sidebar" aria-label="Menu">
             <div class="sidebar-panel">
-                <button type="button" aria-label="Close menu" onclick="closeAllOverlays()"><i class="ph ph-x"></i></button>
+                <button type="button" class="btn-close" aria-label="Close menu"><i class="ph ph-x"></i></button>
                 <a href="index.html">Home</a>
                 <a href="#categories">Skin</a>
                 <a href="pages/survey.html">Routine Program</a>
@@ -222,167 +222,6 @@
         </aside>
     </div>
 
-    <script>
-        let cartCount = 0;
-
-        function applySessionUrlActions() {
-            const params = new URLSearchParams(window.location.search);
-            if (!params.has("logout")) return;
-
-            localStorage.removeItem("yunnUser");
-            localStorage.removeItem("yunnUserNickname");
-            window.history.replaceState({}, "", window.location.pathname);
-        }
-
-        function getCurrentUser() {
-            try {
-                const savedUser = JSON.parse(localStorage.getItem("yunnUser") || "null");
-                if (savedUser && savedUser.nickname) {
-                    return savedUser;
-                }
-            } catch (error) {
-                localStorage.removeItem("yunnUser");
-            }
-
-            const nickname = localStorage.getItem("yunnUserNickname");
-            if (nickname) {
-                return { nickname };
-            }
-
-            return null;
-        }
-
-        function renderPersonalHero() {
-            const hero = document.getElementById("personal-hero");
-            const title = document.getElementById("hero-title");
-            const nickname = document.getElementById("user-nickname");
-            const message = document.getElementById("hero-message");
-            const cta = document.getElementById("hero-cta");
-            const user = getCurrentUser();
-
-            if (user) {
-                hero.classList.remove("logged-out");
-                title.innerHTML = 'Hi, <span id="user-nickname"></span>';
-                document.getElementById("user-nickname").textContent = user.nickname;
-                message.innerHTML = "Your skin journey is <strong>on track</strong>";
-                cta.href = "pages/survey.html";
-                cta.innerHTML = 'My skin Profile <i class="ph ph-arrow-right"></i>';
-                return;
-            }
-
-            hero.classList.add("logged-out");
-            title.textContent = "Welcome to YUNN";
-            nickname.textContent = "";
-            message.innerHTML = "Log in to track your skin journey <strong>and routine progress</strong>";
-            cta.href = "pages/login.html";
-            cta.innerHTML = 'Log in to continue <i class="ph ph-arrow-right"></i>';
-        }
-
-        function updateDeviceTime() {
-            const timeEl = document.getElementById("device-time");
-            const now = new Date();
-            timeEl.textContent = now.toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-                hour12: false
-            });
-        }
-
-        function updateNetworkStatus() {
-            const slot = document.getElementById("network-slot");
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            if (!connection) {
-                slot.innerHTML = '<span class="wifi-mark" aria-hidden="true"><span class="wifi-dot"></span></span>';
-                return;
-            }
-
-            const type = String(connection.effectiveType || connection.type || "").toUpperCase();
-            if (type.includes("4G") || type.includes("5G") || type.includes("3G") || type.includes("2G") || type.includes("CELLULAR")) {
-                slot.textContent = type.replace("CELLULAR", "5G");
-            } else if (navigator.onLine) {
-                slot.innerHTML = '<span class="wifi-mark" aria-hidden="true"><span class="wifi-dot"></span></span>';
-            } else {
-                slot.textContent = "Off";
-            }
-        }
-
-        async function updateBatteryStatus() {
-            const batteryLevel = document.getElementById("battery-level");
-            if (!navigator.getBattery) {
-                batteryLevel.style.width = "72%";
-                return;
-            }
-
-            const battery = await navigator.getBattery();
-            const renderBattery = () => {
-                const percent = Math.max(8, Math.round(battery.level * 100));
-                batteryLevel.style.width = `${percent}%`;
-                batteryLevel.style.backgroundColor = percent <= 20 ? "var(--accent)" : "var(--text)";
-            };
-
-            renderBattery();
-            battery.addEventListener("levelchange", renderBattery);
-            battery.addEventListener("chargingchange", renderBattery);
-        }
-
-        applySessionUrlActions();
-        renderPersonalHero();
-        updateDeviceTime();
-        updateNetworkStatus();
-        updateBatteryStatus();
-        setInterval(updateDeviceTime, 1000);
-
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (connection) {
-            connection.addEventListener("change", updateNetworkStatus);
-        }
-
-        function showScrim() {
-            document.getElementById("modal-scrim").classList.add("active");
-        }
-
-        function closeAllOverlays() {
-            document.getElementById("modal-scrim").classList.remove("active");
-            document.getElementById("cart-sheet").classList.remove("active");
-            document.getElementById("sidebar").classList.remove("active");
-        }
-
-        function openCartSheet() {
-            showScrim();
-            document.getElementById("cart-sheet").classList.add("active");
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById("sidebar");
-            const isActive = sidebar.classList.toggle("active");
-            if (isActive) {
-                showScrim();
-            } else {
-                closeAllOverlays();
-            }
-        }
-
-        function addToCart(name, image) {
-            cartCount += 1;
-            const count = document.getElementById("cart-count");
-            count.textContent = cartCount;
-            count.style.display = "flex";
-            document.getElementById("cart-items").textContent = `(${String(cartCount).padStart(2, "0")} items)`;
-            document.getElementById("cart-product-name").textContent = name;
-            document.getElementById("cart-product-image").src = image;
-            openCartSheet();
-        }
-
-        function showCheckoutNotice() {
-            alert("Checkout is coming soon. Your selected products are saved in this session.");
-        }
-
-        function toggleWishlist(button) {
-            button.classList.toggle("active");
-            const icon = button.querySelector("i");
-            icon.classList.toggle("ph");
-            icon.classList.toggle("ph-fill");
-        }
-    </script>
+    <script src="scripts/home.js" defer></script>
 </body>
 </html>
