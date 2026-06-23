@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Routine — YUNN</title>
+    <link rel="icon" type="image/png" href="../assets/image/yunn_logo.png">
+    <script>
+        window.YUNN_GTM_ID = window.YUNN_GTM_ID || 'GTM-P2NX3N5K';
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'yunn_app_bootstrap', page_path: window.location.pathname });
+        (function(w, d, s, l, i) {
+            if (!i || !/^GTM-[A-Z0-9]+$/.test(i)) { w.yunnGtmStatus = 'missing_container_id'; return; }
+            w.yunnGtmStatus = 'loading';
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            const f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', window.YUNN_GTM_ID);
+    </script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="../styles/routine.css">
+</head>
+<body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2NX3N5K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- ── Guard Screen: 진단 미완료 ──────────────────────────── -->
+    <div id="guard-screen" class="screen active">
+        <div class="guard-icon">🌿</div>
+        <h1 class="guard-title">Your skin profile<br>is waiting</h1>
+        <p class="guard-sub">Take the skin quiz to unlock<br>your personalised 14-day routine.</p>
+        <a href="survey.html" class="btn-primary">Take the Skin Quiz</a>
+    </div>
+
+    <!-- ── Start Screen: 루틴 시작 ────────────────────────────── -->
+    <div id="start-screen" class="screen">
+        <div class="start-hero">
+            <span class="start-badge">14-Day Programme</span>
+            <h1 class="start-title">Start Your<br>Skin Journey</h1>
+            <p class="start-sub">Check in daily, track your progress,<br>and see real results in 14 days.</p>
+        </div>
+
+        <div class="start-photo-section">
+            <div class="photo-upload-card" onclick="document.getElementById('before-photo-input').click()">
+                <img id="before-photo-preview" src="" alt="Before photo preview">
+                <div class="photo-upload-icon">📸</div>
+                <p class="photo-upload-label">Take a Before Photo</p>
+                <p class="photo-upload-hint">Optional — helps you see your progress on Day 14</p>
+            </div>
+            <input type="file" id="before-photo-input" accept="image/*" capture="user">
+        </div>
+
+        <div class="start-cta">
+            <button id="btn-start-routine" type="button" class="btn-primary">Start My Routine</button>
+        </div>
+    </div>
+
+    <!-- ── Routine Screen: 메인 루틴 ──────────────────────────── -->
+    <div id="routine-screen" class="screen">
+        <div class="routine-day-section">
+            <p id="routine-day">Day 1</p>
+            <p id="routine-date"></p>
+            <p id="routine-streak"></p>
+            <div class="progress-row">
+                <div class="progress-bar-track">
+                    <div id="routine-progress-bar"></div>
+                </div>
+                <span id="routine-progress-text">0 / 0 steps done</span>
+            </div>
+        </div>
+
+        <div class="period-tabs">
+            <button class="period-tab active" type="button" data-period="morning">☀️ Morning</button>
+            <button class="period-tab"        type="button" data-period="evening">🌙 Evening</button>
+        </div>
+
+        <div id="step-list"></div>
+
+        <p id="routine-complete-msg"></p>
+
+        <!-- Day 14+ After 사진 업로드 배너 -->
+        <div id="after-photo-banner">
+            <p class="banner-title">🎉 Day 14 Reached!</p>
+            <p class="banner-sub">Take your after photo to see<br>how far your skin has come.</p>
+            <button id="after-photo-banner-btn" type="button" class="btn-primary">Upload After Photo</button>
+            <input type="file" id="after-photo-input" accept="image/*" capture="user">
+        </div>
+    </div>
+
+    <!-- ── Compare Screen: Before / After ─────────────────────── -->
+    <div id="compare-screen" class="screen">
+        <div class="compare-header">
+            <p class="compare-celebrate">🎊</p>
+            <h1 class="compare-title">Your 14-Day Glow Up</h1>
+            <p class="compare-sub">Look how far your skin has come.</p>
+        </div>
+
+        <div class="compare-grid">
+            <div class="compare-item">
+                <p class="compare-label">Before</p>
+                <img id="compare-before-img" class="compare-img" src="" alt="Before">
+                <p id="compare-before-date" class="compare-date"></p>
+            </div>
+            <div class="compare-item">
+                <p class="compare-label">After</p>
+                <img id="compare-after-img" class="compare-img" src="" alt="After">
+                <p id="compare-after-date" class="compare-date"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Reminder Modal ──────────────────────────────────────── -->
+    <div id="reminder-modal" role="dialog" aria-modal="true">
+        <div class="reminder-sheet">
+            <div class="reminder-grip"></div>
+            <p class="reminder-icon">☀️</p>
+            <h2 class="reminder-greeting">Good morning!</h2>
+            <p class="reminder-message">Time for your skincare routine.</p>
+            <button type="button" class="btn-primary reminder-btn-go">Let's Go 💪</button>
+            <button type="button" class="btn-ghost reminder-btn-later">Remind me later</button>
+        </div>
+    </div>
+
+    <script src="../scripts/routine.js" defer></script>
+</body>
+</html>

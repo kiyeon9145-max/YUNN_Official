@@ -650,6 +650,41 @@ export function setupFieldAnalytics() {
     });
 }
 
-trackLandingView();
+// 공통: 스크롤·클릭·이탈 추적은 모든 페이지에서 실행
 setupAnalyticsObservers();
-setupFieldAnalytics();
+
+// Survey 전용 초기화: survey.html에서만 실행
+if (window.location.pathname.includes('survey')) {
+    trackLandingView();
+    setupFieldAnalytics();
+}
+
+// ── Routine 이벤트 추적 ────────────────────────────────────────────
+
+export function trackRoutineStarted(skinType, concernType) {
+    trackYunnEvent('routine_started', { day: 1, skinType, concernType });
+}
+
+export function trackRoutineStepChecked(day, period, step, stepName) {
+    trackYunnEvent('routine_step_checked', { day, period, step, stepName });
+}
+
+export function trackMorningCompleted(day) {
+    trackYunnEvent('morning_completed', { day });
+}
+
+export function trackEveningCompleted(day) {
+    trackYunnEvent('evening_completed', { day });
+}
+
+export function trackBeforePhotoUploaded() {
+    trackYunnEvent('before_photo_uploaded', { day: 1 });
+}
+
+export function trackAfterPhotoUploaded(day) {
+    trackYunnEvent('after_photo_uploaded', { day });
+}
+
+export function trackCompareViewed(day, streakDays) {
+    trackYunnEvent('compare_viewed', { day, streakDays });
+}

@@ -1,5 +1,4 @@
-// survey.js — 자동 생성된 번들 (ES Module 없이 동작)
-// file:// 및 HTTP 환경 모두 지원
+// scripts/survey.js — 자동 생성 번들
 
 // ── js/domain/AppConfig.js ──
 // AppConfig.js — URL 상수, GTM ID, 엔드포인트
@@ -24,6 +23,18 @@ const STORAGE_KEYS = {
     ANALYTICS_EVENTS:  'yunn_analytics_events',
     CART_EVENTS:       'yunn_cart_events',
     BETA_EVENTS:       'yunn_beta_events',
+    ROUTINE_START:     'yunn_routine_start',
+    ROUTINE_CHECKS:    'yunn_routine_checks',
+    PHOTO_BEFORE:      'yunn_photo_before',
+    PHOTO_AFTER:       'yunn_photo_after',
+};
+
+const ROUTINE_CONFIG = {
+    BEFORE_AFTER_UNLOCK_DAY: 14,
+    MORNING_START_HOUR:      6,
+    MORNING_END_HOUR:        10,
+    EVENING_START_HOUR:      20,
+    EVENING_END_HOUR:        23,
 };
 
 const YUNN_GTM_ID = 'GTM-P2NX3N5K';
@@ -1130,9 +1141,44 @@ function setupFieldAnalytics() {
     });
 }
 
-trackLandingView();
+// 공통: 스크롤·클릭·이탈 추적은 모든 페이지에서 실행
 setupAnalyticsObservers();
-setupFieldAnalytics();
+
+// Survey 전용 초기화: survey.html에서만 실행
+if (window.location.pathname.includes('survey')) {
+    trackLandingView();
+    setupFieldAnalytics();
+}
+
+// ── Routine 이벤트 추적 ────────────────────────────────────────────
+
+function trackRoutineStarted(skinType, concernType) {
+    trackYunnEvent('routine_started', { day: 1, skinType, concernType });
+}
+
+function trackRoutineStepChecked(day, period, step, stepName) {
+    trackYunnEvent('routine_step_checked', { day, period, step, stepName });
+}
+
+function trackMorningCompleted(day) {
+    trackYunnEvent('morning_completed', { day });
+}
+
+function trackEveningCompleted(day) {
+    trackYunnEvent('evening_completed', { day });
+}
+
+function trackBeforePhotoUploaded() {
+    trackYunnEvent('before_photo_uploaded', { day: 1 });
+}
+
+function trackAfterPhotoUploaded(day) {
+    trackYunnEvent('after_photo_uploaded', { day });
+}
+
+function trackCompareViewed(day, streakDays) {
+    trackYunnEvent('compare_viewed', { day, streakDays });
+}
 
 // ── js/service/SurveyService.js ──
 // SurveyService.js — 스텝 유효성, 피부 타입 추론, 설문 페이로드 수집

@@ -20,6 +20,18 @@ export const STORAGE_KEYS = {
     ANALYTICS_EVENTS:  'yunn_analytics_events',
     CART_EVENTS:       'yunn_cart_events',
     BETA_EVENTS:       'yunn_beta_events',
+    ROUTINE_START:     'yunn_routine_start',
+    ROUTINE_CHECKS:    'yunn_routine_checks',
+    PHOTO_BEFORE:      'yunn_photo_before',
+    PHOTO_AFTER:       'yunn_photo_after',
+};
+
+export const ROUTINE_CONFIG = {
+    BEFORE_AFTER_UNLOCK_DAY: 14,
+    MORNING_START_HOUR:      6,
+    MORNING_END_HOUR:        10,
+    EVENING_START_HOUR:      20,
+    EVENING_END_HOUR:        23,
 };
 
 export const YUNN_GTM_ID = 'GTM-P2NX3N5K';
