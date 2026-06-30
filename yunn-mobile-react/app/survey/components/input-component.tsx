@@ -26,6 +26,7 @@
 //   • actions:   h 69px, mt 30px, gap 25px, buttons 150×40 radius-[12px] text-base font-semibold tracking-[0.8px]
 
 import { useState } from 'react'
+import { SurveyActions } from './button-component'
 
 // SurveyAnswer.js ALLOWED_INDIAN_EMAIL_DOMAINS
 const ALLOWED_DOMAINS = ['gmail.com', 'outlook.com', 'yahoo.com', 'yahoo.in', 'hotmail.com', 'rediffmail.com', 'icloud.com']
@@ -228,27 +229,12 @@ export default function Step1({ onNext, onBack }: Step1Props) {
           h 69px, mt 30px (Step2는 38px), gap 25px
           buttons: 150×40, rounded-[12px], text-base, font-semibold, tracking-[0.8px]
           ──────────────────────────────────────────────────────────── */}
-      <div className="h-[69px] mt-[30px] flex justify-center items-center gap-[25px]">
-        <button
-          type="button"
-          onClick={onBack}
-          className="w-[150px] h-[40px] rounded-[12px] text-base font-semibold tracking-[0.8px]
-                     border border-[#5CC1A6] text-primary bg-white cursor-pointer
-                     transition-colors active:bg-primary/5"
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          onClick={handleNext}
-          disabled={!isComplete}
-          className="w-[150px] h-[40px] rounded-[12px] text-base font-semibold tracking-[0.8px]
-                     text-white cursor-pointer transition-colors
-                     bg-[#5CC1A6] disabled:bg-[#CFCFCF] disabled:cursor-not-allowed"
-        >
-          Next
-        </button>
-      </div>
+      <SurveyActions
+        className="mt-[30px]"
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!isComplete}
+      />
     </>
   )
 }

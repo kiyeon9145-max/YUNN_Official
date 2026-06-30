@@ -19,16 +19,16 @@ interface SurveyShellProps {
   children: React.ReactNode
 }
 
+function formatDeviceTime() {
+  const d = new Date()
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
 export default function SurveyShell({ currentStep, totalSteps = 10, children }: SurveyShellProps) {
-  const [time, setTime] = useState('--:--')
+  const [time, setTime] = useState(formatDeviceTime)
 
   useEffect(() => {
-    const fmt = () => {
-      const d = new Date()
-      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
-    }
-    setTime(fmt())
-    const id = setInterval(() => setTime(fmt()), 1000)
+    const id = setInterval(() => setTime(formatDeviceTime()), 1000)
     return () => clearInterval(id)
   }, [])
 

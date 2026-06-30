@@ -5,21 +5,22 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { StartSurveyButton } from '../components/button-component'
 
 interface IntroScreenProps {
   onStart: () => void
 }
 
+function formatDeviceTime() {
+  const d = new Date()
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
 export default function IntroScreen({ onStart }: IntroScreenProps) {
-  const [time, setTime] = useState('--:--')
+  const [time, setTime] = useState(formatDeviceTime)
 
   useEffect(() => {
-    const fmt = () => {
-      const d = new Date()
-      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
-    }
-    setTime(fmt())
-    const id = setInterval(() => setTime(fmt()), 1000)
+    const id = setInterval(() => setTime(formatDeviceTime()), 1000)
     return () => clearInterval(id)
   }, [])
 
@@ -99,13 +100,7 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
           <div>designed specifically for you.</div>
         </div>
 
-        <button
-          onClick={onStart}
-          className="flex justify-center items-center w-full bg-primary text-white h-11 rounded-btn text-xl font-medium border-0 cursor-pointer active:scale-[0.98] transition-transform"
-        >
-          Start My Skin Analysis
-          <i className="ph ph-arrow-right ml-2 text-xl"></i>
-        </button>
+        <StartSurveyButton onClick={onStart} />
 
         <div className="text-xs font-normal text-ink-muted text-center mt-4">
           Takes 3 minutes. Results in 24 hours.

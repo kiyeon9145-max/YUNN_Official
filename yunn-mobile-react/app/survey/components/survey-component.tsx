@@ -6,7 +6,7 @@
 // 제목·그룹 목록·액션 버튼을 props로 받아 렌더링하므로 새 스텝 추가 시 파일을 만들 필요가 없다.
 //
 // 구조
-//   OptionCard          — 개별 선택 카드 (named export, 독립 사용 가능)
+//   SurveyChoiceButton  — 개별 선택 카드 버튼 (button-component.tsx)
 //   SurveyOptionStep    — 제목 + 그룹 목록 + 액션 버튼 통합 (default export)
 //
 // 동작 근거 (SurveyScreen.js autoAdvanceSteps):
@@ -24,6 +24,7 @@
 //   액션:         h-[69px] mt-[38px] gap-[25px], buttons 150×40 rounded-[12px]
 
 import { useState, useEffect, useRef } from 'react'
+import { SurveyActions, SurveyChoiceButton } from './button-component'
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -48,52 +49,6 @@ interface SurveyOptionStepProps {
   showSecure?: boolean            // 하단 "Your information is private and secure" 표시 여부
   onNext: (answers: Record<string, string | string[]>) => void
   onBack: () => void
-}
-
-// ── OptionCard ──────────────────────────────────────────────────────────────
-// named export — SurveyOptionStep 외부에서도 직접 임포트해 사용할 수 있다.
-
-export function OptionCard({
-  label,
-  selected,
-  onClick,
-  role = 'radio',
-}: {
-  label: React.ReactNode
-  selected: boolean
-  onClick: () => void
-  role?: 'radio' | 'checkbox'
-}) {
-  return (
-    <div
-      role={role}
-      aria-checked={selected}
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick()}
-      className={[
-        'min-h-[92px] rounded-[14px] px-6 py-5',
-        'flex items-center gap-4',
-        'cursor-pointer select-none transition-all duration-200 active:scale-[0.98]',
-        selected
-          ? 'border-2 border-primary bg-[#F5FAF9] shadow-none'
-          : 'border-2 border-white bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)]',
-      ].join(' ')}
-    >
-      <span className="text-[1.05rem] font-bold">{label}</span>
-      <div
-        className={[
-          'ml-auto w-6 h-6 rounded-full border-2 flex items-center justify-center',
-          'flex-shrink-0 transition-all duration-200',
-          selected
-            ? 'bg-primary border-primary text-white'
-            : 'border-line text-transparent',
-        ].join(' ')}
-      >
-        {selected && <i className="ph-bold ph-check text-[10px]"></i>}
-      </div>
-    </div>
-  )
 }
 
 // ── SurveyOptionStep ────────────────────────────────────────────────────────
@@ -181,9 +136,8 @@ export default function SurveyOptionStep({
                   ? ((selections[group.name] as string[] | undefined) ?? []).includes(opt.value)
                   : selections[group.name] === opt.value
                 return (
-                  <OptionCard
+                  <SurveyChoiceButton
                     key={opt.value}
-                    label={opt.label}
                     selected={isSelected}
                     role={type}
                     onClick={() =>
@@ -191,7 +145,9 @@ export default function SurveyOptionStep({
                         ? handleCheckbox(group.name, opt.value)
                         : handleRadio(group.name, opt.value)
                     }
-                  />
+                  >
+                    {opt.label}
+                  </SurveyChoiceButton>
                 )
               })}
             </div>
@@ -203,27 +159,12 @@ export default function SurveyOptionStep({
           h-[69px], mt-[38px], gap-[25px]
           두 버튼: w-[150px] h-[40px] rounded-[12px] text-base font-semibold tracking-[0.8px]
           ──────────────────────────────────────────────────────── */}
-      <div className="h-[69px] mt-[38px] flex justify-center items-center gap-[25px]">
-        <button
-          type="button"
-          onClick={onBack}
-          className="w-[150px] h-[40px] rounded-[12px] text-base font-semibold tracking-[0.8px]
-                     border border-[#5CC1A6] text-primary bg-white cursor-pointer
-                     transition-colors active:bg-primary/5"
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          onClick={handleNext}
-          disabled={!isComplete}
-          className="w-[150px] h-[40px] rounded-[12px] text-base font-semibold tracking-[0.8px]
-                     text-white cursor-pointer transition-colors
-                     bg-[#5CC1A6] disabled:bg-[#CFCFCF] disabled:cursor-not-allowed"
-        >
-          Next
-        </button>
-      </div>
+      <SurveyActions
+        className="mt-[38px]"
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!isComplete}
+      />
 
       {/* ── 보안 텍스트 (선택적 표시) ────────────────────────────
           survey.css: mt 28px, font-size 10px, color #777, icon color #9D9BA0, gap 12px
