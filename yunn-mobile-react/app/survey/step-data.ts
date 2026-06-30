@@ -74,6 +74,87 @@ export const STEP3_IMAGE_OPTIONS: ImageOptionItem[] = [
   },
 ]
 
+export type SkinHelperStepId = '3-1' | '3-2' | '3-3' | '3-4'
+
+export const SKIN_INFERENCE_RULES = {
+  DRY_MAX: 1.8,
+  OILY_MIN: 4.2,
+  COMBINATION_MIN: 2.6,
+  T_ZONE_VALUE: 3,
+}
+
+// ── Step 3 helper: Not sure 선택 시 피부 타입 추론 질문 ─────────────────────
+export const STEP3_HELPER_STEPS: Record<SkinHelperStepId, {
+  title: string
+  subtitle: string
+  groups: OptionGroup[]
+}> = {
+  '3-1': {
+    title: 'Right after cleansing, how does your skin feel?',
+    subtitle: 'Choose the option that best describes the condition of your skin right after cleansing.',
+    groups: [
+      {
+        name: 'skinHelperCleanse',
+        options: [
+          { value: '1', label: 'Not tight at all' },
+          { value: '2', label: 'Barely tight' },
+          { value: '3', label: 'Slightly tight' },
+          { value: '4', label: 'Quite tight' },
+          { value: '5', label: 'Very tight and uncomfortable' },
+        ],
+      },
+    ],
+  },
+  '3-2': {
+    title: 'A few hours after cleansing, what happens to your skin?',
+    subtitle: 'Choose the option that best describes your skin after 2-3 hours.',
+    groups: [
+      {
+        name: 'skinHelperAfterHours',
+        options: [
+          { value: '1', label: 'Still feels dry or tight' },
+          { value: '2', label: 'Still feels comfortable' },
+          { value: '3', label: 'Becomes a bit oily in the T-zone' },
+          { value: '4', label: 'Becomes oily in most areas' },
+          { value: '5', label: 'Becomes very oily all over' },
+        ],
+      },
+    ],
+  },
+  '3-3': {
+    title: 'How does your skin behave during the day?',
+    subtitle: 'Choose the option that best describes your skin throughout the day.',
+    groups: [
+      {
+        name: 'skinHelperDay',
+        options: [
+          { value: '1', label: 'Feels dry and tight, makeup flakes or looks patchy' },
+          { value: '2', label: 'Stays comfortable and balanced throughout the day' },
+          { value: '3', label: 'Gets shiny in the T-Zone but cheeks feel normal' },
+          { value: '4', label: 'Gets shiny in most areas' },
+          { value: '5', label: 'Gets very oily all over and needs blotting often' },
+        ],
+      },
+    ],
+  },
+  '3-4': {
+    title: 'Which description matches your skin best?',
+    subtitle: 'This helps us understand your pores and texture better.',
+    groups: [
+      {
+        name: 'skinHelperTexture',
+        options: [
+          { value: '1', label: 'Small pores, flaky or rough texture' },
+          { value: '2', label: 'Smooth texture, pores are barely visible' },
+          { value: '3', label: 'Somewhat visible pores mainly in the T-zone' },
+          { value: '4', label: 'Visible pores in most areas and uneven texture' },
+          { value: '5', label: 'Large pores, oily texture with uneven skin' },
+        ],
+      },
+    ],
+  },
+}
+
 // ── Step 4: 주요 피부 고민 이미지 카드 ─────────────────────────────────────
 export const STEP4_IMAGE_OPTIONS: ImageOptionItem[] = [
   {
@@ -141,6 +222,54 @@ export const STEP6_GROUPS: OptionGroup[] = [
   },
 ]
 
+// ── Step 7: 외출 시간 + 선크림 사용 ───────────────────────────────────────
+export const STEP7_GROUPS: OptionGroup[] = [
+  {
+    name: 'outdoor',
+    question: 'How much time do you spend outdoors?',
+    options: [
+      { value: 'Mostly indoors', label: 'Mostly indoors' },
+      { value: 'Under 1h',       label: 'Under 1 hour' },
+      { value: '1-3h',           label: '1-3 hours' },
+      { value: '3h+',            label: 'More than 3 hours' },
+    ],
+  },
+  {
+    name: 'sunscreen',
+    question: 'How often do you apply sunscreen?',
+    options: [
+      { value: 'Every day',    label: 'Every day' },
+      { value: 'Most days',    label: 'Most days' },
+      { value: 'Occasionally', label: 'Occasionally' },
+      { value: 'Rarely',       label: 'Rarely or never' },
+    ],
+  },
+]
+
+// ── Step 8: 수면 + 스트레스 ───────────────────────────────────────────────
+export const STEP8_GROUPS: OptionGroup[] = [
+  {
+    name: 'sleep',
+    question: 'How much sleep do you usually get?',
+    options: [
+      { value: 'Under 5h', label: 'Under 5 hours' },
+      { value: '5-6h',     label: '5-6 hours' },
+      { value: '7-8h',     label: '7-8 hours' },
+      { value: '8h+',      label: 'More than 8 hours' },
+    ],
+  },
+  {
+    name: 'stress',
+    question: 'How would you describe your stress level?',
+    options: [
+      { value: 'Very high',  label: 'Very high' },
+      { value: 'High',       label: 'High' },
+      { value: 'Manageable', label: 'Manageable' },
+      { value: 'Low',        label: 'Low' },
+    ],
+  },
+]
+
 // ── Step 9: 현재 루틴 수준 ────────────────────────────────────────────────
 export const STEP9_GROUPS: OptionGroup[] = [
   {
@@ -154,5 +283,3 @@ export const STEP9_GROUPS: OptionGroup[] = [
     ],
   },
 ]
-
-// ── Step 7, 8: 구현 시 여기에 추가 ────────────────────────────────────────

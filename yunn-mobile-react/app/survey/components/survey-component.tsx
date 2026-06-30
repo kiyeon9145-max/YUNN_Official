@@ -10,7 +10,8 @@
 //   SurveyOptionStep    — 제목 + 그룹 목록 + 액션 버튼 통합 (default export)
 //
 // 동작 근거 (SurveyScreen.js autoAdvanceSteps):
-//   autoAdvance=true → 모든 그룹이 선택 완료되면 300ms 후 자동으로 onNext 호출
+//   autoAdvance 기본값 → 모든 그룹이 radio면 선택 완료 후 300ms 뒤 onNext 호출
+//   autoAdvance=false → 체크박스처럼 Next 확정이 필요한 화면에서 사용
 //   radio  → 같은 그룹 내 단일 선택 (기본값)
 //   checkbox → 복수 선택 가능 (Step 5 triggers 등)
 //
@@ -35,7 +36,7 @@ export interface OptionItem {
 
 export interface OptionGroup {
   name: string              // input name (e.g. 'gender', 'age', 'concerns')
-  question: string          // 그룹 제목
+  question?: string         // 그룹 제목. helper step처럼 화면 title만 쓰는 경우 생략 가능
   options: OptionItem[]
   type?: 'radio' | 'checkbox'   // 기본 'radio'
 }
@@ -44,7 +45,7 @@ interface SurveyOptionStepProps {
   title: React.ReactNode          // JSX 지원 — <span className="text-primary"> 등
   subtitle?: string
   groups: OptionGroup[]
-  autoAdvance?: boolean           // 모든 그룹 완료 시 300ms 후 자동 진행
+  autoAdvance?: boolean           // 생략 시 radio-only 화면은 자동 진행, checkbox 화면은 수동 진행
   requiredMessage?: string        // 미선택 상태에서 Next 클릭 시 alert 문구
   showSecure?: boolean            // 하단 "Your information is private and secure" 표시 여부
   onNext: (answers: Record<string, string | string[]>) => void
@@ -57,13 +58,14 @@ export default function SurveyOptionStep({
   title,
   subtitle,
   groups,
-  autoAdvance = false,
+  autoAdvance,
   requiredMessage = 'Please make a selection.',
   showSecure = false,
   onNext,
   onBack,
 }: SurveyOptionStepProps) {
   const [selections, setSelections] = useState<Record<string, string | string[]>>({})
+  const shouldAutoAdvance = autoAdvance ?? groups.every(group => (group.type ?? 'radio') === 'radio')
 
   // onNext·selections 최신 참조 — autoAdvance 타이머 클로저가 stale 값을 잡지 않도록
   const onNextRef     = useRef(onNext)
@@ -80,10 +82,10 @@ export default function SurveyOptionStep({
 
   // autoAdvance: 완료 순간 300ms 타이머 시작, 언마운트·재선택 시 취소 후 재시작
   useEffect(() => {
-    if (!autoAdvance || !isComplete) return
+    if (!shouldAutoAdvance || !isComplete) return
     const id = setTimeout(() => onNextRef.current(selectionsRef.current), 300)
     return () => clearTimeout(id)
-  }, [autoAdvance, isComplete])
+  }, [shouldAutoAdvance, isComplete])
 
   const handleRadio = (groupName: string, value: string) =>
     setSelections(prev => ({ ...prev, [groupName]: value }))
@@ -127,9 +129,11 @@ export default function SurveyOptionStep({
         const isLast = i === groups.length - 1
         return (
           <div key={group.name} className={isLast ? '' : 'mb-[42px]'}>
-            <h3 className="text-[15px] font-bold leading-[1.2] text-black mb-5">
-              {group.question}
-            </h3>
+            {group.question && (
+              <h3 className="text-[15px] font-bold leading-[1.2] text-black mb-5">
+                {group.question}
+              </h3>
+            )}
             <div className="flex flex-col gap-4">
               {group.options.map(opt => {
                 const isSelected = type === 'checkbox'

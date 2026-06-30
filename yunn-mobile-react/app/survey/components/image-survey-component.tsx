@@ -6,7 +6,7 @@
 // 페이지에서 사용한다. 일반 텍스트 옵션은 survey-component.tsx가 담당한다.
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SurveyActions, SurveyImageChoiceButton, SurveyNotSureButton } from './button-component'
 
 export interface ImageOptionItem {
@@ -26,6 +26,7 @@ interface ImageSurveyStepProps {
   options: ImageOptionItem[]
   requiredMessage?: string
   showSecure?: boolean
+  autoAdvance?: boolean
   onNext: (value: string) => void
   onBack: () => void
 }
@@ -38,13 +39,25 @@ export default function ImageSurveyStep({
   options,
   requiredMessage = 'Please make a selection.',
   showSecure = false,
+  autoAdvance = true,
   onNext,
   onBack,
 }: ImageSurveyStepProps) {
   const [selectedValue, setSelectedValue] = useState('')
+  const onNextRef = useRef(onNext)
+  const selectedValueRef = useRef(selectedValue)
   const imageOptions = options.filter(option => option.variant !== 'not-sure')
   const specialOptions = options.filter(option => option.variant === 'not-sure')
   const isComplete = selectedValue.length > 0
+
+  useEffect(() => { onNextRef.current = onNext })
+  useEffect(() => { selectedValueRef.current = selectedValue }, [selectedValue])
+
+  useEffect(() => {
+    if (!autoAdvance || !isComplete) return
+    const id = setTimeout(() => onNextRef.current(selectedValueRef.current), 300)
+    return () => clearTimeout(id)
+  }, [autoAdvance, isComplete])
 
   const handleNext = () => {
     if (!isComplete) { alert(requiredMessage); return }

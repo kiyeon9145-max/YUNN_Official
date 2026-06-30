@@ -2,12 +2,13 @@
 
 // survey/page.tsx — 설문 SPA 오케스트레이터
 //
-// 구현된 스텝: intro → 1 → 2 → 3 → 4 → 5 → 6 → 9
-// 추후 구현 순서: 3 helper branch → 7/8 → 10 → Analysis/Result
+// 구현된 스텝: intro → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+// 추후 구현 순서: Analysis/Result
 //
 // 컴포넌트 구조:
 //   input-component   → Step 1 (텍스트 입력: 이름/이메일/전화)
 //   survey-component  → Step 2~9 (옵션 카드 선택 패턴 공용)
+//   photo-step        → Step 10 (피부 사진 업로드/미리보기)
 //   SurveyShell       → 설문 공통 껍데기 (상태바 + 헤더 + 프로그레스 바)
 
 import { useState } from 'react'
@@ -16,13 +17,19 @@ import SurveyShell from './screens/SurveyShell'
 import InputStep from './components/input-component'
 import SurveyOptionStep from './components/survey-component'
 import ImageSurveyStep from './components/image-survey-component'
+import PhotoStep from './components/photo-step-component'
 import {
   STEP2_GROUPS,
+  STEP3_HELPER_STEPS,
   STEP3_IMAGE_OPTIONS,
   STEP4_IMAGE_OPTIONS,
   STEP5_GROUPS,
   STEP6_GROUPS,
+  STEP7_GROUPS,
+  STEP8_GROUPS,
   STEP9_GROUPS,
+  SKIN_INFERENCE_RULES,
+  type SkinHelperStepId,
 } from './step-data'
 
 // ── 답변 타입 ──────────────────────────────────────────────────────────────
@@ -33,20 +40,47 @@ interface SurveyAnswers {
   gender?: string
   age?: string
   skinType?: string
+  skinHelperCleanse?: string
+  skinHelperAfterHours?: string
+  skinHelperDay?: string
+  skinHelperTexture?: string
   concerns?: string
   trigger?: string[]
   sensitivity?: string
+  outdoor?: string
+  sunscreen?: string
+  sleep?: string
+  stress?: string
   routineLevel?: string
-  // 이후 Step 3 helper/7/8/10 답변 필드 추가 예정
+  photoDataUrl?: string
 }
 
-type SurveyStep = 'intro' | '1' | '2' | '3' | '4' | '5' | '6' | '9'
+type SurveyStep = 'intro' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10'
+  | SkinHelperStepId
+
+function inferSkinTypeFromHelper(answers: SurveyAnswers): string {
+  const values = [
+    answers.skinHelperCleanse,
+    answers.skinHelperAfterHours,
+    answers.skinHelperDay,
+    answers.skinHelperTexture,
+  ].map(value => Number(value || 0))
+
+  const avg = values.reduce((sum, value) => sum + value, 0) / values.length
+  const hasTZonePattern = values.includes(SKIN_INFERENCE_RULES.T_ZONE_VALUE)
+
+  if (avg <= SKIN_INFERENCE_RULES.DRY_MAX) return 'Dry'
+  if (avg >= SKIN_INFERENCE_RULES.OILY_MIN) return 'Oily'
+  if (hasTZonePattern || (avg > SKIN_INFERENCE_RULES.COMBINATION_MIN && avg < SKIN_INFERENCE_RULES.OILY_MIN)) {
+    return 'Combination'
+  }
+  return 'Normal'
+}
 
 // ── 페이지 ─────────────────────────────────────────────────────────────────
 export default function SurveyPage() {
   const [step, setStep] = useState<SurveyStep>('intro')
   const [answers, setAnswers] = useState<SurveyAnswers>({})
-  void answers // 추후 결과 화면에 전달 예정
 
   const merge = (partial: Partial<SurveyAnswers>) =>
     setAnswers(prev => ({ ...prev, ...partial }))
@@ -100,13 +134,53 @@ export default function SurveyPage() {
             requiredMessage="Please select your skin type."
             onNext={value => {
               merge({ skinType: value })
-              // NotSure helper branch가 구현되면 value === 'NotSure'일 때 Step 3-1로 보낸다.
-              setStep('4')
+              setStep(value === 'NotSure' ? '3-1' : '4')
             }}
             onBack={() => setStep('2')}
           />
         </SurveyShell>
       )}
+
+      {/* ── Step 3-1 ~ 3-4: Not sure helper flow ───────────────── */}
+      {(['3-1', '3-2', '3-3', '3-4'] as SkinHelperStepId[]).map(helperStep => {
+        if (step !== helperStep) return null
+        const helper = STEP3_HELPER_STEPS[helperStep]
+        const currentStepNumber = 3
+        const nextStepById: Record<SkinHelperStepId, SurveyStep> = {
+          '3-1': '3-2',
+          '3-2': '3-3',
+          '3-3': '3-4',
+          '3-4': '4',
+        }
+        const backStepById: Record<SkinHelperStepId, SurveyStep> = {
+          '3-1': '3',
+          '3-2': '3-1',
+          '3-3': '3-2',
+          '3-4': '3-3',
+        }
+
+        return (
+          <SurveyShell key={helperStep} currentStep={currentStepNumber} totalSteps={10}>
+            <SurveyOptionStep
+              title={helper.title}
+              subtitle={helper.subtitle}
+              groups={helper.groups}
+              showSecure
+              requiredMessage="Please select the option that best describes your skin."
+              onNext={ans => {
+                const partial = ans as Partial<SurveyAnswers>
+                const nextAnswers = { ...answers, ...partial }
+                merge(partial)
+                if (helperStep === '3-4') {
+                  merge({ skinType: inferSkinTypeFromHelper(nextAnswers) })
+                }
+                setStep(nextStepById[helperStep])
+              }}
+              onBack={() => setStep(backStepById[helperStep])}
+            />
+          </SurveyShell>
+        )
+      })}
 
       {/* ── Step 4: 주요 피부 고민 ──────────────────────────────── */}
       {step === '4' && (
@@ -155,10 +229,51 @@ export default function SurveyPage() {
             requiredMessage="Please select your skin sensitivity."
             onNext={ans => {
               merge({ sensitivity: ans.sensitivity as string })
-              // Step 7/8이 구현되면: setStep('7')
-              setStep('9')
+              setStep('7')
             }}
             onBack={() => setStep('5')}
+          />
+        </SurveyShell>
+      )}
+
+      {/* ── Step 7: 외출 시간 + 선크림 사용 ─────────────────────── */}
+      {step === '7' && (
+        <SurveyShell currentStep={7} totalSteps={10}>
+          <SurveyOptionStep
+            title={<>How much time do you<br />spend <span className="text-primary">outdoors?</span></>}
+            subtitle="This helps us understand your sun exposure and environmental factors."
+            groups={STEP7_GROUPS}
+            showSecure
+            requiredMessage="Please select your outdoor time and sunscreen habit."
+            onNext={ans => {
+              merge({
+                outdoor: ans.outdoor as string,
+                sunscreen: ans.sunscreen as string,
+              })
+              setStep('8')
+            }}
+            onBack={() => setStep('6')}
+          />
+        </SurveyShell>
+      )}
+
+      {/* ── Step 8: 수면 + 스트레스 ─────────────────────────────── */}
+      {step === '8' && (
+        <SurveyShell currentStep={8} totalSteps={10}>
+          <SurveyOptionStep
+            title={<>How much <span className="text-primary">sleep</span><br />do you usually get?</>}
+            subtitle="This helps us understand your skin recovery and inflammation patterns."
+            groups={STEP8_GROUPS}
+            showSecure
+            requiredMessage="Please select your sleep and stress level."
+            onNext={ans => {
+              merge({
+                sleep: ans.sleep as string,
+                stress: ans.stress as string,
+              })
+              setStep('9')
+            }}
+            onBack={() => setStep('7')}
           />
         </SurveyShell>
       )}
@@ -173,10 +288,26 @@ export default function SurveyPage() {
             requiredMessage="Please select your current routine level."
             onNext={ans => {
               merge({ routineLevel: ans.routineLevel as string })
-              // Step 10이 구현되면: setStep('10')
+              setStep('10')
             }}
-            // Step 7/8이 구현되면: setStep('8')
-            onBack={() => setStep('6')}
+            onBack={() => setStep('8')}
+          />
+        </SurveyShell>
+      )}
+
+      {/* ── Step 10: 피부 사진 업로드 ───────────────────────────── */}
+      {step === '10' && (
+        <SurveyShell currentStep={10} totalSteps={10}>
+          <PhotoStep
+            onBack={() => setStep('9')}
+            onComplete={photoDataUrl => {
+              merge({ photoDataUrl })
+              // Analysis/Result 화면이 확장되면 이 지점에서 다음 화면으로 이동한다.
+            }}
+            onSkip={() => {
+              merge({ photoDataUrl: undefined })
+              // Analysis/Result 화면이 확장되면 이 지점에서 다음 화면으로 이동한다.
+            }}
           />
         </SurveyShell>
       )}

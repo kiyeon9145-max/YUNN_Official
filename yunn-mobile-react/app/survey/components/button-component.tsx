@@ -21,6 +21,18 @@ interface SurveyActionsProps {
   className?: string
 }
 
+interface PhotoStepActionsProps {
+  onBack: () => void
+  onComplete: () => void
+  onSkip: () => void
+}
+
+interface PhotoUploadButtonProps {
+  children: React.ReactNode
+  onClick: () => void
+  hasPreview?: boolean
+}
+
 interface SurveyChoiceButtonProps {
   children: React.ReactNode
   selected: boolean
@@ -100,6 +112,60 @@ export function StartSurveyButton({ onClick }: { onClick: () => void }) {
     >
       Start My Skin Analysis
       <i className="ph ph-arrow-right ml-2 text-xl"></i>
+    </button>
+  )
+}
+
+export function PhotoStepActions({
+  onBack,
+  onComplete,
+  onSkip,
+}: PhotoStepActionsProps) {
+  return (
+    <div>
+      <div className="mb-3 flex gap-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="h-[54px] flex-[0.8] rounded-[12px] border border-[#5CC1A6] bg-white px-0 text-base font-semibold tracking-[0.3px] text-primary cursor-pointer transition-colors active:bg-primary/5"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          onClick={onComplete}
+          className="h-[54px] flex-[1.2] rounded-[12px] border border-transparent bg-[#5CC1A6] px-0 text-base font-semibold tracking-[0.3px] text-white cursor-pointer transition-colors active:bg-primary-dark"
+        >
+          Complete Analysis
+        </button>
+      </div>
+      <button
+        type="button"
+        onClick={onSkip}
+        className="flex h-[54px] w-full items-center justify-center rounded-[12px] border border-[#EBEBEB] bg-white text-[15px] font-medium text-black cursor-pointer transition-colors active:bg-[#F8F9FA]"
+      >
+        Skip for now
+      </button>
+    </div>
+  )
+}
+
+export function PhotoUploadButton({
+  children,
+  onClick,
+  hasPreview = false,
+}: PhotoUploadButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        'relative flex min-h-[184px] w-full cursor-pointer flex-col items-center justify-center overflow-hidden',
+        'rounded-lg border-[1.5px] border-dashed border-primary bg-white text-center transition-colors active:bg-[#F5FAF9]',
+        hasPreview ? 'px-0 py-0' : 'px-5 py-10',
+      ].join(' ')}
+    >
+      {children}
     </button>
   )
 }
