@@ -1,3 +1,8 @@
+// RoutineCardTemplate.js — 결과 화면의 추천 루틴 스텝 카드 한 장 생성
+// HTML <template id="tpl-routine-card">를 복제해 스텝 번호·제품·설명·사용법·팁을 채워 반환한다.
+// @param step  { image, name, tag, description, why, how, tip } 루틴 스텝 데이터
+// @param index 0-기반 인덱스 → 화면에는 "STEP 1"부터 표시(+1)
+// @returns 채워진 .routine-card DOM 요소
 export function routineCardNode(step, index) {
     const tpl = document.getElementById('tpl-routine-card');
     const node = tpl.content.cloneNode(true);

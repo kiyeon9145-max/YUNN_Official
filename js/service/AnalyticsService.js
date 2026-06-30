@@ -1,14 +1,23 @@
-// AnalyticsService.js — GTM / 이벤트 추적
+// AnalyticsService.js — GTM / GA4 행동 분석 이벤트 추적 중앙 모듈
+// 모든 분석 이벤트는 이 파일을 경유한다. 다른 파일에서 dataLayer를 직접 건드리지 않는다.
+// 추적 경로: trackYunnEvent() → ① localStorage 백업 ② GTM dataLayer ③ (선택)원격 endpoint ④ CustomEvent
+// CLAUDE.md 규칙: AnalyticsManager 신규 생성 금지, GTM 코드 분산 금지 — 루틴 이벤트도 이 파일에 추가.
 
 import {
-    YUNN_ANALYTICS_STORAGE_KEY,
-    YUNN_ANALYTICS_MAX_EVENTS,
-    YUNN_ANALYTICS_ENDPOINT,
-    YUNN_SCROLL_THRESHOLDS,
-    YUNN_LONG_STAY_SECONDS
+    YUNN_ANALYTICS_STORAGE_KEY,   // localStorage 이벤트 로그 키
+    YUNN_ANALYTICS_MAX_EVENTS,    // 보관 최대 이벤트 수 (초과 시 오래된 것부터 삭제)
+    YUNN_ANALYTICS_ENDPOINT,      // 원격 전송 endpoint (미설정 시 로컬+GTM만)
+    YUNN_SCROLL_THRESHOLDS,       // 스크롤 깊이 이벤트 발행 % 구간
+    YUNN_LONG_STAY_SECONDS        // friction(막힘) 판단 기준 체류 시간
 } from '../domain/AppConfig.js';
 import { getItem, setItem, getSessionId } from '../repository/SessionRepository.js';
 
+// ── 설문 스텝별 이벤트 이름 매핑 ────────────────────────────────────────────────
+// 각 스텝(1~10, 세부 3-1~3-4)마다 발행할 이벤트 이름과 속성 키를 정의한다.
+// 키 의미: pageView(진입), timeSpent(체류), abandon(이탈), friction(막힘),
+//          scroll(스크롤), optionView(선택지 노출), select/change(선택/변경),
+//          nextClick/backClick(이동), *Property(이벤트에 실어 보낼 속성 키 이름).
+// 여기서 이름을 관리해 분석 도구의 이벤트명을 한 곳에서 일관되게 유지한다.
 export const STEP_ANALYTICS_CONFIG = {
     '1': {
         pageView: 'user_info_page_view',
@@ -181,6 +190,9 @@ export const STEP_ANALYTICS_CONFIG = {
     }
 };
 
+// ── 입력 필드별 이벤트 이름 매핑 ────────────────────────────────────────────────
+// 스텝과 무관하게 입력 이름(name 속성)으로 직접 매핑되는 선택지들.
+// trackInputSelection()에서 STEP_ANALYTICS_CONFIG보다 우선 적용된다.
 export const INPUT_ANALYTICS_CONFIG = {
     gender: {
         select: 'gender_select',
@@ -233,36 +245,43 @@ export const INPUT_ANALYTICS_CONFIG = {
     }
 };
 
+// ── 런타임 분석 상태 ────────────────────────────────────────────────────────────
+// 현재 화면/스텝, 체류 시작 시각, 화면별 최대 스크롤, 중복 발행 방지 집합 등을 보관한다.
+// 페이지 생애 동안 메모리에 유지되는 단일 상태 객체.
 export const yunnAnalyticsState = {
-    currentScreen: 'intro',
-    currentStep: '',
-    screenStartedAt: Date.now(),
-    maxScrollByScreen: {},
-    emittedScrollByScreen: {},
-    viewedScreens: new Set(),
-    frictionScreens: new Set(),
-    firstInteractionTracked: false,
-    lastVisibleResultSection: '',
-    uploadStartedAt: 0,
-    uploadAttemptCount: 0
+    currentScreen: 'intro',          // 현재 화면 ('intro' | 'survey' | 'result' 등)
+    currentStep: '',                 // 현재 설문 스텝 키 (survey 화면일 때만)
+    screenStartedAt: Date.now(),     // 현재 화면 진입 시각 (체류 시간 계산용)
+    maxScrollByScreen: {},           // 화면별 최대 스크롤 깊이 (%)
+    emittedScrollByScreen: {},       // 화면별 이미 발행한 스크롤 임계값 Set (중복 방지)
+    viewedScreens: new Set(),        // 조회한 화면 키 집합
+    frictionScreens: new Set(),      // friction 이벤트를 이미 발행한 화면 (1회만 발행)
+    firstInteractionTracked: false,  // 랜딩 첫 상호작용 추적 여부 (1회만)
+    lastVisibleResultSection: '',    // 결과 화면에서 마지막으로 본 섹션 (이탈 분석용)
+    uploadStartedAt: 0,              // 사진 업로드 시작 시각
+    uploadAttemptCount: 0            // 사진 업로드 시도 횟수
 };
 
+// 유입 경로 추정: utm_source → source 파라미터 → 리퍼러 → 'direct' 순으로 폴백.
 function getTrafficSource() {
     const params = new URLSearchParams(window.location.search);
     return params.get('utm_source') || params.get('source') || document.referrer || 'direct';
 }
 
+// 뷰포트 너비 기준 디바이스 타입 판별 (768 미만 mobile, 1025 미만 tablet, 그 외 desktop).
 export function getDeviceType() {
     if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
     if (window.matchMedia('(max-width: 1024px)').matches) return 'tablet';
     return 'desktop';
 }
 
+// 네트워크 타입(4g, wifi 등)을 브라우저별 connection API에서 읽는다. 미지원 시 'unknown'.
 function getNetworkType() {
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     return connection && (connection.effectiveType || connection.type) ? String(connection.effectiveType || connection.type) : 'unknown';
 }
 
+// localStorage에 저장된 이벤트 로그 배열을 읽는다. 파싱 실패 시 빈 배열.
 function readAnalyticsEvents() {
     try {
         return JSON.parse(getItem(YUNN_ANALYTICS_STORAGE_KEY) || '[]');
@@ -271,6 +290,7 @@ function readAnalyticsEvents() {
     }
 }
 
+// 이벤트를 localStorage 로그에 추가한다. 최근 YUNN_ANALYTICS_MAX_EVENTS건만 보관(slice).
 function persistAnalyticsEvent(eventPayload) {
     try {
         const events = readAnalyticsEvents();
@@ -281,7 +301,13 @@ function persistAnalyticsEvent(eventPayload) {
     }
 }
 
+// ── 핵심 이벤트 발행 함수 ────────────────────────────────────────────────────────
+// 모든 추적의 진입점. 공통 메타데이터(세션·페이지·디바이스 등)를 자동으로 덧붙이고
+// 4개 채널로 동시에 내보낸다: ①localStorage ②GTM dataLayer ③원격 endpoint ④CustomEvent.
+// @param eventName  발행할 이벤트 이름
+// @param properties 이벤트별 추가 속성 (공통 메타데이터와 병합)
 export function trackYunnEvent(eventName, properties = {}) {
+    // 공통 메타데이터 + 호출자가 넘긴 속성을 병합한 최종 payload.
     const eventPayload = {
         event: eventName,
         event_name: eventName,
@@ -298,11 +324,14 @@ export function trackYunnEvent(eventName, properties = {}) {
         ...properties
     };
 
+    // ① localStorage 백업 (분석 도구 누락 대비 + 디버깅용)
     persistAnalyticsEvent(eventPayload);
 
+    // ② GTM dataLayer push (GA4 등으로 전달되는 주 경로)
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(eventPayload);
 
+    // ③ 원격 endpoint 전송 (설정된 경우에만). sendBeacon은 페이지 이탈 중에도 안전하게 전송된다.
     if (YUNN_ANALYTICS_ENDPOINT && navigator.sendBeacon) {
         try {
             navigator.sendBeacon(YUNN_ANALYTICS_ENDPOINT, JSON.stringify(eventPayload));
@@ -311,22 +340,29 @@ export function trackYunnEvent(eventName, properties = {}) {
         }
     }
 
+    // ④ 앱 내부 리스너용 CustomEvent (예: 실시간 디버그 패널)
     window.dispatchEvent(new CustomEvent('yunn:analytics', { detail: eventPayload }));
     return eventPayload;
 }
+// 번들 환경에서 인라인 HTML이 호출할 수 있도록 전역 노출.
 window.trackYunnEvent = trackYunnEvent;
 
+// 화면 식별 키 반환. 스텝이 있으면 "step_3", 없으면 현재 화면 이름.
+// maxScrollByScreen / frictionScreens 등 화면별 상태의 키로 사용된다.
 export function getScreenKey(step) {
     const s = step !== undefined ? step : yunnAnalyticsState.currentStep;
     return s ? `step_${s}` : yunnAnalyticsState.currentScreen;
 }
 
+// 현재 페이지의 스크롤 깊이를 0~100%로 반환. 분모가 0이 되지 않도록 최소 1로 보정.
 export function getScrollPercent() {
     const doc = document.documentElement;
     const maxScrollable = Math.max(1, doc.scrollHeight - window.innerHeight);
     return Math.min(100, Math.round((window.scrollY / maxScrollable) * 100));
 }
 
+// 특정 스텝에서 사용자가 선택한 값들을 { 입력이름: 값 또는 값배열 } 형태로 수집한다.
+// 단일 선택은 문자열, 다중 선택(체크박스)은 배열로 정규화한다.
 export function getCurrentStepSelectedValues(step) {
     if (step === undefined) step = window.currentStep !== undefined ? String(window.currentStep) : '';
     const activeStep = document.querySelector(`.survey-step[data-step="${String(step)}"]`);
@@ -339,6 +375,8 @@ export function getCurrentStepSelectedValues(step) {
     return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, value.length === 1 ? value[0] : value]));
 }
 
+// 특정 스텝에 노출된 모든 선택지 값 목록을 반환한다 (선택 여부 무관).
+// 어떤 선택지가 사용자에게 보였는지 분석(option_list 속성)에 사용된다.
 export function getStepOptionList(step) {
     if (step === undefined) step = window.currentStep !== undefined ? String(window.currentStep) : '';
     const activeStep = document.querySelector(`.survey-step[data-step="${String(step)}"]`);
@@ -346,12 +384,16 @@ export function getStepOptionList(step) {
     return [...activeStep.querySelectorAll('input[type="radio"], input[type="checkbox"]')].map(input => input.value);
 }
 
+// 스텝 완료 상태를 'partial_or_complete'(하나라도 선택) / 'empty'(미선택)로 반환.
 export function getStepCompletionStatus(step) {
     if (step === undefined) step = window.currentStep !== undefined ? String(window.currentStep) : '';
     const selectedValues = getCurrentStepSelectedValues(step);
     return Object.keys(selectedValues).length ? 'partial_or_complete' : 'empty';
 }
 
+// 스텝 진입 시 선택지 노출(optionView) 이벤트를 발행한다.
+// optionViewEvents 배열이 있으면 입력 그룹별로 개별 발행(예: 성별·나이 각각),
+// 없으면 단일 optionView 이벤트로 전체 선택지 목록을 발행한다.
 function emitStepOptionView(step) {
     const config = STEP_ANALYTICS_CONFIG[String(step)];
     if (!config) return;
@@ -373,6 +415,9 @@ function emitStepOptionView(step) {
     }
 }
 
+// ── 화면 전환·체류·이탈 추적 ──────────────────────────────────────────────────
+// 화면 전환 시 호출. 현재 화면/스텝을 갱신하고 체류 타이머를 리셋한다.
+// friction 플래그도 초기화해 새 화면에서 다시 막힘을 감지할 수 있게 한다.
 export function markAnalyticsScreen(screen, step = '') {
     yunnAnalyticsState.currentScreen = screen;
     yunnAnalyticsState.currentStep = step ? String(step) : '';
@@ -380,6 +425,9 @@ export function markAnalyticsScreen(screen, step = '') {
     yunnAnalyticsState.frictionScreens.delete(getScreenKey(step));
 }
 
+// 현재 화면을 떠날 때 체류 시간 이벤트를 발행한다.
+// 스텝 화면이면 timeSpent 이벤트(선택값·스크롤 포함), intro/result면 전용 이벤트로 분기.
+// @param reason 발행 사유 ('screen_leave' | 'beforeunload' 등)
 export function emitCurrentScreenTime(reason = 'screen_leave') {
     const durationSec = Math.round((Date.now() - yunnAnalyticsState.screenStartedAt) / 1000);
     const screenKey = getScreenKey();
@@ -410,6 +458,10 @@ export function emitCurrentScreenTime(reason = 'screen_leave') {
     }
 }
 
+// 사용자가 페이지를 이탈할 때 이탈 지점·완료 상태를 기록한다.
+// 결과 화면에서는 스크롤이 얕거나(35% 미만) 잠금 미해제 상태면 추가 드롭오프 이벤트를 발행 —
+// KPI 분석(어디서 떨어져 나가는가)의 핵심 데이터.
+// @param reason 이탈 사유
 export function emitPageAbandon(reason = 'page_exit') {
     const step = yunnAnalyticsState.currentStep;
     const config = STEP_ANALYTICS_CONFIG[String(step)];
@@ -449,6 +501,8 @@ export function emitPageAbandon(reason = 'page_exit') {
     }
 }
 
+// 한 스텝에 YUNN_LONG_STAY_SECONDS 이상 머물면 friction(막힘) 이벤트를 1회 발행한다.
+// 이미 발행한 화면은 frictionScreens로 걸러 중복을 막는다.
 function emitFrictionIfNeeded() {
     const step = yunnAnalyticsState.currentStep;
     const config = STEP_ANALYTICS_CONFIG[String(step)];
@@ -462,6 +516,8 @@ function emitFrictionIfNeeded() {
     }
 }
 
+// 스크롤 시 화면별 최대 깊이를 갱신하고, 임계값(25/50/75/100%) 통과 시 1회씩 이벤트 발행.
+// emittedScrollByScreen Set으로 같은 임계값 중복 발행을 막는다. 마지막에 friction도 점검.
 function emitScrollDepth() {
     const screenKey = getScreenKey();
     const percent = getScrollPercent();
@@ -488,6 +544,8 @@ function emitScrollDepth() {
     emitFrictionIfNeeded();
 }
 
+// ── 화면별 진입/상호작용 추적 함수 ──────────────────────────────────────────────
+// 랜딩(intro) 화면 진입을 기록하고, load 완료 시 페이지 로드 시간도 1회 측정한다.
 export function trackLandingView() {
     markAnalyticsScreen('intro');
     trackYunnEvent('landing_view', {
@@ -507,6 +565,7 @@ export function trackLandingView() {
     }, { once: true });
 }
 
+// 랜딩 화면에서의 첫 상호작용(스크롤/클릭)을 1회만 기록한다 — 사용자 참여 시작 시점 측정.
 export function trackFirstInteraction(interactionType) {
     if (yunnAnalyticsState.firstInteractionTracked) return;
     if (yunnAnalyticsState.currentScreen !== 'intro') return;
@@ -517,6 +576,8 @@ export function trackFirstInteraction(interactionType) {
     });
 }
 
+// 설문 스텝 진입을 기록한다. pageView·선택지 노출 이벤트를 발행하고,
+// 스텝 1(개인정보 고지·진행바)과 스텝 10(사진 개인정보 고지)은 전용 이벤트를 추가 발행한다.
 export function trackSurveyStepView(step) {
     const stepKey = String(step);
     const config = STEP_ANALYTICS_CONFIG[stepKey];
@@ -537,11 +598,20 @@ export function trackSurveyStepView(step) {
     }
 }
 
+// 사용자가 선택지를 고르거나 변경할 때 select/change 이벤트를 발행한다.
+// 매핑 우선순위: 입력 이름(INPUT_ANALYTICS_CONFIG) → 스텝(STEP_ANALYTICS_CONFIG).
+// 특수 처리:
+//   - trigger: 다중 선택이므로 select/unselect + 선택 조합(combination) 별도 발행.
+//   - skinType='NotSure': 상세 분석 플로우(3-1~3-4)로 분기하는 전용 이벤트 발행.
+// @param previousValue 변경 전 값 (없으면 신규 선택)
+// @param nextValue     선택된 값
+// @param isSelected    선택(true)/해제(false) — trigger 다중 선택에서 의미 있음
 export function trackInputSelection(input, previousValue, nextValue, isSelected = true) {
     const name = input.name;
     const step = String(window.currentStep !== undefined ? window.currentStep : '');
     const inputConfig = INPUT_ANALYTICS_CONFIG[name] || STEP_ANALYTICS_CONFIG[step];
 
+    // trigger는 복수 선택 가능 — 개별 선택/해제 + 전체 조합을 함께 기록한다.
     if (name === 'trigger') {
         trackYunnEvent(isSelected ? 'skin_trigger_select' : 'skin_trigger_unselect', {
             [isSelected ? 'selected_trigger' : 'unselected_trigger']: nextValue
@@ -554,10 +624,12 @@ export function trackInputSelection(input, previousValue, nextValue, isSelected 
     }
 
     if (!inputConfig) return;
+    // 이벤트에 실어 보낼 속성 키 이름 (config에 없으면 기본값 사용).
     const selectedProperty = inputConfig.selectedProperty || 'selected_value';
     const previousProperty = inputConfig.previousProperty || 'previous_value';
     const newProperty = inputConfig.newProperty || 'new_value';
 
+    // 기존 값에서 다른 값으로 바꾼 경우에만 change 이벤트 발행 (전/후 값 포함).
     if (previousValue && previousValue !== nextValue && inputConfig.change) {
         trackYunnEvent(inputConfig.change, {
             [previousProperty]: previousValue,
@@ -565,18 +637,21 @@ export function trackInputSelection(input, previousValue, nextValue, isSelected 
         });
     }
 
+    // 선택 자체(select) 이벤트 발행.
     if (inputConfig.select) {
         trackYunnEvent(inputConfig.select, {
             [selectedProperty]: nextValue
         });
     }
 
+    // "잘 모르겠음" 선택 시 상세 피부 분석 플로우로 유도된 것을 별도 추적.
     if (name === 'skinType' && nextValue === 'NotSure') {
         trackYunnEvent('not_sure_click', { current_step: step });
         trackYunnEvent('not_sure_to_detailed_flow', { flow_id: 'detailed_skin_analysis' });
     }
 }
 
+// "다음" 버튼 클릭을 기록한다. 선택값·선택 개수·스텝1 필수입력 완료 여부 등을 함께 보낸다.
 export function trackStepNextClick(step) {
     if (step === undefined) step = window.currentStep !== undefined ? String(window.currentStep) : '';
     const stepKey = String(step);
@@ -595,6 +670,7 @@ export function trackStepNextClick(step) {
     }
 }
 
+// "뒤로" 버튼 클릭을 기록한다 — 어느 스텝에서 되돌아가는지 분석.
 export function trackStepBackClick(step) {
     if (step === undefined) step = window.currentStep !== undefined ? String(window.currentStep) : '';
     const stepKey = String(step);
@@ -607,6 +683,9 @@ export function trackStepBackClick(step) {
     }
 }
 
+// ── 전역 옵저버 / 필드 추적 설정 ────────────────────────────────────────────────
+// 스크롤·클릭·이탈을 감지하는 전역 리스너를 등록한다. 모든 페이지에서 1회 실행.
+// 5초마다 friction 점검 인터벌도 가동해 스크롤 없이 머무는 경우도 감지한다.
 export function setupAnalyticsObservers() {
     window.addEventListener('scroll', () => {
         trackFirstInteraction('scroll');
@@ -620,6 +699,8 @@ export function setupAnalyticsObservers() {
     setInterval(emitFrictionIfNeeded, 5000);
 }
 
+// 이름·이메일·전화 입력 필드의 focus/blur를 추적한다 — 입력 시작/완료 및 도메인·길이 등 기록.
+// blur 시 값이 비어 있으면 무시(미입력 이탈은 abandon에서 별도 처리).
 export function setupFieldAnalytics() {
     const fieldConfig = {
         userName: { focus: 'name_input_focus', complete: 'name_input_complete', field: 'name' },
@@ -660,31 +741,40 @@ if (window.location.pathname.includes('survey')) {
 }
 
 // ── Routine 이벤트 추적 ────────────────────────────────────────────
+// routine.html(14일 루틴 트래킹) 전용 이벤트. CLAUDE.md 설계서의 7개 이벤트와 1:1 대응.
+// AnalyticsManager 신규 생성 금지 규칙에 따라 모두 이 파일에 추가한다.
 
+// 루틴 첫 시작 (KPI 2: 루틴 실행 의향).
 export function trackRoutineStarted(skinType, concernType) {
     trackYunnEvent('routine_started', { day: 1, skinType, concernType });
 }
 
+// 개별 스텝 체크. stepName 필수 — "클렌저 vs 선크림" 완료율 비교 분석에 사용된다.
 export function trackRoutineStepChecked(day, period, step, stepName) {
     trackYunnEvent('routine_step_checked', { day, period, step, stepName });
 }
 
+// 아침 루틴 전체 완료.
 export function trackMorningCompleted(day) {
     trackYunnEvent('morning_completed', { day });
 }
 
+// 저녁 루틴 전체 완료.
 export function trackEveningCompleted(day) {
     trackYunnEvent('evening_completed', { day });
 }
 
+// Before 사진 업로드 (항상 Day 1, KPI 3: 성과 체감 기록 시작).
 export function trackBeforePhotoUploaded() {
     trackYunnEvent('before_photo_uploaded', { day: 1 });
 }
 
+// After 사진 업로드 (Day 14+).
 export function trackAfterPhotoUploaded(day) {
     trackYunnEvent('after_photo_uploaded', { day });
 }
 
+// Before/After 비교 화면 조회 (KPI 3: 개선 체감). 누적 streak 일수 포함.
 export function trackCompareViewed(day, streakDays) {
     trackYunnEvent('compare_viewed', { day, streakDays });
 }

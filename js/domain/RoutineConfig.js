@@ -1,6 +1,10 @@
 // RoutineConfig.js — 결과 화면 에셋·카피·추천 설정·상품 데이터
 // ROUTINE_DATABASE(상세 루틴 스텝)는 RoutineDatabase.js에서 관리. 이 파일은 import하지 않음.
+// 핵심: 피부타입(4) × 고민(4) 조합으로 RESULT_RECOMMENDATION_CONFIG를 자동 생성하고,
+//       일부 조합은 RESULT_TYPE_PROFILES로 이름·요약을 덮어쓴다(override).
 
+// ── 결과 화면 이미지 경로 ────────────────────────────────────────────────────────
+// 상대 경로는 pages/survey.html 기준(../assets/...). 파일명 공백 없이 사용(CLAUDE.md).
 export const RESULT_ASSETS = {
     userFallbackFemale: '../assets/image/Woman_model_YUNN.png',
     userFallbackMale:   '../assets/image/Man_model_YUNN.png',
@@ -14,6 +18,9 @@ export const RESULT_ASSETS = {
     creamCard:          '../assets/image/Moisturiser_top_selling.png'
 };
 
+// ── 고민(concern)별 카피 변형 ────────────────────────────────────────────────────
+// 4가지 피부 고민(Acne/Marks/Pigmentation/Tone)별 문구·세럼 추천 텍스트.
+// 추천 조합 생성 시 피부타입 카피와 결합된다.
 export const RESULT_COPY_VARIANTS = {
     Acne: {
         focus: 'calmer pores and breakout control',
@@ -57,11 +64,14 @@ export const RESULT_COPY_VARIANTS = {
     }
 };
 
+// ── 피부타입(skin)별 카피·밸런스 보정 ────────────────────────────────────────────
+// 4가지 피부타입(Oily/Dry/Combination/Normal)별 문구·클렌저/보습제 추천.
+// balanceAdjust: 결과 화면 밸런스 게이지(수분·장벽·유분·진정)에 더해질 가감 값.
 export const RESULT_SKIN_VARIANTS = {
     Oily: {
         typePrefix: 'Oil-Control',
         keyword: 'Oily',
-        balanceAdjust: { hydration: -5, barrier: -4, oil: -12, calmness: -3 },
+        balanceAdjust: { hydration: -5, barrier: -4, oil: -12, calmness: -3 }, // 유분 큰 폭 감점
         cleanserDesc: 'Removes excess oil and impurities without stripping your skin barrier.',
         cleanserWhy: 'Helps keep pores clear and oil balanced, which may support a calmer complexion for oily and sensitive skin.',
         moisturiserName: 'Light Gel Moisturiser'
@@ -92,6 +102,10 @@ export const RESULT_SKIN_VARIANTS = {
     }
 };
 
+// ── 추천 설정 자동 생성 ──────────────────────────────────────────────────────────
+// 피부타입(4) × 고민(4) = 16개 조합을 "skinType|concernType" 키로 생성한다.
+// 각 조합마다 피부+고민 카피를 합쳐 이름·키워드·요약·아침/저녁 루틴 스텝을 구성한다.
+// ResultService가 사용자 응답으로 이 키를 만들어 결과를 조회한다.
 export const RESULT_RECOMMENDATION_CONFIG = {};
 Object.keys(RESULT_SKIN_VARIANTS).forEach((skinType) => {
     Object.keys(RESULT_COPY_VARIANTS).forEach((concernType) => {
@@ -167,6 +181,9 @@ Object.keys(RESULT_SKIN_VARIANTS).forEach((skinType) => {
     });
 });
 
+// ── 조합별 이름·요약 override ────────────────────────────────────────────────────
+// 자동 생성된 추천 설정 위에 덮어쓸 맞춤 카피. 키는 동일한 "skinType|concernType" 형식.
+// 마케팅상 더 다듬어진 타입명(예: 'Oil Clear')과 요약 문구를 제공한다. 아래 forEach에서 병합.
 export const RESULT_TYPE_PROFILES = {
     'Oily|Acne': {
         skinTypeName: 'Oil Clear',
@@ -266,12 +283,15 @@ export const RESULT_TYPE_PROFILES = {
     }
 };
 
+// 프로필 카피를 자동 생성된 추천 설정에 병합한다(같은 키만 덮어씀 → 이름·요약·키워드 갱신).
 Object.entries(RESULT_TYPE_PROFILES).forEach(([profileKey, profile]) => {
     if (RESULT_RECOMMENDATION_CONFIG[profileKey]) {
         Object.assign(RESULT_RECOMMENDATION_CONFIG[profileKey], profile);
     }
 });
 
+// ── 결과 화면 추천 상품 목록 ──────────────────────────────────────────────────────
+// 모든 사용자에게 노출되는 K-뷰티 4종. id는 장바구니 이벤트 추적 키로도 쓰인다.
 export const RESULT_PRODUCTS = [
     {
         id: 'cleanser-foam',

@@ -1589,3 +1589,28 @@ Main implementation:
 Notes:
 - `trackYunnEvent()`가 공통으로 `event`, `event_name`, `session_id`, `screen`, `step`, `device_type`, `traffic_source`를 넣기 때문에 GTM의 Custom Event Trigger와 GA4 Event Tag에서 바로 받을 수 있다.
 - GA4 측정 ID는 `G-JWRKGPTXX5`, GTM 컨테이너 ID는 `GTM-P2NX3N5K` 기준이다.
+
+## 2026-06-30
+
+### js/ 전체 한글 주석(문서화) 작업 마무리
+
+Purpose:
+유지보수를 위해 `js/` 하위 모든 모듈에 역할·동작·파라미터를 설명하는 한글 주석을 추가했다. 이전 작업에서 13개 파일에 주석이 적용된 상태였고, 이번에 나머지 15개 파일을 동일한 스타일(파일 헤더 확장 + 섹션 구분선 + 함수별 설명 + 핵심 라인 인라인 주석)로 마저 작성했다.
+
+Changed files (이번 작업):
+- `js/service/AnalyticsService.js` — 이벤트 추적 중앙 모듈 (설정 매핑·발행 함수·루틴 이벤트)
+- `js/controller/AppController.js` — 4개 스크린 라우팅 로직
+- `js/ui/RoutineScreen.js`, `js/ui/PhotoManager.js`, `js/ui/ReminderModal.js` — 루틴 화면 UI
+- `js/ui/HomeScreen.js`, `js/ui/ModalManager.js`, `js/ui/ResultScreen.js` — 홈/모달/결과 화면 UI
+- `js/domain/RoutineConfig.js` — 추천 설정 자동 생성 로직 설명
+- `js/domain/RoutineDatabase.js` — 키 형식·엔트리 구조 헤더 보강
+- `js/app.js`, `js/routine.js` — 진입점 의존성 주입 설명
+- `js/ui/templates/{BalanceRow,ProductCard,RoutineCard}Template.js` — 템플릿 복제 함수 설명
+
+Main implementation:
+- 동작 로직은 변경하지 않고 주석만 추가 (행위 보존)
+- 각 파일에 CLAUDE.md 설계 규칙(의존성 방향·Config 중앙화·Analytics 중앙화)과의 연결을 주석으로 명시
+
+Verification:
+- 15개 파일 전부 `node --check` 문법 검사 통과
+- IDE 진단(diagnostics) 오류 없음 확인

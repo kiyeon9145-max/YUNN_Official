@@ -1,6 +1,16 @@
-// RoutineDatabase.js — 성별·고민·피부타입별 상세 루틴 스텝
-// 키 형식: "성별-고민타입-피부타입"  F/M · A(Acne)/P(Hyperpigmentation) · O/D/N/C
-// 현재 결과 렌더링 미사용. 향후 gender 파라미터 연동 시 ResultService에서 import.
+// RoutineDatabase.js — 성별·고민·피부타입별 상세 루틴 스텝 (16개 조합)
+// 키 형식: "성별-고민타입-피부타입"
+//   성별:     F(Female) / M(Male)
+//   고민타입: A(Acne) / P(Hyperpigmentation)
+//   피부타입: O(Oily) / D(Dry) / N(Normal) / C(Combination)
+//   예) "F-A-O" = 여성·여드름·지성
+// 각 엔트리 구조:
+//   title    화면 표시용 사람이 읽는 라벨
+//   morning  아침 루틴 스텝 [{ name, desc }, ...]
+//   out      외출 시 추가 케어 (주로 자외선 차단 덧바르기)
+//   home     귀가 후 간단 케어
+//   evening  저녁 루틴 스텝
+// 현재 결과 렌더링 미사용(RoutineConfig의 추천 루틴을 사용). 향후 gender 연동 시 routine.html에서 import.
 
 export const ROUTINE_DATABASE = {
     "F-A-O": {
