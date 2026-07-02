@@ -1,65 +1,74 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+// page.tsx — 홈 페이지 오케스트레이터
+//
+// 이 파일은 오버레이 상태(카트·사이드바)만 관리한다.
+// 개별 UI 로직은 각 컴포넌트 파일에 캡슐화되어 있다.
+//
+// 확장 포인트:
+//   - 상품 추가: app/home/home-data.ts의 TOP_SELLING 배열에 항목 추가
+//   - 카테고리 추가: app/home/home-data.ts의 CATEGORIES 배열에 항목 추가
+//   - 새 섹션 추가: 컴포넌트 파일 생성 후 <main> 안에 배치
+
+import { useState } from 'react'
+import HomeStatusBar    from './home/HomeStatusBar'
+import HomeHeader       from './home/HomeHeader'
+import HeroCard         from './home/HeroCard'
+import CategorySection  from './home/CategorySection'
+import TopSellingSection from './home/TopSellingSection'
+import HomeBottomNav    from './home/HomeBottomNav'
+import CartSheet        from './home/CartSheet'
+import HomeSidebar      from './home/HomeSidebar'
+import { type CartItem } from './home/home-data'
+
+export default function HomePage() {
+  const [cartCount, setCartCount]   = useState(0)
+  const [cartOpen, setCartOpen]     = useState(false)
+  const [cartItem, setCartItem]     = useState<CartItem | null>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const handleAddToCart = (item: CartItem) => {
+    setCartCount(c => c + 1)
+    setCartItem(item)
+    setCartOpen(true)
+  }
+
+  const closeAll = () => { setCartOpen(false); setSidebarOpen(false) }
+  const overlayOpen = cartOpen || sidebarOpen
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="w-full max-w-[393px] min-h-screen mx-auto bg-white relative pb-[72px] overflow-x-hidden">
+      <HomeStatusBar />
+      <HomeHeader
+        cartCount={cartCount}
+        onMenu={() => setSidebarOpen(true)}
+        onCart={() => setCartOpen(true)}
+      />
+
+      <main className="pt-[19px] px-[17px]">
+        <HeroCard />
+        <CategorySection />
+        <TopSellingSection onAddToCart={handleAddToCart} />
       </main>
+
+      <HomeBottomNav activeHref="/" />
+
+      {/* 딤드 스크림 — 카트·사이드바 열릴 때 공통 사용 */}
+      <div
+        className={`fixed inset-0 bg-black/25 z-[39] transition-opacity duration-200 ${
+          overlayOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={closeAll}
+      />
+
+      <CartSheet
+        open={cartOpen}
+        count={cartCount}
+        item={cartItem}
+        onClose={closeAll}
+        onViewCart={() => alert('Checkout is coming soon. Your selected products are saved in this session.')}
+      />
+      <HomeSidebar open={sidebarOpen} onClose={closeAll} />
     </div>
-  );
+  )
 }

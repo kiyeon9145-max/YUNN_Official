@@ -4,6 +4,7 @@
 // 버튼 클릭 시 onStart() 콜백으로 다음 스텝 이동을 page.tsx에 위임한다.
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { StartSurveyButton } from '../components/button-component'
 
@@ -17,7 +18,9 @@ function formatDeviceTime() {
 }
 
 export default function IntroScreen({ onStart }: IntroScreenProps) {
+  const router = useRouter()
   const [time, setTime] = useState(formatDeviceTime)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const id = setInterval(() => setTime(formatDeviceTime()), 1000)
@@ -37,7 +40,42 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
 
       {/* ── Header ─────────────────────────────────────────────── */}
       <div className="h-14 px-shell-x flex justify-between items-center relative bg-white">
-        <i className="ph ph-list text-2xl cursor-pointer text-black relative z-[2]"></i>
+        {menuOpen && (
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+        <div className="relative z-20">
+          <i
+            role="button"
+            aria-label="메뉴 열기"
+            onClick={() => setMenuOpen(o => !o)}
+            className="ph ph-list text-2xl cursor-pointer text-black"
+          ></i>
+          {menuOpen && (
+            <div className="absolute left-0 top-[calc(100%+10px)] w-[220px] rounded-[8px] border border-line bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+              <div className="px-4 py-2 text-xs font-semibold tracking-[0.4px] text-ink-muted">
+                Quiz
+              </div>
+              <button
+                type="button"
+                onClick={() => { setMenuOpen(false); onStart() }}
+                className="block w-full cursor-pointer px-4 py-3 text-left text-sm text-black transition-colors hover:bg-primary-light"
+              >
+                지금 피부 루틴 가이드
+              </button>
+              <button
+                type="button"
+                onClick={() => { setMenuOpen(false); router.push('/survey/ingredient-check') }}
+                className="block w-full cursor-pointer px-4 py-3 text-left text-sm text-black transition-colors hover:bg-primary-light"
+              >
+                성분 분석
+              </button>
+            </div>
+          )}
+        </div>
         <div
           className="absolute left-1/2 top-1/2 w-[128px] h-[58px] overflow-visible cursor-pointer z-[1]"
           style={{ transform: 'translate(-50%, -50%) scale(1.75)', transformOrigin: 'center' }}

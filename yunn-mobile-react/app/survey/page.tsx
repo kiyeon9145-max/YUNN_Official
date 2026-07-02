@@ -14,6 +14,8 @@
 import { useState } from 'react'
 import IntroScreen from './screens/IntroScreen'
 import SurveyShell from './screens/SurveyShell'
+import AnalysisScreen from './screens/AnalysisScreen'
+import ResultScreen from './screens/ResultScreen'
 import InputStep from './components/input-component'
 import SurveyOptionStep from './components/survey-component'
 import ImageSurveyStep from './components/image-survey-component'
@@ -33,7 +35,7 @@ import {
 } from './step-data'
 
 // ── 답변 타입 ──────────────────────────────────────────────────────────────
-interface SurveyAnswers {
+export interface SurveyAnswers {
   name?: string
   email?: string
   phone?: string
@@ -56,7 +58,7 @@ interface SurveyAnswers {
 }
 
 type SurveyStep = 'intro' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10'
-  | SkinHelperStepId
+  | SkinHelperStepId | 'analysis' | 'result'
 
 function inferSkinTypeFromHelper(answers: SurveyAnswers): string {
   const values = [
@@ -302,14 +304,27 @@ export default function SurveyPage() {
             onBack={() => setStep('9')}
             onComplete={photoDataUrl => {
               merge({ photoDataUrl })
-              // Analysis/Result 화면이 확장되면 이 지점에서 다음 화면으로 이동한다.
+              setStep('analysis')
             }}
             onSkip={() => {
               merge({ photoDataUrl: undefined })
-              // Analysis/Result 화면이 확장되면 이 지점에서 다음 화면으로 이동한다.
+              setStep('analysis')
             }}
           />
         </SurveyShell>
+      )}
+
+      {/* ── 분석 로딩 화면 ──────────────────────────────────────── */}
+      {step === 'analysis' && (
+        <AnalysisScreen onComplete={() => setStep('result')} />
+      )}
+
+      {/* ── 결과 화면 ────────────────────────────────────────────── */}
+      {step === 'result' && (
+        <ResultScreen
+          answers={answers}
+          onRetake={() => setStep('intro')}
+        />
       )}
     </>
   )

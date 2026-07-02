@@ -271,7 +271,7 @@ const inputClass = [
 ].join(' ')
 
 // survey.css .step-valid-check: absolute right 13px, top 50%, color #3AAE92, font-size 18px
-function ValidCheck() {
+export function ValidCheck() {
   return (
     <i className="ph-fill ph-check-circle absolute right-[13px] top-1/2 -translate-y-1/2 text-primary text-[18px] pointer-events-none"></i>
   )
