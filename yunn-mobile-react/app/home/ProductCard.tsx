@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // ProductCard.tsx — 재사용 가능한 상품 카드
 //
@@ -6,14 +6,14 @@
 // 어느 섹션에서든 ProductItem을 받아 동일한 카드로 표시한다.
 // home.css .product-card / .product-media / .add-cart / .heart-btn
 
-import Image from 'next/image'
-import { type ProductItem } from './home-data'
+import Image from "next/image";
+import { type ProductItem } from "./home-data";
 
 interface ProductCardProps {
-  product: ProductItem
-  wishlisted?: boolean
-  onWishlist?: () => void
-  onAddToCart?: () => void
+  product: ProductItem;
+  wishlisted?: boolean;
+  onWishlist?: () => void;
+  onAddToCart?: () => void;
 }
 
 export default function ProductCard({
@@ -26,17 +26,22 @@ export default function ProductCard({
     <article className="min-w-0">
       {/* 이미지 영역 — home.css .product-media: h-119px, bg-card */}
       <div className="h-[119px] rounded-[5px] overflow-hidden relative bg-[#F7F7F7]">
-        <Image src={product.imageSrc} alt={product.name} fill className="object-cover" />
+        <Image
+          src={product.imageSrc}
+          alt={product.name}
+          fill
+          className="object-cover"
+        />
         {onWishlist && (
           <button
             type="button"
             className={`absolute top-[8px] right-[8px] w-[24px] h-[24px] flex items-center justify-center bg-transparent text-[22px] ${
-              wishlisted ? 'text-[#E5484D]' : 'text-black'
+              wishlisted ? "text-[#E5484D]" : "text-black"
             }`}
             onClick={onWishlist}
-            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <i className={wishlisted ? 'ph-fill ph-heart' : 'ph ph-heart'} />
+            <i className={wishlisted ? "ph-fill ph-heart" : "ph ph-heart"} />
           </button>
         )}
       </div>
@@ -70,5 +75,5 @@ export default function ProductCard({
         </button>
       )}
     </article>
-  )
+  );
 }

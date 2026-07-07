@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // survey-component.tsx — 옵션 카드 선택형 설문 스텝 공용 컴포넌트
 //
@@ -24,32 +24,32 @@
 //   질문:         text-[15px] font-bold leading-[1.2] mb-5
 //   액션:         h-[69px] mt-[38px] gap-[25px], buttons 150×40 rounded-[12px]
 
-import { useState, useEffect, useRef } from 'react'
-import { SurveyActions, SurveyChoiceButton } from './button-component'
+import { useState, useEffect, useRef } from "react";
+import { SurveyActions, SurveyChoiceButton } from "./button-component";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
 export interface OptionItem {
-  value: string
-  label: React.ReactNode   // 일반 텍스트 또는 JSX (T존 설명 등 rich text 대응)
+  value: string;
+  label: React.ReactNode; // 일반 텍스트 또는 JSX (T존 설명 등 rich text 대응)
 }
 
 export interface OptionGroup {
-  name: string              // input name (e.g. 'gender', 'age', 'concerns')
-  question?: string         // 그룹 제목. helper step처럼 화면 title만 쓰는 경우 생략 가능
-  options: OptionItem[]
-  type?: 'radio' | 'checkbox'   // 기본 'radio'
+  name: string; // input name (e.g. 'gender', 'age', 'concerns')
+  question?: string; // 그룹 제목. helper step처럼 화면 title만 쓰는 경우 생략 가능
+  options: OptionItem[];
+  type?: "radio" | "checkbox"; // 기본 'radio'
 }
 
 interface SurveyOptionStepProps {
-  title: React.ReactNode          // JSX 지원 — <span className="text-primary"> 등
-  subtitle?: string
-  groups: OptionGroup[]
-  autoAdvance?: boolean           // 생략 시 radio-only 화면은 자동 진행, checkbox 화면은 수동 진행
-  requiredMessage?: string        // 미선택 상태에서 Next 클릭 시 alert 문구
-  showSecure?: boolean            // 하단 "Your information is private and secure" 표시 여부
-  onNext: (answers: Record<string, string | string[]>) => void
-  onBack: () => void
+  title: React.ReactNode; // JSX 지원 — <span className="text-primary"> 등
+  subtitle?: string;
+  groups: OptionGroup[];
+  autoAdvance?: boolean; // 생략 시 radio-only 화면은 자동 진행, checkbox 화면은 수동 진행
+  requiredMessage?: string; // 미선택 상태에서 Next 클릭 시 alert 문구
+  showSecure?: boolean; // 하단 "Your information is private and secure" 표시 여부
+  onNext: (answers: Record<string, string | string[]>) => void;
+  onBack: () => void;
 }
 
 // ── SurveyOptionStep ────────────────────────────────────────────────────────
@@ -59,50 +59,60 @@ export default function SurveyOptionStep({
   subtitle,
   groups,
   autoAdvance,
-  requiredMessage = 'Please make a selection.',
+  requiredMessage = "Please make a selection.",
   showSecure = false,
   onNext,
   onBack,
 }: SurveyOptionStepProps) {
-  const [selections, setSelections] = useState<Record<string, string | string[]>>({})
-  const shouldAutoAdvance = autoAdvance ?? groups.every(group => (group.type ?? 'radio') === 'radio')
+  const [selections, setSelections] = useState<
+    Record<string, string | string[]>
+  >({});
+  const shouldAutoAdvance =
+    autoAdvance ?? groups.every((group) => (group.type ?? "radio") === "radio");
 
   // onNext·selections 최신 참조 — autoAdvance 타이머 클로저가 stale 값을 잡지 않도록
-  const onNextRef     = useRef(onNext)
-  const selectionsRef = useRef(selections)
-  useEffect(() => { onNextRef.current = onNext })
-  useEffect(() => { selectionsRef.current = selections }, [selections])
+  const onNextRef = useRef(onNext);
+  const selectionsRef = useRef(selections);
+  useEffect(() => {
+    onNextRef.current = onNext;
+  });
+  useEffect(() => {
+    selectionsRef.current = selections;
+  }, [selections]);
 
   // 모든 그룹에 선택이 있을 때 완료
-  const isComplete = groups.every(g => {
-    const sel = selections[g.name]
-    if (sel === undefined) return false
-    return Array.isArray(sel) ? sel.length > 0 : true
-  })
+  const isComplete = groups.every((g) => {
+    const sel = selections[g.name];
+    if (sel === undefined) return false;
+    return Array.isArray(sel) ? sel.length > 0 : true;
+  });
 
   // autoAdvance: 완료 순간 300ms 타이머 시작, 언마운트·재선택 시 취소 후 재시작
   useEffect(() => {
-    if (!shouldAutoAdvance || !isComplete) return
-    const id = setTimeout(() => onNextRef.current(selectionsRef.current), 300)
-    return () => clearTimeout(id)
-  }, [shouldAutoAdvance, isComplete])
+    if (!shouldAutoAdvance || !isComplete) return;
+    const id = setTimeout(() => onNextRef.current(selectionsRef.current), 300);
+    return () => clearTimeout(id);
+  }, [shouldAutoAdvance, isComplete]);
 
   const handleRadio = (groupName: string, value: string) =>
-    setSelections(prev => ({ ...prev, [groupName]: value }))
+    setSelections((prev) => ({ ...prev, [groupName]: value }));
 
   const handleCheckbox = (groupName: string, value: string) =>
-    setSelections(prev => {
-      const current = (prev[groupName] as string[] | undefined) ?? []
+    setSelections((prev) => {
+      const current = (prev[groupName] as string[] | undefined) ?? [];
       const next = current.includes(value)
-        ? current.filter(v => v !== value)
-        : [...current, value]
-      return { ...prev, [groupName]: next }
-    })
+        ? current.filter((v) => v !== value)
+        : [...current, value];
+      return { ...prev, [groupName]: next };
+    });
 
   const handleNext = () => {
-    if (!isComplete) { alert(requiredMessage); return }
-    onNext(selections)
-  }
+    if (!isComplete) {
+      alert(requiredMessage);
+      return;
+    }
+    onNext(selections);
+  };
 
   return (
     <>
@@ -125,38 +135,41 @@ export default function SurveyOptionStep({
 
       {/* ── 그룹 목록 ─────────────────────────────────────────── */}
       {groups.map((group, i) => {
-        const type = group.type ?? 'radio'
-        const isLast = i === groups.length - 1
+        const type = group.type ?? "radio";
+        const isLast = i === groups.length - 1;
         return (
-          <div key={group.name} className={isLast ? '' : 'mb-[42px]'}>
+          <div key={group.name} className={isLast ? "" : "mb-[42px]"}>
             {group.question && (
               <h3 className="text-[15px] font-bold leading-[1.2] text-black mb-5">
                 {group.question}
               </h3>
             )}
             <div className="flex flex-col gap-4">
-              {group.options.map(opt => {
-                const isSelected = type === 'checkbox'
-                  ? ((selections[group.name] as string[] | undefined) ?? []).includes(opt.value)
-                  : selections[group.name] === opt.value
+              {group.options.map((opt) => {
+                const isSelected =
+                  type === "checkbox"
+                    ? (
+                        (selections[group.name] as string[] | undefined) ?? []
+                      ).includes(opt.value)
+                    : selections[group.name] === opt.value;
                 return (
                   <SurveyChoiceButton
                     key={opt.value}
                     selected={isSelected}
                     role={type}
                     onClick={() =>
-                      type === 'checkbox'
+                      type === "checkbox"
                         ? handleCheckbox(group.name, opt.value)
                         : handleRadio(group.name, opt.value)
                     }
                   >
                     {opt.label}
                   </SurveyChoiceButton>
-                )
+                );
               })}
             </div>
           </div>
-        )
+        );
       })}
 
       {/* ── 액션 버튼 ────────────────────────────────────────────
@@ -180,5 +193,5 @@ export default function SurveyOptionStep({
         </div>
       )}
     </>
-  )
+  );
 }

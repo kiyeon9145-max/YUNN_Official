@@ -1,35 +1,34 @@
-'use client'
+"use client";
 
 // IntroScreen.tsx — 설문 진입 전 히어로 화면 (page.tsx에서 분리)
 // 버튼 클릭 시 onStart() 콜백으로 다음 스텝 이동을 page.tsx에 위임한다.
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { StartSurveyButton } from '../components/button-component'
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { StartSurveyButton } from "../components/button-component";
 
 interface IntroScreenProps {
-  onStart: () => void
+  onStart: () => void;
 }
 
 function formatDeviceTime() {
-  const d = new Date()
-  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
 export default function IntroScreen({ onStart }: IntroScreenProps) {
-  const router = useRouter()
-  const [time, setTime] = useState(formatDeviceTime)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const router = useRouter();
+  const [time, setTime] = useState(formatDeviceTime);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => setTime(formatDeviceTime()), 1000)
-    return () => clearInterval(id)
-  }, [])
+    const id = setInterval(() => setTime(formatDeviceTime()), 1000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="w-full max-w-phone-max min-h-screen mx-auto bg-white relative pb-3">
-
       {/* ── Status Bar ─────────────────────────────────────────── */}
       <div className="h-10 px-4 pt-3 flex items-start justify-between text-black text-[15px] font-semibold leading-none">
         <span>{time}</span>
@@ -51,7 +50,7 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
           <i
             role="button"
             aria-label="메뉴 열기"
-            onClick={() => setMenuOpen(o => !o)}
+            onClick={() => setMenuOpen((o) => !o)}
             className="ph ph-list text-2xl cursor-pointer text-black"
           ></i>
           {menuOpen && (
@@ -61,14 +60,20 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
               </div>
               <button
                 type="button"
-                onClick={() => { setMenuOpen(false); onStart() }}
+                onClick={() => {
+                  setMenuOpen(false);
+                  onStart();
+                }}
                 className="block w-full cursor-pointer px-4 py-3 text-left text-sm text-black transition-colors hover:bg-primary-light"
               >
                 지금 피부 루틴 가이드
               </button>
               <button
                 type="button"
-                onClick={() => { setMenuOpen(false); router.push('/survey/ingredient-check') }}
+                onClick={() => {
+                  setMenuOpen(false);
+                  router.push("/survey/ingredient-check");
+                }}
                 className="block w-full cursor-pointer px-4 py-3 text-left text-sm text-black transition-colors hover:bg-primary-light"
               >
                 성분 분석
@@ -78,10 +83,21 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
         </div>
         <div
           className="absolute left-1/2 top-1/2 w-[128px] h-[58px] overflow-visible cursor-pointer z-[1]"
-          style={{ transform: 'translate(-50%, -50%) scale(1.75)', transformOrigin: 'center' }}
+          style={{
+            transform: "translate(-50%, -50%) scale(1.75)",
+            transformOrigin: "center",
+          }}
+          onClick={() => router.push('/')}
         >
           <div className="relative w-full h-full">
-            <Image src="/images/yunn_logo.png" alt="YUNN" fill className="object-contain" priority sizes="128px" />
+            <Image
+              src="/images/yunn_logo.png"
+              alt="YUNN"
+              fill
+              className="object-contain"
+              priority
+              sizes="128px"
+            />
           </div>
         </div>
         <div className="flex items-center gap-[14px] relative z-[2]">
@@ -97,18 +113,48 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
         <div className="relative min-h-[268px]">
           <div className="relative z-[2] w-[206px]">
             <div className="text-xl font-semibold leading-[1.45] tracking-[-0.01em] text-black mb-5">
-              <p className="mb-[18px]">Your acne<br />keeps <span className="text-primary">coming back.</span></p>
-              <p className="mb-[18px]">Your dark spots<br /><span className="text-primary">won&apos;t fade.</span></p>
-              <p>Let&apos;s find out <span className="text-primary">why.</span></p>
+              <p className="mb-[18px]">
+                Your acne
+                <br />
+                keeps <span className="text-primary">coming back.</span>
+              </p>
+              <p className="mb-[18px]">
+                Your dark spots
+                <br />
+                <span className="text-primary">won&apos;t fade.</span>
+              </p>
+              <p>
+                Let&apos;s find out <span className="text-primary">why.</span>
+              </p>
             </div>
             <div className="text-xs font-normal leading-[1.66] text-black">
-              Answer a few quick questions<br />and get your personalized<br />skin routine.
+              Answer a few quick questions
+              <br />
+              and get your personalized
+              <br />
+              skin routine.
             </div>
           </div>
-          <div className="absolute right-[-19px] top-1 w-[188px] h-[262px] z-[1]" aria-hidden="true">
+          <div
+            className="absolute right-[-19px] top-1 w-[188px] h-[262px] z-[1]"
+            aria-hidden="true"
+          >
             <div className="relative w-full h-full">
-              <div className="absolute inset-0 rounded-[15px_0_0_15px]" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, #effaf7 48%, #c7ede4 100%)' }} />
-              <Image src="/images/survey.start.image.png" alt="" fill className="object-cover object-[58%_center] rounded-[15px_0_0_15px]" sizes="188px" priority />
+              <div
+                className="absolute inset-0 rounded-[15px_0_0_15px]"
+                style={{
+                  background:
+                    "linear-gradient(90deg, rgba(255,255,255,0) 0%, #effaf7 48%, #c7ede4 100%)",
+                }}
+              />
+              <Image
+                src="/images/survey.start.image.png"
+                alt=""
+                fill
+                className="object-cover object-[58%_center] rounded-[15px_0_0_15px]"
+                sizes="188px"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -130,11 +176,24 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
 
         <div className="text-sm font-normal leading-[1.55] text-black mb-[38px] tracking-[-0.01em]">
           <div className="mb-[15px]">Most routines fail</div>
-          <div className="mb-[15px]">because they&apos;re built on <span className="font-bold text-primary">guesswork.</span></div>
-          <div className="mb-[15px]">YUNN <span className="font-bold text-primary">analyzes</span> your skin,</div>
-          <div className="mb-[15px]">your <span className="font-bold text-primary">environment,</span></div>
-          <div className="mb-[15px]">and your <span className="font-bold text-primary">lifestyle</span> then builds</div>
-          <div className="mb-[15px]">a <span className="font-bold text-primary">14-day routine</span></div>
+          <div className="mb-[15px]">
+            because they&apos;re built on{" "}
+            <span className="font-bold text-primary">guesswork.</span>
+          </div>
+          <div className="mb-[15px]">
+            YUNN <span className="font-bold text-primary">analyzes</span> your
+            skin,
+          </div>
+          <div className="mb-[15px]">
+            your <span className="font-bold text-primary">environment,</span>
+          </div>
+          <div className="mb-[15px]">
+            and your <span className="font-bold text-primary">lifestyle</span>{" "}
+            then builds
+          </div>
+          <div className="mb-[15px]">
+            a <span className="font-bold text-primary">14-day routine</span>
+          </div>
           <div>designed specifically for you.</div>
         </div>
 
@@ -145,7 +204,10 @@ export default function IntroScreen({ onStart }: IntroScreenProps) {
         </div>
       </div>
 
-      <div className="w-[134px] h-[5px] mx-auto mt-[7px] rounded-full bg-black" aria-hidden="true" />
+      <div
+        className="w-[134px] h-[5px] mx-auto mt-[7px] rounded-full bg-black"
+        aria-hidden="true"
+      />
     </div>
-  )
+  );
 }

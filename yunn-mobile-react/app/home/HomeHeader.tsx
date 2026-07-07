@@ -1,19 +1,24 @@
-'use client'
+"use client";
 
 // HomeHeader.tsx — 홈 전용 헤더
 //
 // 카트 뱃지 숫자와 열기/메뉴 콜백은 page.tsx에서 내려받는다.
 // home.css .top-header: h-56px, sticky, blur backdrop
 
-import Image from 'next/image'
+import Image from "next/image";
+import Link from "next/link";
 
 interface HomeHeaderProps {
-  cartCount: number
-  onMenu: () => void
-  onCart: () => void
+  cartCount: number;
+  onMenu: () => void;
+  onCart: () => void;
 }
 
-export default function HomeHeader({ cartCount, onMenu, onCart }: HomeHeaderProps) {
+export default function HomeHeader({
+  cartCount,
+  onMenu,
+  onCart,
+}: HomeHeaderProps) {
   return (
     <header className="h-[56px] border-b border-[#E5E5E5] flex items-center justify-between px-[17px] sticky top-0 z-20 bg-white/[0.94] backdrop-blur-[10px]">
       <button
@@ -26,7 +31,7 @@ export default function HomeHeader({ cartCount, onMenu, onCart }: HomeHeaderProp
       </button>
 
       {/* 로고 — home.css .logo: absolute center, scale 1.75 */}
-      <div className="absolute left-1/2 top-[28px] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+      <Link href="/" className="absolute left-1/2 top-[28px] -translate-x-1/2 -translate-y-1/2" aria-label="YUNN 홈으로 이동">
         <Image
           src="/images/yunn_logo.png"
           alt="YUNN"
@@ -35,7 +40,7 @@ export default function HomeHeader({ cartCount, onMenu, onCart }: HomeHeaderProp
           className="object-contain scale-[1.75]"
           priority
         />
-      </div>
+      </Link>
 
       <div className="flex items-center gap-[9px]">
         <button
@@ -67,5 +72,5 @@ export default function HomeHeader({ cartCount, onMenu, onCart }: HomeHeaderProp
         </button>
       </div>
     </header>
-  )
+  );
 }

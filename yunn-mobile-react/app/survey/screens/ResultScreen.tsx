@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // ResultScreen.tsx — 피부 진단 결과 화면
 //
@@ -14,9 +14,9 @@
 //
 // 잠금(피드백 게이트) 메커니즘은 MVP 이후 구현 예정 — 현재 모두 잠금 해제 상태로 표시.
 
-import Image from 'next/image'
-import { useMemo, useState } from 'react'
-import type { SurveyAnswers } from '../page'
+import Image from "next/image";
+import { useMemo, useState } from "react";
+import type { SurveyAnswers } from "../page";
 import {
   RESULT_ASSETS,
   RESULT_PRODUCTS,
@@ -28,45 +28,52 @@ import {
   type ResultData,
   type RoutineStep,
   type ProductItem,
-} from '../result-data'
+} from "../result-data";
 
 interface ResultScreenProps {
-  answers: SurveyAnswers
-  onRetake: () => void
+  answers: SurveyAnswers;
+  onRetake: () => void;
 }
 
 function toResultData(answers: SurveyAnswers): ResultData {
   return {
-    name: answers.name || 'Guest',
-    gender: answers.gender || 'Female',
-    skinType: answers.skinType || 'Oily',
-    concernType: toConcernKey(answers.concerns || 'Acne'),
-    age: answers.age || '',
-    sleep: answers.sleep || '',
-    stress: answers.stress || '',
-    sensitivity: answers.sensitivity || '',
-    outdoor: answers.outdoor || '',
-    sunscreen: answers.sunscreen || '',
-  }
+    name: answers.name || "Guest",
+    gender: answers.gender || "Female",
+    skinType: answers.skinType || "Oily",
+    concernType: toConcernKey(answers.concerns || "Acne"),
+    age: answers.age || "",
+    sleep: answers.sleep || "",
+    stress: answers.stress || "",
+    sensitivity: answers.sensitivity || "",
+    outdoor: answers.outdoor || "",
+    sunscreen: answers.sunscreen || "",
+  };
 }
 
 // ── Main ────────────────────────────────────────────────────────────────────
 
 export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
-  const [activePeriod, setActivePeriod] = useState<'morning' | 'evening'>('morning')
+  const [activePeriod, setActivePeriod] = useState<"morning" | "evening">(
+    "morning",
+  );
 
-  const data    = useMemo(() => toResultData(answers), [answers])
-  const config  = useMemo(() => getResultConfig(data), [data])
-  const balance = useMemo(() => computeSkinBalance(data, config), [data, config])
+  const data = useMemo(() => toResultData(answers), [answers]);
+  const config = useMemo(() => getResultConfig(data), [data]);
+  const balance = useMemo(
+    () => computeSkinBalance(data, config),
+    [data, config],
+  );
 
-  const faceImage = answers.photoDataUrl
-    || (answers.gender === 'Male' ? RESULT_ASSETS.userFallbackMale : RESULT_ASSETS.userFallbackFemale)
-  const isPhotoDataUrl = Boolean(answers.photoDataUrl)
+  const faceImage =
+    answers.photoDataUrl ||
+    (answers.gender === "Male"
+      ? RESULT_ASSETS.userFallbackMale
+      : RESULT_ASSETS.userFallbackFemale);
+  const isPhotoDataUrl = Boolean(answers.photoDataUrl);
 
   return (
     <div className="min-h-screen bg-white pb-[74px]">
       <div className="w-full max-w-[393px] mx-auto bg-white relative min-h-screen">
-
         <StatusBar />
 
         {/* 상단 바: 36px 아이콘 | 제목(중앙) | 36px 아이콘 */}
@@ -79,7 +86,9 @@ export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
           >
             <i className="ph ph-arrow-left"></i>
           </button>
-          <h1 className="text-[15px] font-bold text-center text-black">AI Skin Analysis</h1>
+          <h1 className="text-[15px] font-bold text-center text-black">
+            AI Skin Analysis
+          </h1>
           <button
             type="button"
             className="w-9 h-9 flex items-center justify-center text-2xl text-black bg-transparent border-0 cursor-pointer"
@@ -91,7 +100,12 @@ export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
 
         {/* 콘텐츠 영역 */}
         <div className="px-[17px] pt-[18px]">
-          <InsightSection data={data} config={config} faceImage={faceImage} isPhotoDataUrl={isPhotoDataUrl} />
+          <InsightSection
+            data={data}
+            config={config}
+            faceImage={faceImage}
+            isPhotoDataUrl={isPhotoDataUrl}
+          />
           <InfoCard />
           <BalanceCard balance={balance} />
           <RoutineSection
@@ -105,16 +119,20 @@ export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
         <BottomNav onRetake={onRetake} />
       </div>
     </div>
-  )
+  );
 }
 
 // ── StatusBar ───────────────────────────────────────────────────────────────
 
 function StatusBar() {
   const time = useMemo(() => {
-    const d = new Date()
-    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: false })
-  }, [])
+    const d = new Date();
+    return d.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: false,
+    });
+  }, []);
 
   return (
     <div className="h-[42px] px-[17px] pt-[14px] flex items-start justify-between text-[15px] font-bold leading-none text-black">
@@ -125,21 +143,29 @@ function StatusBar() {
         <i className="ph ph-battery-high"></i>
       </div>
     </div>
-  )
+  );
 }
 
 // ── InsightSection ──────────────────────────────────────────────────────────
 
 function InsightSection({
-  data, config, faceImage, isPhotoDataUrl,
+  data,
+  config,
+  faceImage,
+  isPhotoDataUrl,
 }: {
-  data: ResultData; config: ResultConfig; faceImage: string; isPhotoDataUrl: boolean
+  data: ResultData;
+  config: ResultConfig;
+  faceImage: string;
+  isPhotoDataUrl: boolean;
 }) {
   return (
     <section className="relative min-h-[196px]">
       {/* 텍스트 영역 (왼쪽, 얼굴 이미지 제외 너비) */}
       <div className="pr-[143px]">
-        <div className="text-[13px] font-bold text-primary mb-[6px]">YUNN Skin Insight</div>
+        <div className="text-[13px] font-bold text-primary mb-[6px]">
+          YUNN Skin Insight
+        </div>
         <div className="text-[20px] font-bold text-black leading-[1.35]">
           Hi! <span>{data.name}</span>
         </div>
@@ -147,7 +173,7 @@ function InsightSection({
           Your skin type is
         </div>
         <div className="text-[32px] font-bold text-primary leading-[1.08] mt-[18px] break-keep w-[232px]">
-          {config.skinTypeName}{' '}
+          {config.skinTypeName}{" "}
           <span className="text-primary whitespace-nowrap">type</span>
         </div>
       </div>
@@ -174,7 +200,7 @@ function InsightSection({
 
       {/* 키워드 태그 */}
       <div className="flex flex-wrap gap-2 mt-[14px]">
-        {config.keywords.map(kw => (
+        {config.keywords.map((kw) => (
           <span
             key={kw}
             className="min-h-[22px] px-[13px] rounded-full bg-[#E9F4F1] text-black text-[12px] font-bold leading-none inline-flex items-center justify-center whitespace-nowrap"
@@ -189,7 +215,7 @@ function InsightSection({
         <SummaryText summary={config.summary} focus={config.focus} />
       </div>
     </section>
-  )
+  );
 }
 
 // ── SummaryText ──────────────────────────────────────────────────────────────
@@ -199,34 +225,36 @@ function InsightSection({
 //   /[^.!?]+[.!?]+|[^.!?]+$/g 로 문장 분리 → focus 포함 문장에 <strong> 삽입
 
 function SummaryText({ summary, focus }: { summary: string; focus: string }) {
-  const sentences: string[] = []
-  String(summary).replace(/[^.!?]+[.!?]+|[^.!?]+$/g, match => {
-    const trimmed = match.trim()
-    if (trimmed) sentences.push(trimmed)
-    return match
-  })
+  const sentences: string[] = [];
+  String(summary).replace(/[^.!?]+[.!?]+|[^.!?]+$/g, (match) => {
+    const trimmed = match.trim();
+    if (trimmed) sentences.push(trimmed);
+    return match;
+  });
 
   return (
     <>
       {sentences.map((sentence, i) => {
-        const hasFocus = focus && sentence.includes(focus)
+        const hasFocus = focus && sentence.includes(focus);
         return (
-          <p key={i} className={i > 0 ? 'mt-[18px]' : ''}>
+          <p key={i} className={i > 0 ? "mt-[18px]" : ""}>
             {hasFocus
               ? sentence.split(focus).map((part, j, arr) => (
                   <span key={j}>
                     {part}
                     {j < arr.length - 1 && (
-                      <strong className="text-primary font-bold">{focus}</strong>
+                      <strong className="text-primary font-bold">
+                        {focus}
+                      </strong>
                     )}
                   </span>
                 ))
               : sentence}
           </p>
-        )
+        );
       })}
     </>
-  )
+  );
 }
 
 // ── InfoCard ─────────────────────────────────────────────────────────────────
@@ -238,13 +266,15 @@ function InfoCard() {
         <i className="ph ph-lightbulb"></i>
       </div>
       <div>
-        <div className="text-[15px] font-bold text-black leading-[1.2]">Check your current skin balance</div>
+        <div className="text-[15px] font-bold text-black leading-[1.2]">
+          Check your current skin balance
+        </div>
         <div className="text-[13px] text-black leading-[1.35] mt-[3px]">
           The areas with the lowest balance are the top priorities to improve.
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // ── BalanceCard ──────────────────────────────────────────────────────────────
@@ -254,21 +284,24 @@ function BalanceCard({ balance }: { balance: BalanceMetric[] }) {
     <section className="mt-[28px] bg-white border border-[#E9E9E9] rounded-[5px] shadow-[0_4px_10px_rgba(0,0,0,0.12)] px-2 pt-[15px] pb-[14px]">
       {/* 헤더 */}
       <div className="flex items-baseline justify-between gap-[10px] px-[6px] mb-3">
-        <div className="text-[20px] font-bold text-black leading-[1.2]">Your Skin Balance</div>
+        <div className="text-[20px] font-bold text-black leading-[1.2]">
+          Your Skin Balance
+        </div>
         <div className="text-primary text-[12px] leading-none whitespace-nowrap">
           • Good&nbsp;&nbsp;• Needs Care&nbsp;&nbsp;• Focus
         </div>
       </div>
 
-      {balance.map(metric => (
+      {balance.map((metric) => (
         <BalanceRow key={metric.key} metric={metric} />
       ))}
 
       <p className="text-[9px] text-[#A8A8A8] text-center mt-[15px]">
-        ＊ Results are based on your answers and lifestyle data. Not a medical diagnosis.
+        ＊ Results are based on your answers and lifestyle data. Not a medical
+        diagnosis.
       </p>
     </section>
-  )
+  );
 }
 
 function BalanceRow({ metric }: { metric: BalanceMetric }) {
@@ -290,19 +323,21 @@ function BalanceRow({ metric }: { metric: BalanceMetric }) {
         {metric.status}
       </div>
     </div>
-  )
+  );
 }
 
 // ── RoutineSection ───────────────────────────────────────────────────────────
 
 function RoutineSection({
-  config, activePeriod, onTabChange,
+  config,
+  activePeriod,
+  onTabChange,
 }: {
-  config: ResultConfig
-  activePeriod: 'morning' | 'evening'
-  onTabChange: (period: 'morning' | 'evening') => void
+  config: ResultConfig;
+  activePeriod: "morning" | "evening";
+  onTabChange: (period: "morning" | "evening") => void;
 }) {
-  const steps = config.routines[activePeriod]
+  const steps = config.routines[activePeriod];
 
   return (
     <section className="mt-[25px]">
@@ -312,15 +347,15 @@ function RoutineSection({
           label="Morning Routine"
           subtitle="Protect & Glow"
           icon="ph-fill ph-sun"
-          active={activePeriod === 'morning'}
-          onClick={() => onTabChange('morning')}
+          active={activePeriod === "morning"}
+          onClick={() => onTabChange("morning")}
         />
         <RoutineTab
           label="Evening Routine"
           subtitle="Repair & Recover"
           icon="ph-fill ph-moon"
-          active={activePeriod === 'evening'}
-          onClick={() => onTabChange('evening')}
+          active={activePeriod === "evening"}
+          onClick={() => onTabChange("evening")}
         />
       </div>
 
@@ -329,32 +364,44 @@ function RoutineSection({
         <RoutineCard key={step.name + i} step={step} index={i} />
       ))}
     </section>
-  )
+  );
 }
 
 function RoutineTab({
-  label, subtitle, icon, active, onClick,
+  label,
+  subtitle,
+  icon,
+  active,
+  onClick,
 }: {
-  label: string; subtitle: string; icon: string; active: boolean; onClick: () => void
+  label: string;
+  subtitle: string;
+  icon: string;
+  active: boolean;
+  onClick: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={[
-        'border rounded-[4px] min-h-[58px] px-[10px] py-2 flex items-center justify-center gap-2 cursor-pointer transition-colors',
+        "border rounded-[4px] min-h-[58px] px-[10px] py-2 flex items-center justify-center gap-2 cursor-pointer transition-colors",
         active
-          ? 'border-primary text-primary bg-[#F8FDFB]'
-          : 'border-[#E5E5E5] text-black bg-white',
-      ].join(' ')}
+          ? "border-primary text-primary bg-[#F8FDFB]"
+          : "border-[#E5E5E5] text-black bg-white",
+      ].join(" ")}
     >
       <i className={`${icon} text-2xl flex-shrink-0`}></i>
       <span className="flex flex-col items-start gap-[3px] min-w-0">
-        <span className="text-[13px] font-bold leading-[1.1] text-left whitespace-nowrap">{label}</span>
-        <span className="text-[11px] font-normal leading-[1.25] text-left text-[#8B8B8B]">{subtitle}</span>
+        <span className="text-[13px] font-bold leading-[1.1] text-left whitespace-nowrap">
+          {label}
+        </span>
+        <span className="text-[11px] font-normal leading-[1.25] text-left text-[#8B8B8B]">
+          {subtitle}
+        </span>
       </span>
     </button>
-  )
+  );
 }
 
 function RoutineCard({ step, index }: { step: RoutineStep; index: number }) {
@@ -378,38 +425,77 @@ function RoutineCard({ step, index }: { step: RoutineStep; index: number }) {
 
       {/* 상품 정보 */}
       <div>
-        <div className="text-[16px] font-bold text-black leading-[1.16]">{step.name}</div>
+        <div className="text-[16px] font-bold text-black leading-[1.16]">
+          {step.name}
+        </div>
         <div className="inline-flex items-center justify-center h-[16px] min-w-[49px] rounded-full bg-[#E9F4F1] text-primary text-[9px] font-bold my-[5px] px-2">
           {step.tag}
         </div>
-        <div className="text-[11px] text-black leading-[1.45] mb-[7px]">{step.description}</div>
+        <div className="text-[11px] text-black leading-[1.45] mb-[7px]">
+          {step.description}
+        </div>
 
-        <RoutineDetail icon="ph ph-question" title="Why it&apos;s recommended" copy={step.why} />
-        <RoutineDetail icon="ph ph-drop" title="How to use" copy={step.how} isBorderTop />
-        <RoutineDetail icon="ph ph-lightbulb" title="YUNN TIP" copy={step.tip} isBorderTop isHighlight />
+        <RoutineDetail
+          icon="ph ph-question"
+          title="Why it's recommended"
+          copy={step.why}
+        />
+        <RoutineDetail
+          icon="ph ph-drop"
+          title="How to use"
+          copy={step.how}
+          isBorderTop
+        />
+        <RoutineDetail
+          icon="ph ph-lightbulb"
+          title="YUNN TIP"
+          copy={step.tip}
+          isBorderTop
+          isHighlight
+        />
       </div>
     </article>
-  )
+  );
 }
 
 function RoutineDetail({
-  icon, title, copy, isBorderTop = false, isHighlight = false,
+  icon,
+  title,
+  copy,
+  isBorderTop = false,
+  isHighlight = false,
 }: {
-  icon: string; title: string; copy: string; isBorderTop?: boolean; isHighlight?: boolean
+  icon: string;
+  title: string;
+  copy: string;
+  isBorderTop?: boolean;
+  isHighlight?: boolean;
 }) {
   return (
-    <div className={['grid grid-cols-[24px_1fr] gap-[6px] pt-[9px] mt-[8px]', isBorderTop ? 'border-t border-[#E4E4E4]' : ''].join(' ')}>
+    <div
+      className={[
+        "grid grid-cols-[24px_1fr] gap-[6px] pt-[9px] mt-[8px]",
+        isBorderTop ? "border-t border-[#E4E4E4]" : "",
+      ].join(" ")}
+    >
       <div className="w-5 h-5 rounded-full bg-[#E9F4F1] text-primary flex items-center justify-center text-[13px] font-bold">
         <i className={icon}></i>
       </div>
       <div>
-        <div className={['text-[12px] font-bold leading-[1.25]', isHighlight ? 'text-primary' : 'text-black'].join(' ')}>
+        <div
+          className={[
+            "text-[12px] font-bold leading-[1.25]",
+            isHighlight ? "text-primary" : "text-black",
+          ].join(" ")}
+        >
           {title}
         </div>
-        <div className="text-[10px] text-black leading-[1.45] mt-[2px]">{copy}</div>
+        <div className="text-[10px] text-black leading-[1.45] mt-[2px]">
+          {copy}
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 // ── ProductsSection ──────────────────────────────────────────────────────────
@@ -418,14 +504,17 @@ function ProductsSection({ onRetake }: { onRetake: () => void }) {
   return (
     <section className="mt-[27px]">
       <h2 className="text-[22px] font-bold text-black leading-[1.1] tracking-[-0.01em]">
-        Products selected to reduce<br />trial-and-error
+        Products selected to reduce
+        <br />
+        trial-and-error
       </h2>
       <p className="text-[12px] text-black leading-[1.45] mt-[17px] mb-[10px]">
-        Based on your responses, our Skin AI recommends the following products for you.
+        Based on your responses, our Skin AI recommends the following products
+        for you.
       </p>
 
       <div className="grid grid-cols-2 gap-x-[17px] gap-y-4">
-        {RESULT_PRODUCTS.map(product => (
+        {RESULT_PRODUCTS.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
@@ -448,9 +537,12 @@ function ProductsSection({ onRetake }: { onRetake: () => void }) {
 
       {/* Unlock CTA — 피드백 게이트 MVP 이후 구현 */}
       <section className="mt-[28px] mb-6 rounded-[5px] border border-[#EAEAEA] bg-[#FAFAFA] px-4 py-5 text-center">
-        <div className="text-[15px] font-bold text-black mb-2">Your 14-day routine plan is ready.</div>
+        <div className="text-[15px] font-bold text-black mb-2">
+          Your 14-day routine plan is ready.
+        </div>
         <p className="text-[13px] text-[#666] leading-[1.5] mb-4">
-          Answer one quick feedback form to unlock the full morning routine, evening routine, and product plan.
+          Answer one quick feedback form to unlock the full morning routine,
+          evening routine, and product plan.
         </p>
         <button
           type="button"
@@ -461,7 +553,7 @@ function ProductsSection({ onRetake }: { onRetake: () => void }) {
         </button>
       </section>
     </section>
-  )
+  );
 }
 
 function ProductCard({ product }: { product: ProductItem }) {
@@ -487,15 +579,23 @@ function ProductCard({ product }: { product: ProductItem }) {
           {product.name}
         </div>
         <div className="flex items-baseline gap-[5px] mt-[6px]">
-          <span className="text-[12px] font-bold text-[#F05A5A]">{product.discount}</span>
-          <span className="text-[13px] font-bold text-black">{product.price}</span>
+          <span className="text-[12px] font-bold text-[#F05A5A]">
+            {product.discount}
+          </span>
+          <span className="text-[13px] font-bold text-black">
+            {product.price}
+          </span>
         </div>
-        <div className="text-[12px] text-[#B6B6B6] line-through mt-[-2px]">{product.original}</div>
+        <div className="text-[12px] text-[#B6B6B6] line-through mt-[-2px]">
+          {product.original}
+        </div>
         <div className="flex items-center gap-[2px] text-primary text-[12px] mt-1">
           {Array.from({ length: 5 }).map((_, i) => (
             <i key={i} className="ph-fill ph-star"></i>
           ))}
-          <span className="text-black text-[10px] ml-1">{product.rating} ({product.reviews})</span>
+          <span className="text-black text-[10px] ml-1">
+            {product.rating} ({product.reviews})
+          </span>
         </div>
         <button
           type="button"
@@ -506,7 +606,7 @@ function ProductCard({ product }: { product: ProductItem }) {
         </button>
       </div>
     </article>
-  )
+  );
 }
 
 // ── BottomNav ─────────────────────────────────────────────────────────────────
@@ -518,26 +618,51 @@ function BottomNav({ onRetake }: { onRetake: () => void }) {
       aria-label="Result bottom navigation"
     >
       {[
-        { icon: 'ph-fill ph-house', label: 'Home', active: true, onClick: undefined },
-        { icon: 'ph ph-shopping-cart', label: 'Shop', active: false, onClick: undefined },
-        { icon: 'ph ph-magnifying-glass-plus', label: 'Quiz', active: false, onClick: onRetake },
-        { icon: 'ph ph-tag', label: 'Offers', active: false, onClick: undefined },
-        { icon: 'ph ph-user', label: 'Account', active: false, onClick: undefined },
+        {
+          icon: "ph-fill ph-house",
+          label: "Home",
+          active: true,
+          onClick: undefined,
+        },
+        {
+          icon: "ph ph-shopping-cart",
+          label: "Shop",
+          active: false,
+          onClick: undefined,
+        },
+        {
+          icon: "ph ph-magnifying-glass-plus",
+          label: "Quiz",
+          active: false,
+          onClick: onRetake,
+        },
+        {
+          icon: "ph ph-tag",
+          label: "Offers",
+          active: false,
+          onClick: undefined,
+        },
+        {
+          icon: "ph ph-user",
+          label: "Account",
+          active: false,
+          onClick: undefined,
+        },
       ].map(({ icon, label, active, onClick }) => (
         <button
           key={label}
           type="button"
           onClick={onClick}
           className={[
-            'flex flex-col items-center justify-center gap-[2px]',
-            'text-[9px] border-0 bg-transparent cursor-pointer',
-            active ? 'text-primary' : 'text-black',
-          ].join(' ')}
+            "flex flex-col items-center justify-center gap-[2px]",
+            "text-[9px] border-0 bg-transparent cursor-pointer",
+            active ? "text-primary" : "text-black",
+          ].join(" ")}
         >
           <i className={`${icon} text-[19px]`}></i>
           <span>{label}</span>
         </button>
       ))}
     </nav>
-  )
+  );
 }

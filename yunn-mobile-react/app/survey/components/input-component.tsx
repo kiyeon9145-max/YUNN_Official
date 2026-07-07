@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // Step1.tsx — 이름 / 이메일 / 전화번호 입력 (설문 1번)
 //
@@ -25,79 +25,94 @@
 //   • secure-box: mt 33px, p 8px 16px, radius 5px, bg #F5FAF9, gap 13px; icon #3AAE92 24px; text font-size 12px gap 3px
 //   • actions:   h 69px, mt 30px, gap 25px, buttons 150×40 radius-[12px] text-base font-semibold tracking-[0.8px]
 
-import { useState } from 'react'
-import { SurveyActions } from './button-component'
+import { useState } from "react";
+import { SurveyActions } from "./button-component";
 
 // SurveyAnswer.js ALLOWED_INDIAN_EMAIL_DOMAINS
-const ALLOWED_DOMAINS = ['gmail.com', 'outlook.com', 'yahoo.com', 'yahoo.in', 'hotmail.com', 'rediffmail.com', 'icloud.com']
+const ALLOWED_DOMAINS = [
+  "gmail.com",
+  "outlook.com",
+  "yahoo.com",
+  "yahoo.in",
+  "hotmail.com",
+  "rediffmail.com",
+  "icloud.com",
+];
 
 function isValidEmail(raw: string): boolean {
-  const email = raw.toLowerCase().trim()
-  if (!email) return false
-  if (/\s/.test(raw.trim())) return false
-  if (/[^\x00-\x7F]/.test(email)) return false
+  const email = raw.toLowerCase().trim();
+  if (!email) return false;
+  if (/\s/.test(raw.trim())) return false;
+  if (/[^\x00-\x7F]/.test(email)) return false;
 
-  const parts = email.split('@')
-  if (parts.length !== 2) return false
+  const parts = email.split("@");
+  if (parts.length !== 2) return false;
 
-  const [local, domain] = parts
-  if (!local || !domain) return false
-  if (!/^[a-z0-9._%+-]+$/.test(local)) return false
-  if (!/^[a-z0-9.-]+$/.test(domain)) return false
-  if (/^[._%+-]|[._%+-]$/.test(local)) return false
-  if (local.includes('..') || domain.includes('..')) return false
-  if (!domain.includes('.')) return false
+  const [local, domain] = parts;
+  if (!local || !domain) return false;
+  if (!/^[a-z0-9._%+-]+$/.test(local)) return false;
+  if (!/^[a-z0-9.-]+$/.test(domain)) return false;
+  if (/^[._%+-]|[._%+-]$/.test(local)) return false;
+  if (local.includes("..") || domain.includes("..")) return false;
+  if (!domain.includes(".")) return false;
 
-  const labels = domain.split('.')
-  if (labels.some(l => !l || l.startsWith('-') || l.endsWith('-'))) return false
+  const labels = domain.split(".");
+  if (labels.some((l) => !l || l.startsWith("-") || l.endsWith("-")))
+    return false;
 
-  const tld = labels[labels.length - 1]
-  if (!/^[a-z]{2,}$/.test(tld)) return false
-  return ALLOWED_DOMAINS.includes(domain)
+  const tld = labels[labels.length - 1];
+  if (!/^[a-z]{2,}$/.test(tld)) return false;
+  return ALLOWED_DOMAINS.includes(domain);
 }
 
 function isValidPhone(value: string): boolean {
-  return /^[6-9]\d{9}$/.test(value.trim())
+  return /^[6-9]\d{9}$/.test(value.trim());
 }
 
 interface Step1Props {
-  onNext: (answers: { name: string; email: string; phone: string }) => void
-  onBack: () => void
+  onNext: (answers: { name: string; email: string; phone: string }) => void;
+  onBack: () => void;
 }
 
-type FieldState = '' | 'valid' | 'invalid'
+type FieldState = "" | "valid" | "invalid";
 
 export default function Step1({ onNext, onBack }: Step1Props) {
-  const [name,  setName]  = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   // 이메일·전화는 blur 이전엔 invalid를 노출하지 않는다 (SurveyService.js 설계)
-  const [emailTouched, setEmailTouched] = useState(false)
-  const [phoneTouched, setPhoneTouched] = useState(false)
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [phoneTouched, setPhoneTouched] = useState(false);
   // Next 클릭 시 강제 에러 노출
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
 
-  const nameValid  = name.trim().length >= 2
-  const emailValid = isValidEmail(email)
-  const phoneValid = isValidPhone(phone)
-  const isComplete = nameValid && emailValid && phoneValid
+  const nameValid = name.trim().length >= 2;
+  const emailValid = isValidEmail(email);
+  const phoneValid = isValidPhone(phone);
+  const isComplete = nameValid && emailValid && phoneValid;
 
   // 이름은 valid check만 표시 (is-invalid 없음)
-  const nameCardState:  FieldState = nameValid ? 'valid' : ''
-  const emailCardState: FieldState = emailValid ? 'valid'
-    : (emailTouched || submitted) && email.trim() ? 'invalid' : ''
-  const phoneCardState: FieldState = phoneValid ? 'valid'
-    : (phoneTouched || submitted) && phone.trim() ? 'invalid' : ''
+  const nameCardState: FieldState = nameValid ? "valid" : "";
+  const emailCardState: FieldState = emailValid
+    ? "valid"
+    : (emailTouched || submitted) && email.trim()
+      ? "invalid"
+      : "";
+  const phoneCardState: FieldState = phoneValid
+    ? "valid"
+    : (phoneTouched || submitted) && phone.trim()
+      ? "invalid"
+      : "";
 
   const handleNext = () => {
     if (!isComplete) {
-      setSubmitted(true)
-      alert('Please fill out all fields.')
-      return
+      setSubmitted(true);
+      alert("Please fill out all fields.");
+      return;
     }
-    onNext({ name: name.trim(), email: email.toLowerCase().trim(), phone })
-  }
+    onNext({ name: name.trim(), email: email.toLowerCase().trim(), phone });
+  };
 
   return (
     <>
@@ -106,7 +121,9 @@ export default function Step1({ onNext, onBack }: Step1Props) {
           letter-spacing -0.01em, mb 8px; span color #3AAE92
           ──────────────────────────────────────────────────────────── */}
       <h2 className="text-[24px] font-bold leading-[1.17] tracking-[-0.01em] text-black mb-[8px]">
-        Let&apos;s Start<br /><span className="text-primary">with the basics</span>
+        Let&apos;s Start
+        <br />
+        <span className="text-primary">with the basics</span>
       </h2>
 
       {/* ── 소제목 ───────────────────────────────────────────────────
@@ -119,7 +136,6 @@ export default function Step1({ onNext, onBack }: Step1Props) {
 
       {/* ── 필드 목록 (gap 21px) ─────────────────────────────────── */}
       <div className="flex flex-col gap-[21px]">
-
         {/* ─ 이름 카드 ─────────────────────────────────────────── */}
         <FieldCard>
           <FieldLabel icon="ph-user" label="Your Name" />
@@ -129,10 +145,10 @@ export default function Step1({ onNext, onBack }: Step1Props) {
               placeholder="Enter your full name"
               autoComplete="name"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className={inputClass}
             />
-            {nameCardState === 'valid' && <ValidCheck />}
+            {nameCardState === "valid" && <ValidCheck />}
           </div>
         </FieldCard>
 
@@ -146,17 +162,17 @@ export default function Step1({ onNext, onBack }: Step1Props) {
               autoComplete="email"
               inputMode="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               onBlur={() => setEmailTouched(true)}
               className={[
                 inputClass,
                 // survey.css .step-one-card.is-invalid input: border-color #E5534B
-                emailCardState === 'invalid' ? '!border-[#E5534B]' : '',
-              ].join(' ')}
+                emailCardState === "invalid" ? "!border-[#E5534B]" : "",
+              ].join(" ")}
             />
-            {emailCardState === 'valid' && <ValidCheck />}
+            {emailCardState === "valid" && <ValidCheck />}
           </div>
-          {emailCardState === 'invalid' && (
+          {emailCardState === "invalid" && (
             <p className="mt-[7px] text-[#E5534B] text-[11px] leading-[1.25] tracking-[0.2px]">
               Please enter a valid email address.
             </p>
@@ -169,15 +185,21 @@ export default function Step1({ onNext, onBack }: Step1Props) {
           {/* phone-row: grid [94px 1fr], h 36px, border 1px #EBEBEB, radius 5px */}
           <div
             className={[
-              'grid h-9 border rounded-[5px] overflow-hidden bg-white',
-              phoneCardState === 'invalid' ? 'border-[#E5534B]' : 'border-[#EBEBEB]',
-            ].join(' ')}
-            style={{ gridTemplateColumns: '94px 1fr' }}
+              "grid h-9 border rounded-[5px] overflow-hidden bg-white",
+              phoneCardState === "invalid"
+                ? "border-[#E5534B]"
+                : "border-[#EBEBEB]",
+            ].join(" ")}
+            style={{ gridTemplateColumns: "94px 1fr" }}
           >
             {/* 국가 선택 (인도 고정, MVP에서 드롭다운 미구현) */}
             <div className="flex items-center justify-center gap-2 border-r border-[#EBEBEB] text-[13px] font-semibold tracking-[0.4px] text-black">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://flagcdn.com/w40/in.png" alt="India" className="w-4 h-4 rounded-full" />
+              <img
+                src="https://flagcdn.com/w40/in.png"
+                alt="India"
+                className="w-4 h-4 rounded-full"
+              />
               <span>+91</span>
               <i className="ph ph-caret-down text-[14px] text-black"></i>
             </div>
@@ -189,23 +211,23 @@ export default function Step1({ onNext, onBack }: Step1Props) {
                 maxLength={10}
                 autoComplete="tel-national"
                 value={phone}
-                onChange={e => {
-                  const v = e.target.value.replace(/\D/g, '').slice(0, 10)
-                  setPhone(v)
+                onChange={(e) => {
+                  const v = e.target.value.replace(/\D/g, "").slice(0, 10);
+                  setPhone(v);
                 }}
                 onBlur={() => setPhoneTouched(true)}
                 className={[
-                  'w-full h-[34px] border-0 rounded-none bg-white',
-                  'px-4 pr-[40px] text-xs font-normal tracking-[0.6px] outline-none text-black',
-                  'placeholder:text-[#9D9BA0]',
-                ].join(' ')}
+                  "w-full h-[34px] border-0 rounded-none bg-white",
+                  "px-4 pr-[40px] text-xs font-normal tracking-[0.6px] outline-none text-black",
+                  "placeholder:text-[#9D9BA0]",
+                ].join(" ")}
               />
-              {phoneCardState === 'valid' && (
+              {phoneCardState === "valid" && (
                 <i className="ph-fill ph-check-circle absolute right-[12px] top-1/2 -translate-y-1/2 text-primary text-[18px] pointer-events-none"></i>
               )}
             </div>
           </div>
-          {phoneCardState === 'invalid' && (
+          {phoneCardState === "invalid" && (
             <p className="mt-[7px] text-[#E5534B] text-[11px] leading-[1.25] tracking-[0.2px]">
               Please enter a valid Indian phone number.
             </p>
@@ -236,7 +258,7 @@ export default function Step1({ onNext, onBack }: Step1Props) {
         nextDisabled={!isComplete}
       />
     </>
-  )
+  );
 }
 
 // ── 공통 인라인 컴포넌트 ────────────────────────────────────────────────────
@@ -247,7 +269,7 @@ function FieldCard({ children }: { children: React.ReactNode }) {
     <div className="w-full min-h-[100px] p-[16px_24px_13px_16px] bg-white border border-[#EBEBEB] rounded-[5px] shadow-[0_4px_7px_rgba(0,0,0,0.08)]">
       {children}
     </div>
-  )
+  );
 }
 
 // survey.css .step-one-label: flex gap 10px, font-size 15px, font-weight 400, letter-spacing 0.75px, mb 16px
@@ -258,21 +280,21 @@ function FieldLabel({ icon, label }: { icon: string; label: string }) {
       <i className={`ph ${icon} text-[20px] text-primary`}></i>
       <span>{label}</span>
     </div>
-  )
+  );
 }
 
 // survey.css .step-one-card input (with .step-input-wrap pr 40px)
 // invalid 상태는 카드 자체 is-invalid 클래스로 처리하므로, input은 별도로 invalid 스타일을 받는다
 const inputClass = [
-  'w-full h-9 border border-[#EBEBEB] rounded-[5px] bg-white',
-  'px-4 pr-[40px] text-xs font-normal tracking-[0.6px] outline-none text-black',
-  'placeholder:text-[#9D9BA0]',
-  'focus:border-primary transition-colors',
-].join(' ')
+  "w-full h-9 border border-[#EBEBEB] rounded-[5px] bg-white",
+  "px-4 pr-[40px] text-xs font-normal tracking-[0.6px] outline-none text-black",
+  "placeholder:text-[#9D9BA0]",
+  "focus:border-primary transition-colors",
+].join(" ");
 
 // survey.css .step-valid-check: absolute right 13px, top 50%, color #3AAE92, font-size 18px
 export function ValidCheck() {
   return (
     <i className="ph-fill ph-check-circle absolute right-[13px] top-1/2 -translate-y-1/2 text-primary text-[18px] pointer-events-none"></i>
-  )
+  );
 }

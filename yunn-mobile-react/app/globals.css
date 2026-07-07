@@ -1,4 +1,4 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 @import "tailwindcss";
 
 :root {
@@ -9,7 +9,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Pretendard', sans-serif;
+  --font-sans: "Pretendard", sans-serif;
 }
 
 /* ── YUNN Design Tokens ─────────────────────────────────────────────
@@ -18,22 +18,22 @@
    ─────────────────────────────────────────────────────────────────── */
 @theme {
   /* Colors */
-  --color-primary:       #3AAE92;   /* 브랜드 그린 — 버튼·강조 텍스트·아이콘 */
-  --color-primary-dark:  #2F8E76;   /* hover/active 상태 */
-  --color-primary-light: #E9F6F3;   /* 선택 카드 배경 (option-card.selected) */
-  --color-ink:           #222222;   /* 본문 텍스트 (원본: --text-main) */
-  --color-ink-faint:     #666666;   /* 보조 텍스트 (상태바 등) */
-  --color-ink-muted:     #A8A8A8;   /* 안내·푸터 텍스트 (원본: --text-light) */
-  --color-line:          #EAEAEA;   /* 구분선·테두리 (원본: --border-color) */
-  --color-canvas:        #F8F9FA;   /* 페이지 배경 (원본: --bg-gray) */
+  --color-primary: #3aae92; /* 브랜드 그린 — 버튼·강조 텍스트·아이콘 */
+  --color-primary-dark: #2f8e76; /* hover/active 상태 */
+  --color-primary-light: #e9f6f3; /* 선택 카드 배경 (option-card.selected) */
+  --color-ink: #222222; /* 본문 텍스트 (원본: --text-main) */
+  --color-ink-faint: #666666; /* 보조 텍스트 (상태바 등) */
+  --color-ink-muted: #a8a8a8; /* 안내·푸터 텍스트 (원본: --text-light) */
+  --color-line: #eaeaea; /* 구분선·테두리 (원본: --border-color) */
+  --color-canvas: #f8f9fa; /* 페이지 배경 (원본: --bg-gray) */
 
   /* Border Radius */
-  --radius-btn:  5px;               /* CTA 버튼 (#btn-start-survey) */
-  --radius-card: 8px;               /* 일반 카드 (option-card 등) */
+  --radius-btn: 5px; /* CTA 버튼 (#btn-start-survey) */
+  --radius-card: 8px; /* 일반 카드 (option-card 등) */
 
   /* Spacing — w-* / h-* / max-w-* / px-* / mx-* 등에서 사용 */
-  --spacing-phone-max: 393px;       /* 모바일 셸 최대 너비 */
-  --spacing-shell-x:   17px;        /* 헤더·콘텐츠 좌우 패딩 */
+  --spacing-phone-max: 393px; /* 모바일 셸 최대 너비 */
+  --spacing-shell-x: 17px; /* 헤더·콘텐츠 좌우 패딩 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -46,5 +46,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Pretendard', sans-serif;
+  font-family: "Pretendard", sans-serif;
 }

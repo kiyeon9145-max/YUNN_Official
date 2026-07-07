@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // CategorySection.tsx — 카테고리 그리드
 //
@@ -6,21 +6,26 @@
 // 새 카테고리는 home-data.ts의 CATEGORIES에 항목만 추가하면 자동 반영된다.
 // home.css .category-grid: grid-cols-4, gap-x-10px gap-y-16px
 
-import Image from 'next/image'
-import { CATEGORIES } from './home-data'
+import Image from "next/image";
+import { CATEGORIES } from "./home-data";
 
 export default function CategorySection() {
   return (
     <section aria-labelledby="category-title">
       <div className="flex items-center justify-between mt-[23px] mb-[12px]">
-        <h2 id="category-title" className="text-[16px] font-normal">Shop by Category</h2>
-        <a href="#" className="inline-flex items-center gap-[7px] text-[14px] no-underline">
+        <h2 id="category-title" className="text-[16px] font-normal">
+          Shop by Category
+        </h2>
+        <a
+          href="#"
+          className="inline-flex items-center gap-[7px] text-[14px] no-underline"
+        >
           View all <i className="ph ph-caret-right" />
         </a>
       </div>
 
       <div className="grid grid-cols-4 gap-x-[10px] gap-y-[16px]">
-        {CATEGORIES.map(cat => (
+        {CATEGORIES.map((cat) => (
           <div key={cat.label} className="text-center min-w-0">
             {/* 원형 이미지 — home.css .category-image */}
             <div className="relative w-[78px] h-[78px] mx-auto mb-[5px] rounded-full bg-[#F2F2F2] flex items-center justify-center">
@@ -42,5 +47,5 @@ export default function CategorySection() {
         ))}
       </div>
     </section>
-  )
+  );
 }

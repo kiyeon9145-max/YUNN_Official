@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // use-page-tracking.ts — page_view/page_exit + 체류시간(duration_sec) 트래킹 훅
 //
@@ -7,50 +7,51 @@
 // 마지막 페이지 체류시간 유실을 막기 위해 visibilitychange/beforeunload에서도
 // page_exit를 전송한다(beacon 경로는 analytics.ts의 sendBeacon이 담당).
 
-import { useEffect, useRef } from 'react'
-import { trackYunnEvent, type PageId } from './analytics'
+import { useEffect, useRef } from "react";
+import { trackYunnEvent, type PageId } from "./analytics";
 
 export function usePageTracking(pageId: PageId | null) {
-  const enteredAtRef = useRef(0)
-  const exitTypeRef = useRef<'converted' | 'dropped'>('dropped')
-  const firedRef = useRef(false)
+  const enteredAtRef = useRef(0);
+  const exitTypeRef = useRef<"converted" | "dropped">("dropped");
+  const firedRef = useRef(false);
 
   useEffect(() => {
-    if (!pageId) return
+    if (!pageId) return;
 
-    enteredAtRef.current = performance.now()
-    exitTypeRef.current = 'dropped'
-    firedRef.current = false
-    trackYunnEvent('page_view', { page_id: pageId })
+    enteredAtRef.current = performance.now();
+    exitTypeRef.current = "dropped";
+    firedRef.current = false;
+    trackYunnEvent("page_view", { page_id: pageId });
 
     const sendExit = () => {
-      if (firedRef.current) return
-      firedRef.current = true
-      const duration_sec = Math.round((performance.now() - enteredAtRef.current) / 100) / 10
-      trackYunnEvent('page_exit', {
+      if (firedRef.current) return;
+      firedRef.current = true;
+      const duration_sec =
+        Math.round((performance.now() - enteredAtRef.current) / 100) / 10;
+      trackYunnEvent("page_exit", {
         page_id: pageId,
         duration_sec,
         exit_type: exitTypeRef.current,
-      })
-    }
+      });
+    };
 
     const handleVisibility = () => {
-      if (document.visibilityState === 'hidden') sendExit()
-    }
+      if (document.visibilityState === "hidden") sendExit();
+    };
 
-    window.addEventListener('beforeunload', sendExit)
-    document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener("beforeunload", sendExit);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      sendExit()
-      window.removeEventListener('beforeunload', sendExit)
-      document.removeEventListener('visibilitychange', handleVisibility)
-    }
-  }, [pageId])
+      sendExit();
+      window.removeEventListener("beforeunload", sendExit);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [pageId]);
 
   const markConverted = () => {
-    exitTypeRef.current = 'converted'
-  }
+    exitTypeRef.current = "converted";
+  };
 
-  return { markConverted }
+  return { markConverted };
 }

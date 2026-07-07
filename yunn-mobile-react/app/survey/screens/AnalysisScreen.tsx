@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // AnalysisScreen.tsx — 분석 로딩 화면
 //
@@ -8,33 +8,39 @@
 // 동작 근거 (SurveyScreen.js #startAnalysis):
 //   messages 4개, setInterval 600ms, i===4 에서 clearInterval 후 resultScreen.show()
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from "react";
 
 const MESSAGES = [
-  'Analysing skin concern patterns...',
-  'Mapping daily environment...',
-  'Calibrating routine intensity...',
-  'Finalising your plan...',
-]
+  "Analysing skin concern patterns...",
+  "Mapping daily environment...",
+  "Calibrating routine intensity...",
+  "Finalising your plan...",
+];
 
-export default function AnalysisScreen({ onComplete }: { onComplete: () => void }) {
-  const [msgIndex, setMsgIndex] = useState(0)
-  const onCompleteRef = useRef(onComplete)
-  useEffect(() => { onCompleteRef.current = onComplete })
+export default function AnalysisScreen({
+  onComplete,
+}: {
+  onComplete: () => void;
+}) {
+  const [msgIndex, setMsgIndex] = useState(0);
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  });
 
   useEffect(() => {
-    let count = 0
+    let count = 0;
     const id = setInterval(() => {
-      count++
+      count++;
       if (count < MESSAGES.length) {
-        setMsgIndex(count)
+        setMsgIndex(count);
       } else {
-        clearInterval(id)
-        onCompleteRef.current()
+        clearInterval(id);
+        onCompleteRef.current();
       }
-    }, 600)
-    return () => clearInterval(id)
-  }, [])
+    }, 600);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center text-center px-6">
@@ -46,7 +52,8 @@ export default function AnalysisScreen({ onComplete }: { onComplete: () => void 
       </h2>
 
       <p className="text-[1rem] text-[#999] leading-[1.5] mb-5">
-        We&apos;re cross-referencing your skin profile,<br />
+        We&apos;re cross-referencing your skin profile,
+        <br />
         lifestyle data, and environment.
       </p>
 
@@ -54,5 +61,5 @@ export default function AnalysisScreen({ onComplete }: { onComplete: () => void 
         {MESSAGES[msgIndex]}
       </p>
     </div>
-  )
+  );
 }
