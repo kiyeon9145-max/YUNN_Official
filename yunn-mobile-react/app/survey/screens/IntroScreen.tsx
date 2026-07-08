@@ -12,24 +12,12 @@ interface IntroScreenProps {
   onStart: () => void;
 }
 
-// 폰 목업 디자인을 그대로 옮긴 장식용 상태바 — 웹에는 실제 기기 시각이 없으므로
-// 실시간 갱신 없이 고정값으로 표시한다 (서버/클라이언트 렌더링 값이 항상 같아 hydration mismatch도 없다).
-const MOCK_DEVICE_TIME = "9:41";
-
 export default function IntroScreen({ onStart }: IntroScreenProps) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="w-full max-w-phone-max min-h-screen mx-auto bg-white relative pb-3">
-      {/* ── Status Bar ─────────────────────────────────────────── */}
-      <div className="h-10 px-4 pt-3 flex items-start justify-between text-black text-[15px] font-semibold leading-none">
-        <span>{MOCK_DEVICE_TIME}</span>
-        <div className="flex items-center gap-2 text-xs font-semibold text-ink-faint">
-          <span>Online</span>
-        </div>
-      </div>
-
       {/* ── Header ─────────────────────────────────────────────── */}
       <div className="h-14 px-shell-x flex justify-between items-center relative bg-white">
         {menuOpen && (

@@ -19,10 +19,6 @@ interface SurveyShellProps {
   children: React.ReactNode;
 }
 
-// 폰 목업 디자인을 그대로 옮긴 장식용 상태바 — 웹에는 실제 기기 시각이 없으므로
-// 실시간 갱신 없이 고정값으로 표시한다 (서버/클라이언트 렌더링 값이 항상 같아 hydration mismatch도 없다).
-const MOCK_DEVICE_TIME = "9:41";
-
 export default function SurveyShell({
   currentStep,
   totalSteps = 10,
@@ -33,36 +29,6 @@ export default function SurveyShell({
 
   return (
     <div className="w-full max-w-phone-max min-h-[852px] mx-auto bg-white relative pb-[26px]">
-      {/* ── Status Bar ──────────────────────────────────────────────
-          survey.css .survey-status-bar: h 40px, px 24px, pt 12px, text-sm font-bold
-          우측: 신호 막대 4개 + wifi 아이콘 + 배터리 셸
-          ──────────────────────────────────────────────────────────── */}
-      <div className="h-10 px-6 pt-3 flex items-start justify-between text-black text-sm font-bold leading-none">
-        <span>{MOCK_DEVICE_TIME}</span>
-        <div className="flex items-center gap-[7px] h-4">
-          {/* 신호 막대: 높이 5/8/11/15px */}
-          <div className="flex items-end gap-0.5 h-[15px]">
-            {[5, 8, 11, 15].map((h) => (
-              <span
-                key={h}
-                className="w-1 bg-black rounded-sm block"
-                style={{ height: `${h}px` }}
-              />
-            ))}
-          </div>
-          {/* Wifi */}
-          <i className="ph-fill ph-wifi-high text-xl text-black leading-none"></i>
-          {/* 배터리: 셸(25×13) + 내부 레벨(18×7) + 오른쪽 돌출 버튼(after 슈도) */}
-          <div
-            className="w-[25px] h-[13px] border-[1.5px] border-[#8c8c8c] rounded-[3px] relative
-            after:content-[''] after:absolute after:right-[-3px] after:top-[4px]
-            after:w-[2px] after:h-[5px] after:bg-[#8c8c8c] after:rounded-[0_1px_1px_0]"
-          >
-            <div className="absolute left-[2px] top-[2px] h-[7px] w-[18px] rounded-[1px] bg-black" />
-          </div>
-        </div>
-      </div>
-
       {/* ── Top Header (h 104px) ──────────────────────────────────
           아이콘은 mt-[39px]로 세로 중앙 정렬.
           로고는 absolute left-1/2 top-[51px] — 진단 화면과 동일한 scale(1.75).

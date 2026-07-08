@@ -11,7 +11,6 @@
 //   - 새 섹션 추가: 컴포넌트 파일 생성 후 <main> 안에 배치
 
 import { useState } from "react";
-import HomeStatusBar from "./home/HomeStatusBar";
 import HomeHeader from "./home/HomeHeader";
 import HeroCard from "./home/HeroCard";
 import CategorySection from "./home/CategorySection";
@@ -41,7 +40,6 @@ export default function HomePage() {
 
   return (
     <div className="w-full max-w-[393px] min-h-screen mx-auto bg-white relative pb-[72px] overflow-x-hidden">
-      <HomeStatusBar />
       <HomeHeader
         cartCount={cartCount}
         onMenu={() => setSidebarOpen(true)}
