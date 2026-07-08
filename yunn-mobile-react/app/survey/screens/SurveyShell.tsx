@@ -10,7 +10,6 @@
 //   .step-indicator:        text-xs, mb 14px
 //   .survey-content:        px 25px, pb 30px
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,23 +19,15 @@ interface SurveyShellProps {
   children: React.ReactNode;
 }
 
-function formatDeviceTime() {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
+// 폰 목업 디자인을 그대로 옮긴 장식용 상태바 — 웹에는 실제 기기 시각이 없으므로
+// 실시간 갱신 없이 고정값으로 표시한다 (서버/클라이언트 렌더링 값이 항상 같아 hydration mismatch도 없다).
+const MOCK_DEVICE_TIME = "9:41";
 
 export default function SurveyShell({
   currentStep,
   totalSteps = 10,
   children,
 }: SurveyShellProps) {
-  const [time, setTime] = useState(formatDeviceTime);
-
-  useEffect(() => {
-    const id = setInterval(() => setTime(formatDeviceTime()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
   // SurveyScreen.js updateProgress() 근거: progressStep / DISPLAYED_PAGES * 100
   const progressPct = (currentStep / totalSteps) * 100;
 
@@ -47,7 +38,7 @@ export default function SurveyShell({
           우측: 신호 막대 4개 + wifi 아이콘 + 배터리 셸
           ──────────────────────────────────────────────────────────── */}
       <div className="h-10 px-6 pt-3 flex items-start justify-between text-black text-sm font-bold leading-none">
-        <span>{time}</span>
+        <span>{MOCK_DEVICE_TIME}</span>
         <div className="flex items-center gap-[7px] h-4">
           {/* 신호 막대: 높이 5/8/11/15px */}
           <div className="flex items-end gap-0.5 h-[15px]">
