@@ -190,3 +190,43 @@ export function trackSubscribeComplete(plan: string) {
 export function trackRediagnosisComplete() {
   return trackYunnEvent("rediagnosis_complete");
 }
+
+// ── 루틴 트래킹 이벤트 (routine.html 설계 문서의 이벤트 스키마와 동일) ──────
+// trackRoutineStepComplete(위)는 설문 화면(step: am/pm/extra)용 이벤트로 별개다.
+
+export function trackRoutineStarted(
+  day: number,
+  skinType: string,
+  concernType: string,
+) {
+  return trackYunnEvent("routine_started", { day, skinType, concernType });
+}
+
+export function trackRoutineStepChecked(
+  day: number,
+  period: "morning" | "evening",
+  step: number,
+  stepName: string,
+) {
+  return trackYunnEvent("routine_step_checked", { day, period, step, stepName });
+}
+
+export function trackMorningCompleted(day: number) {
+  return trackYunnEvent("morning_completed", { day });
+}
+
+export function trackEveningCompleted(day: number) {
+  return trackYunnEvent("evening_completed", { day });
+}
+
+export function trackBeforePhotoUploaded() {
+  return trackYunnEvent("before_photo_uploaded", { day: 1 });
+}
+
+export function trackAfterPhotoUploaded(day: number) {
+  return trackYunnEvent("after_photo_uploaded", { day });
+}
+
+export function trackCompareViewed(day: number, streakDays: number) {
+  return trackYunnEvent("compare_viewed", { day, streakDays });
+}

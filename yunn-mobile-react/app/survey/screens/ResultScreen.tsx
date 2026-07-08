@@ -15,7 +15,8 @@
 // 잠금(피드백 게이트) 메커니즘은 MVP 이후 구현 예정 — 현재 모두 잠금 해제 상태로 표시.
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
 import type { SurveyAnswers } from "../page";
 import {
   RESULT_ASSETS,
@@ -29,6 +30,7 @@ import {
   type RoutineStep,
   type ProductItem,
 } from "../result-data";
+import { savePendingResult } from "@/app/routine/lib/routine-storage";
 
 interface ResultScreenProps {
   answers: SurveyAnswers;
@@ -53,6 +55,7 @@ function toResultData(answers: SurveyAnswers): ResultData {
 // ── Main ────────────────────────────────────────────────────────────────────
 
 export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
+  const router = useRouter();
   const [activePeriod, setActivePeriod] = useState<"morning" | "evening">(
     "morning",
   );
@@ -63,6 +66,18 @@ export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
     () => computeSkinBalance(data, config),
     [data, config],
   );
+
+  // 설문 결과를 localStorage에 저장해 /routine이 읽을 수 있게 한 뒤 이동
+  const handleUnlockRoutine = useCallback(() => {
+    savePendingResult({
+      skinType: data.skinType,
+      concernType: data.concernType,
+      gender: data.gender,
+      name: data.name,
+      email: answers.email || "",
+    });
+    router.push("/routine");
+  }, [data, answers.email, router]);
 
   const faceImage =
     answers.photoDataUrl ||
@@ -113,7 +128,7 @@ export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
             activePeriod={activePeriod}
             onTabChange={setActivePeriod}
           />
-          <ProductsSection onRetake={onRetake} />
+          <ProductsSection onRetake={onRetake} onUnlockRoutine={handleUnlockRoutine} />
         </div>
 
         <BottomNav onRetake={onRetake} />
@@ -500,7 +515,13 @@ function RoutineDetail({
 
 // ── ProductsSection ──────────────────────────────────────────────────────────
 
-function ProductsSection({ onRetake }: { onRetake: () => void }) {
+function ProductsSection({
+  onRetake,
+  onUnlockRoutine,
+}: {
+  onRetake: () => void;
+  onUnlockRoutine: () => void;
+}) {
   return (
     <section className="mt-[27px]">
       <h2 className="text-[22px] font-bold text-black leading-[1.1] tracking-[-0.01em]">
@@ -546,6 +567,7 @@ function ProductsSection({ onRetake }: { onRetake: () => void }) {
         </p>
         <button
           type="button"
+          onClick={onUnlockRoutine}
           className="w-full h-[46px] rounded-[5px] bg-primary text-white text-[15px] font-bold flex items-center justify-center gap-2 cursor-pointer border-0"
         >
           <span>Unlock My Full Routine</span>
