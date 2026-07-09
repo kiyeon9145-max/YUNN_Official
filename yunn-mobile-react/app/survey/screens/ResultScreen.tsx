@@ -213,8 +213,8 @@ function InsightSection({
         )}
       </div>
 
-      {/* 키워드 태그 */}
-      <div className="flex flex-wrap gap-2 mt-[14px]">
+      {/* 키워드 태그 — 얼굴 이미지(absolute, 오른쪽)에 가려지지 않도록 텍스트 블록과 동일한 우측 여백을 준다 */}
+      <div className="flex flex-wrap gap-2 mt-[14px] pr-[143px]">
         {config.keywords.map((kw) => (
           <span
             key={kw}
