@@ -14,7 +14,7 @@
 //
 // 이름/이메일/전화번호 입력 스텝은 app/survey/_archived/에 보관 중 (서비스 오픈 시 복원 예정).
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IntroScreen from "./screens/IntroScreen";
 import SurveyShell from "./screens/SurveyShell";
 import AnalysisScreen from "./screens/AnalysisScreen";
@@ -109,6 +109,11 @@ export default function SurveyPage() {
 
   const merge = (partial: Partial<SurveyAnswers>) =>
     setAnswers((prev) => ({ ...prev, ...partial }));
+
+  // 스텝 전환 시 이전 화면에서 스크롤한 위치가 남아있지 않도록 맨 위로 리셋한다
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [step]);
 
   return (
     <>
