@@ -304,3 +304,11 @@ export function SurveyNotSureButton({
     </div>
   );
 }
+
+// survey.css .step-valid-check: absolute right 13px, top 50%, color #3AAE92, font-size 18px
+// 텍스트 입력 필드 옆에 붙는 "입력 완료" 체크 아이콘 — input-component.tsx, region-component.tsx 등에서 공용으로 쓴다.
+export function ValidCheck() {
+  return (
+    <i className="ph-fill ph-check-circle absolute right-[13px] top-1/2 -translate-y-1/2 text-primary text-[18px] pointer-events-none"></i>
+  );
+}

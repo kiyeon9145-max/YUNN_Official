@@ -11,8 +11,7 @@
 // 갖고, 행 추가/삭제/이름 변경은 즉시 onChange로 부모에 올린다.
 
 import { useEffect, useRef, useState } from "react";
-import { SurveyActions } from "./button-component";
-import { ValidCheck } from "./input-component";
+import { SurveyActions, ValidCheck } from "./button-component";
 
 export interface ProductEntry {
   category: string;

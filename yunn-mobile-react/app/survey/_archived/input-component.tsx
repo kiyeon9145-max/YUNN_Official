@@ -26,7 +26,7 @@
 //   • actions:   h 69px, mt 30px, gap 25px, buttons 150×40 radius-[12px] text-base font-semibold tracking-[0.8px]
 
 import { useState } from "react";
-import { SurveyActions } from "./button-component";
+import { SurveyActions } from "../components/button-component";
 
 // SurveyAnswer.js ALLOWED_INDIAN_EMAIL_DOMAINS
 const ALLOWED_DOMAINS = [

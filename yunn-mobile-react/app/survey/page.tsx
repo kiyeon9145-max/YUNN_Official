@@ -6,22 +6,25 @@
 // 추후 구현 순서: Analysis/Result
 //
 // 컴포넌트 구조:
-//   input-component   → Step 1 (텍스트 입력: 이름/이메일/전화)
-//   survey-component  → Step 2~9 (옵션 카드 선택 패턴 공용)
+//   survey-component  → Step 1, 2, 5~9 (성별/연령/지역 등 옵션 카드 선택 패턴 공용)
+//   region-component  → Step 2 (거주 도시, 라디오 5개 + Other 직접입력)
+//   image-survey      → Step 3~4 (이미지 카드 선택)
 //   photo-step        → Step 10 (피부 사진 업로드/미리보기)
-//   SurveyShell       → 설문 공통 껍데기 (상태바 + 헤더 + 프로그레스 바)
+//   SurveyShell       → 설문 공통 껍데기 (헤더 + 프로그레스 바)
+//
+// 이름/이메일/전화번호 입력 스텝은 app/survey/_archived/에 보관 중 (서비스 오픈 시 복원 예정).
 
 import { useState } from "react";
 import IntroScreen from "./screens/IntroScreen";
 import SurveyShell from "./screens/SurveyShell";
 import AnalysisScreen from "./screens/AnalysisScreen";
 import ResultScreen from "./screens/ResultScreen";
-import InputStep from "./components/input-component";
 import SurveyOptionStep from "./components/survey-component";
+import RegionStep from "./components/region-component";
 import ImageSurveyStep from "./components/image-survey-component";
 import PhotoStep from "./components/photo-step-component";
 import {
-  STEP2_GROUPS,
+  STEP1_GROUPS,
   STEP3_HELPER_STEPS,
   STEP3_IMAGE_OPTIONS,
   STEP4_IMAGE_OPTIONS,
@@ -36,9 +39,12 @@ import {
 
 // ── 답변 타입 ──────────────────────────────────────────────────────────────
 export interface SurveyAnswers {
+  // 이름/이메일/전화는 현재 설문에서 수집하지 않는다 (app/survey/_archived/ 참조).
+  // ResultScreen이 기본값으로 폴백하므로 필드 자체는 남겨둔다.
   name?: string;
   email?: string;
   phone?: string;
+  city?: string;
   gender?: string;
   age?: string;
   skinType?: string;
@@ -109,22 +115,9 @@ export default function SurveyPage() {
       {/* ── 인트로 ──────────────────────────────────────────────── */}
       {step === "intro" && <IntroScreen onStart={() => setStep("1")} />}
 
-      {/* ── Step 1: 이름 / 이메일 / 전화번호 ────────────────────── */}
+      {/* ── Step 1: 성별 + 연령 ──────────────────────────────────── */}
       {step === "1" && (
         <SurveyShell currentStep={1} totalSteps={10}>
-          <InputStep
-            onNext={(ans) => {
-              merge(ans);
-              setStep("2");
-            }}
-            onBack={() => setStep("intro")}
-          />
-        </SurveyShell>
-      )}
-
-      {/* ── Step 2: 성별 + 연령 ──────────────────────────────────── */}
-      {step === "2" && (
-        <SurveyShell currentStep={2} totalSteps={10}>
           <SurveyOptionStep
             title={
               <>
@@ -132,12 +125,25 @@ export default function SurveyPage() {
               </>
             }
             subtitle="Gender and age help us refine your routine."
-            groups={STEP2_GROUPS}
+            groups={STEP1_GROUPS}
             autoAdvance
             showSecure
             requiredMessage="Please select your gender and age."
             onNext={(ans) => {
               merge({ gender: ans.gender as string, age: ans.age as string });
+              setStep("2");
+            }}
+            onBack={() => setStep("intro")}
+          />
+        </SurveyShell>
+      )}
+
+      {/* ── Step 2: 거주 도시(지역) ──────────────────────────────── */}
+      {step === "2" && (
+        <SurveyShell currentStep={2} totalSteps={10}>
+          <RegionStep
+            onNext={(ans) => {
+              merge({ city: ans.city });
               setStep("3");
             }}
             onBack={() => setStep("1")}

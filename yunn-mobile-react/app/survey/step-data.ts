@@ -8,8 +8,19 @@
 import type { OptionGroup } from "./components/survey-component";
 import type { ImageOptionItem } from "./components/image-survey-component";
 
-// ── Step 2: 성별 + 연령 ────────────────────────────────────────────────────
-export const STEP2_GROUPS: OptionGroup[] = [
+// ── Step 2: 지역 (도시) ────────────────────────────────────────────────────
+// 기후(습도·자외선·건조도)가 크게 갈리는 5개 주요 도시만 라디오로 두고, 나머지는 Other로 직접 입력받는다.
+// 추후 기후 기반 루틴 분기, 관리자 대시보드의 지역별 수요 집계가 이 값을 키로 쓴다.
+export const STEP2_CITY_OPTIONS: string[] = [
+  "Delhi",
+  "Mumbai",
+  "Bangalore",
+  "Chennai",
+  "Kolkata",
+];
+
+// ── Step 1: 성별 + 연령 ────────────────────────────────────────────────────
+export const STEP1_GROUPS: OptionGroup[] = [
   {
     name: "gender",
     question: "What's your gender?",
