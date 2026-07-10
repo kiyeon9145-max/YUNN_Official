@@ -11,6 +11,30 @@ interface SendSurveySheetOptions {
   photoUploaded: boolean;
 }
 
+// Sheets 컬럼 순서를 문서처럼 읽을 수 있게 명시한 비식별 설문 완료 schema다.
+export const SURVEY_SHEET_COLUMNS = [
+  "app_source",
+  "app_name",
+  "session_id",
+  "completed_at",
+  "page_path",
+  "city",
+  "gender",
+  "age",
+  "skin_type",
+  "concern",
+  "trigger",
+  "sensitivity",
+  "outdoor",
+  "sunscreen",
+  "sleep",
+  "stress",
+  "routine_level",
+  "photo_uploaded",
+  "result_skin_type",
+  "result_concern_type",
+] as const;
+
 // 개인정보 없이 설문 완료 시점의 운영/리서치 필드만 Sheets row로 만든다.
 export function buildSurveySheetPayload(
   answers: SurveyAnswers,
