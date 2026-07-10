@@ -37,6 +37,7 @@ import {
   SKIN_INFERENCE_RULES,
   type SkinHelperStepId,
 } from "./step-data";
+import { sendSurveyCompletionToSheet } from "./survey-sheet";
 
 // ── 답변 타입 ──────────────────────────────────────────────────────────────
 export interface SurveyAnswers {
@@ -274,6 +275,7 @@ export default function SurveyPage() {
       routine_level: finalAnswers.routineLevel ?? null,
       photo_uploaded: photoUploaded,
     });
+    sendSurveyCompletionToSheet(finalAnswers, { photoUploaded });
   };
 
   // 스텝 전환 시 이전 화면에서 스크롤한 위치가 남아있지 않도록 맨 위로 리셋한다
