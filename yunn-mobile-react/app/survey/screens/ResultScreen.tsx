@@ -16,7 +16,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { SurveyAnswers } from "../page";
 import {
   RESULT_ASSETS,
@@ -31,6 +31,7 @@ import {
   type ProductItem,
 } from "../result-data";
 import { savePendingResult } from "@/app/routine/lib/routine-storage";
+import { setAnalyticsContext, trackEvent } from "@/app/lib/analytics";
 import { ResultCtaButton } from "../components/button-component";
 
 interface ResultScreenProps {
@@ -68,8 +69,28 @@ export default function ResultScreen({ answers, onRetake }: ResultScreenProps) {
     [data, config],
   );
 
+  // 결과 화면 노출을 피부 타입/고민별 전환 분석의 기준 이벤트로 남긴다.
+  useEffect(() => {
+    setAnalyticsContext({
+      city: answers.city ?? null,
+      skin_concern: data.concernType,
+    });
+    trackEvent("result_view", {
+      skin_type: data.skinType,
+      concern_type: data.concernType,
+      gender: data.gender,
+      age: data.age,
+    });
+  }, [answers.city, data]);
+
   // 설문 결과를 localStorage에 저장해 /routine이 읽을 수 있게 한 뒤 이동
   const handleUnlockRoutine = useCallback(() => {
+    // 14일 루틴 CTA 클릭은 결과 확인 후 루틴 진입 의향을 보는 핵심 지표다.
+    trackEvent("routine_cta_click", {
+      source: "result_screen",
+      skin_type: data.skinType,
+      concern_type: data.concernType,
+    });
     savePendingResult({
       skinType: data.skinType,
       concernType: data.concernType,

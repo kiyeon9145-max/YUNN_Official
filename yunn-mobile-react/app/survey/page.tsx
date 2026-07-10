@@ -15,6 +15,7 @@
 // 이름/이메일/전화번호 입력 스텝은 app/survey/_archived/에 보관 중 (서비스 오픈 시 복원 예정).
 
 import { useEffect, useState } from "react";
+import { setAnalyticsContext, trackEvent } from "../lib/analytics";
 import IntroScreen from "./screens/IntroScreen";
 import SurveyShell from "./screens/SurveyShell";
 import AnalysisScreen from "./screens/AnalysisScreen";
@@ -79,6 +80,119 @@ type SurveyStep =
   | "analysis"
   | "result";
 
+type SurveyStepMeta = {
+  step_id: SurveyStep;
+  step_name: string;
+  step_number: number | null;
+  step_type: "intro" | "question" | "helper" | "analysis" | "result";
+};
+
+// 설문 퍼널 이벤트가 항상 같은 스텝 이름과 번호를 쓰도록 중앙에서 관리한다.
+const SURVEY_STEP_META: Record<SurveyStep, SurveyStepMeta> = {
+  intro: {
+    step_id: "intro",
+    step_name: "intro",
+    step_number: null,
+    step_type: "intro",
+  },
+  "1": {
+    step_id: "1",
+    step_name: "gender_age",
+    step_number: 1,
+    step_type: "question",
+  },
+  "2": {
+    step_id: "2",
+    step_name: "city",
+    step_number: 2,
+    step_type: "question",
+  },
+  "3": {
+    step_id: "3",
+    step_name: "skin_type",
+    step_number: 3,
+    step_type: "question",
+  },
+  "3-1": {
+    step_id: "3-1",
+    step_name: "skin_helper_cleanse",
+    step_number: 3,
+    step_type: "helper",
+  },
+  "3-2": {
+    step_id: "3-2",
+    step_name: "skin_helper_after_hours",
+    step_number: 3,
+    step_type: "helper",
+  },
+  "3-3": {
+    step_id: "3-3",
+    step_name: "skin_helper_day",
+    step_number: 3,
+    step_type: "helper",
+  },
+  "3-4": {
+    step_id: "3-4",
+    step_name: "skin_helper_texture",
+    step_number: 3,
+    step_type: "helper",
+  },
+  "4": {
+    step_id: "4",
+    step_name: "main_concern",
+    step_number: 4,
+    step_type: "question",
+  },
+  "5": {
+    step_id: "5",
+    step_name: "skin_trigger",
+    step_number: 5,
+    step_type: "question",
+  },
+  "6": {
+    step_id: "6",
+    step_name: "sensitivity",
+    step_number: 6,
+    step_type: "question",
+  },
+  "7": {
+    step_id: "7",
+    step_name: "sun_habits",
+    step_number: 7,
+    step_type: "question",
+  },
+  "8": {
+    step_id: "8",
+    step_name: "sleep_stress",
+    step_number: 8,
+    step_type: "question",
+  },
+  "9": {
+    step_id: "9",
+    step_name: "routine_level",
+    step_number: 9,
+    step_type: "question",
+  },
+  "10": {
+    step_id: "10",
+    step_name: "skin_photo",
+    step_number: 10,
+    step_type: "question",
+  },
+  analysis: {
+    step_id: "analysis",
+    step_name: "analysis_loading",
+    step_number: null,
+    step_type: "analysis",
+  },
+  result: {
+    step_id: "result",
+    step_name: "result",
+    step_number: null,
+    step_type: "result",
+  },
+};
+
 function inferSkinTypeFromHelper(answers: SurveyAnswers): string {
   const values = [
     answers.skinHelperCleanse,
@@ -110,15 +224,76 @@ export default function SurveyPage() {
   const merge = (partial: Partial<SurveyAnswers>) =>
     setAnswers((prev) => ({ ...prev, ...partial }));
 
+  // 스텝 진입 이벤트를 한 곳에서 보내 퍼널 이탈 지점을 볼 수 있게 한다.
+  const trackStepView = (nextStep: SurveyStep) => {
+    const meta = SURVEY_STEP_META[nextStep];
+    if (nextStep === "result") return;
+    if (nextStep === "intro") {
+      trackEvent("survey_intro_view", meta);
+      return;
+    }
+    if (nextStep === "analysis") {
+      trackEvent("survey_analysis_view", meta);
+      return;
+    }
+    trackEvent("survey_step_view", meta);
+  };
+
+  // 질문 완료 이벤트에 답변과 스텝 메타를 함께 담아 선택 분포를 볼 수 있게 한다.
+  const trackStepComplete = (
+    completedStep: SurveyStep,
+    properties: Record<string, unknown> = {},
+  ) => {
+    trackEvent("survey_step_complete", {
+      ...SURVEY_STEP_META[completedStep],
+      ...properties,
+    });
+  };
+
+  // 개인정보 없이 최종 설문 결과만 보내 Sheets/GA4 분석의 기준 데이터로 삼는다.
+  const trackSurveyComplete = (
+    finalAnswers: SurveyAnswers,
+    photoUploaded: boolean,
+  ) => {
+    setAnalyticsContext({
+      city: finalAnswers.city ?? null,
+      skin_concern: finalAnswers.concerns ?? null,
+    });
+    trackEvent("survey_complete", {
+      city: finalAnswers.city ?? null,
+      gender: finalAnswers.gender ?? null,
+      age: finalAnswers.age ?? null,
+      skin_type: finalAnswers.skinType ?? null,
+      concern: finalAnswers.concerns ?? null,
+      trigger: finalAnswers.trigger ?? [],
+      sensitivity: finalAnswers.sensitivity ?? null,
+      outdoor: finalAnswers.outdoor ?? null,
+      sunscreen: finalAnswers.sunscreen ?? null,
+      sleep: finalAnswers.sleep ?? null,
+      stress: finalAnswers.stress ?? null,
+      routine_level: finalAnswers.routineLevel ?? null,
+      photo_uploaded: photoUploaded,
+    });
+  };
+
   // 스텝 전환 시 이전 화면에서 스크롤한 위치가 남아있지 않도록 맨 위로 리셋한다
   useEffect(() => {
     window.scrollTo(0, 0);
+    trackStepView(step);
   }, [step]);
 
   return (
     <>
       {/* ── 인트로 ──────────────────────────────────────────────── */}
-      {step === "intro" && <IntroScreen onStart={() => setStep("1")} />}
+      {step === "intro" && (
+        <IntroScreen
+          onStart={() => {
+            // 인트로 CTA 클릭을 설문 시작 전환율의 기준 이벤트로 남긴다.
+            trackEvent("survey_start", { source: "intro_cta" });
+            setStep("1");
+          }}
+        />
+      )}
 
       {/* ── Step 1: 성별 + 연령 ──────────────────────────────────── */}
       {step === "1" && (
@@ -135,7 +310,13 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your gender and age."
             onNext={(ans) => {
-              merge({ gender: ans.gender as string, age: ans.age as string });
+              // 성별/연령 답변은 결과 세분화 분석의 기본 축으로 기록한다.
+              const partial = {
+                gender: ans.gender as string,
+                age: ans.age as string,
+              };
+              merge(partial);
+              trackStepComplete("1", partial);
               setStep("2");
             }}
             onBack={() => setStep("intro")}
@@ -148,7 +329,11 @@ export default function SurveyPage() {
         <SurveyShell currentStep={2} totalSteps={10}>
           <RegionStep
             onNext={(ans) => {
-              merge({ city: ans.city });
+              // 도시 답변은 이후 모든 이벤트의 지역 컨텍스트로도 재사용한다.
+              const partial = { city: ans.city };
+              merge(partial);
+              setAnalyticsContext({ city: ans.city });
+              trackStepComplete("2", partial);
               setStep("3");
             }}
             onBack={() => setStep("1")}
@@ -174,7 +359,9 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your skin type."
             onNext={(value) => {
+              // 피부 타입 선택은 추천 결과와 루틴 분기의 핵심 기준이다.
               merge({ skinType: value });
+              trackStepComplete("3", { skin_type: value });
               setStep(value === "NotSure" ? "3-1" : "4");
             }}
             onBack={() => setStep("2")}
@@ -217,8 +404,15 @@ export default function SurveyPage() {
                   const partial = ans as Partial<SurveyAnswers>;
                   const nextAnswers = { ...answers, ...partial };
                   merge(partial);
+                  // NotSure 보조 플로우 답변은 추론 품질을 나중에 점검하기 위해 남긴다.
+                  trackStepComplete(helperStep, partial);
                   if (helperStep === "3-4") {
-                    merge({ skinType: inferSkinTypeFromHelper(nextAnswers) });
+                    const inferredSkinType = inferSkinTypeFromHelper(nextAnswers);
+                    merge({ skinType: inferredSkinType });
+                    // 최종 추론 피부 타입은 직접 선택값과 구분해서 분석한다.
+                    trackEvent("survey_skin_type_inferred", {
+                      inferred_skin_type: inferredSkinType,
+                    });
                   }
                   setStep(nextStepById[helperStep]);
                 }}
@@ -251,7 +445,10 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your biggest skin concern."
             onNext={(value) => {
+              // 주요 고민은 결과 화면과 추천 루틴의 가장 중요한 세그먼트다.
               merge({ concerns: value });
+              setAnalyticsContext({ skin_concern: value });
+              trackStepComplete("4", { concern: value });
               setStep("5");
             }}
             onBack={() => setStep("3")}
@@ -275,7 +472,10 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select at least one skin trigger."
             onNext={(ans) => {
-              merge({ trigger: ans.trigger as string[] });
+              // 악화 트리거는 다중 선택 분포와 루틴 메시지 개선에 쓴다.
+              const partial = { trigger: ans.trigger as string[] };
+              merge(partial);
+              trackStepComplete("5", partial);
               setStep("6");
             }}
             onBack={() => setStep("4")}
@@ -299,7 +499,10 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your skin sensitivity."
             onNext={(ans) => {
-              merge({ sensitivity: ans.sensitivity as string });
+              // 민감도는 성분 강도와 제품 추천 리스크를 판단하는 기준이다.
+              const partial = { sensitivity: ans.sensitivity as string };
+              merge(partial);
+              trackStepComplete("6", partial);
               setStep("7");
             }}
             onBack={() => setStep("5")}
@@ -323,10 +526,13 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your outdoor time and sunscreen habit."
             onNext={(ans) => {
-              merge({
+              // 외출/선크림 습관은 자외선 관련 루틴 추천을 보정한다.
+              const partial = {
                 outdoor: ans.outdoor as string,
                 sunscreen: ans.sunscreen as string,
-              });
+              };
+              merge(partial);
+              trackStepComplete("7", partial);
               setStep("8");
             }}
             onBack={() => setStep("6")}
@@ -350,10 +556,13 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your sleep and stress level."
             onNext={(ans) => {
-              merge({
+              // 수면/스트레스 답변은 생활 요인과 피부 고민의 관계를 보기 위해 기록한다.
+              const partial = {
                 sleep: ans.sleep as string,
                 stress: ans.stress as string,
-              });
+              };
+              merge(partial);
+              trackStepComplete("8", partial);
               setStep("9");
             }}
             onBack={() => setStep("7")}
@@ -378,7 +587,10 @@ export default function SurveyPage() {
             showSecure
             requiredMessage="Please select your current routine level."
             onNext={(ans) => {
-              merge({ routineLevel: ans.routineLevel as string });
+              // 현재 루틴 수준은 14일 루틴 난이도와 CTA 반응 분석에 사용한다.
+              const partial = { routineLevel: ans.routineLevel as string };
+              merge(partial);
+              trackStepComplete("9", partial);
               setStep("10");
             }}
             onBack={() => setStep("8")}
@@ -392,11 +604,19 @@ export default function SurveyPage() {
           <PhotoStep
             onBack={() => setStep("9")}
             onComplete={(photoDataUrl) => {
+              // 사진 업로드 여부는 분석 몰입도와 결과 신뢰도 지표로 분리해서 본다.
+              const nextAnswers = { ...answers, photoDataUrl };
               merge({ photoDataUrl });
+              trackStepComplete("10", { photo_uploaded: true });
+              trackSurveyComplete(nextAnswers, true);
               setStep("analysis");
             }}
             onSkip={() => {
+              // 스킵도 명시적으로 기록해 사진 단계 이탈과 구분한다.
+              const nextAnswers = { ...answers, photoDataUrl: undefined };
               merge({ photoDataUrl: undefined });
+              trackStepComplete("10", { photo_uploaded: false });
+              trackSurveyComplete(nextAnswers, false);
               setStep("analysis");
             }}
           />
