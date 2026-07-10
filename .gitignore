@@ -1,3 +1,5 @@
 yunn-google-creds.json
+.env*
+!.env.example
 .DS_Store
 .gstack/

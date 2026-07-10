@@ -2,11 +2,9 @@
 
 // sheet-repository.ts — React 앱의 비식별 설문 완료 데이터를 Google Sheets로 전송한다.
 
-const LEGACY_SHEET_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbyVf7nkwjveU5rWg3iE363zg8wsWhXdba47-C0HKSfpjZYMJ62-p4tetm4RADGT11MNfQ/exec";
-
+// Apps Script Web App URL은 공개 설정값이지만 환경별 교체를 위해 env에서만 읽는다.
 const SHEET_ENDPOINT =
-  process.env.NEXT_PUBLIC_YUNN_SHEET_ENDPOINT || LEGACY_SHEET_ENDPOINT;
+  process.env.NEXT_PUBLIC_YUNN_SHEET_ENDPOINT || "";
 
 export type SheetPayloadValue =
   | string
