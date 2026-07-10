@@ -13,6 +13,11 @@ interface SurveyButtonProps {
   className?: string;
 }
 
+interface ResultCtaButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+}
+
 interface SurveyActionsProps {
   onBack: () => void;
   onNext: () => void;
@@ -79,6 +84,19 @@ export function SurveyButton({
         variantClass,
         className,
       ].join(" ")}
+    >
+      {children}
+    </button>
+  );
+}
+
+// 결과 화면의 14일 루틴 CTA 스타일을 한 곳에서 관리하기 위한 전용 버튼이다.
+export function ResultCtaButton({ children, onClick }: ResultCtaButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full h-[46px] rounded-[5px] bg-primary text-white text-[20px] font-bold flex items-center justify-center gap-2 cursor-pointer border-0"
     >
       {children}
     </button>

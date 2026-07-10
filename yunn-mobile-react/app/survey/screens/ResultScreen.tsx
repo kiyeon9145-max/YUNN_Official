@@ -31,6 +31,7 @@ import {
   type ProductItem,
 } from "../result-data";
 import { savePendingResult } from "@/app/routine/lib/routine-storage";
+import { ResultCtaButton } from "../components/button-component";
 
 interface ResultScreenProps {
   answers: SurveyAnswers;
@@ -558,21 +559,17 @@ function ProductsSection({
 
       {/* Unlock CTA — 피드백 게이트 MVP 이후 구현 */}
       <section className="mt-[28px] mb-6 rounded-[5px] border border-[#EAEAEA] bg-[#FAFAFA] px-4 py-5 text-center">
-        <div className="text-[15px] font-bold text-black mb-2">
+        <div className="text-[24px] font-bold text-black mb-2">
           Your Personalized 14-Day Skin Plan
         </div>
-        <p className="text-[13px] text-[#666] leading-[1.5] mb-4">
+        <p className="text-[16px] text-[#666] leading-[1.5] mb-4">
           Build healthier skin with a personalized 14-day skincare routine,
           daily guidance, and expert tips based on your results.
         </p>
-        <button
-          type="button"
-          onClick={onUnlockRoutine}
-          className="w-full h-[46px] rounded-[5px] bg-primary text-white text-[15px] font-bold flex items-center justify-center gap-2 cursor-pointer border-0"
-        >
+        <ResultCtaButton onClick={onUnlockRoutine}>
           <span>Get My 14-Day Plan</span>
           <i className="ph ph-arrow-right"></i>
-        </button>
+        </ResultCtaButton>
       </section>
     </section>
   );
